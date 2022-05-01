@@ -210,16 +210,16 @@ HRESULT CStage1::NativeConstruct()
 	//if (FAILED(Ready_Pot()))
 	//	return E_FAIL;
 
-	////// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
-	//if (FAILED(Ready_Cinema()))
-	//{
-	//	MSGBOX("Cinema");
-	//	return E_FAIL;
-	//}
+	//// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
+	if (FAILED(Ready_Cinema()))
+	{
+		MSGBOX("Cinema");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -1183,6 +1183,9 @@ HRESULT CStage1::Ready_Obstacle()
 		MSGBOX(L"스테이지1 캡슐 장애물 설치 실패");
 		return E_FAIL;
 	}
+
+
+
 	tObstacleDesc.vPosition = { -175.753589f, 28.702583f, 308.261066f};
 	tObstacleDesc.fHeight = 2.f;
 	tObstacleDesc.fRadius = 1.7f;
@@ -1197,7 +1200,7 @@ HRESULT CStage1::Ready_Obstacle()
 
 HRESULT CStage1::Ready_Portal()
 {
-	for (_uint i = 0; i <= 73; i++)
+	for (_uint i = 0; i < 73; i++)
 	{
 		if (i < 20)//19개
 		{

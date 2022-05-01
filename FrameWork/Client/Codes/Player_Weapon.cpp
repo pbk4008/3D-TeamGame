@@ -154,6 +154,7 @@ _int CPlayer_Weapon::LateTick(_double _dDeltaTime)
 		{
 			m_pTrailEffect_Distortion->Clear_Points();
 			m_pTrailEffect_Distortion->Set_IsRender(false);
+			//if(g_pGameInstance->getCurrentLevel() != (_uint)SCENEID::SCENE_STAGE3)
 			//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 		}
 	}

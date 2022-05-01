@@ -67,6 +67,9 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Data_Effect()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Boss(L"Layer_Boss")))
 		return E_FAIL;
 
@@ -76,11 +79,8 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
-
-	if (FAILED(Ready_Data_Effect()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;

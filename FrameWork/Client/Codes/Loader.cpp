@@ -238,8 +238,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
 
-	//if (FAILED(Load_Stage1_Cinema_Object()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1_Cinema_Object()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Pot()))
 	//	return E_FAIL;
@@ -1095,36 +1095,37 @@ HRESULT CLoader::Set_Stage3_Prototype()
 
 HRESULT CLoader::Load_Stage3_Object()
 {
-	if (FAILED(Load_Stage3_Cinema_Object()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage3_Cinema_Object()))
+	//	return E_FAIL;
 
 	//Boss Solaris
 	if(FAILED(Load_Stage3_BossLoad()))
 		return E_FAIL;
 
+	//if (FAILED(Load_Stage1PlayerLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1PlayerLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1Navi_SkyLoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1Navi_SkyLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1StaticUILoad()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1StaticUILoad()))
-		return E_FAIL;
-
-	if (FAILED(Load_Stage1UILoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1UILoad()))
+	//	return E_FAIL;
 
 #pragma region 이펙트들
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
-	if (FAILED(Load_TrailEffects())) //소드
-		return E_FAIL;
-	if (FAILED(Load_MeshEffects())) //매쉬
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
+	//if (FAILED(Load_TrailEffects())) //소드
+	//	return E_FAIL;
+	//if (FAILED(Load_MeshEffects())) //매쉬
+	//	return E_FAIL;
+	//if (FAILED(Load_StaticEffects())) //
+	//	return E_FAIL;
 #pragma endregion
 
 	_matrix matPivot = XMMatrixIdentity();
@@ -1496,9 +1497,9 @@ HRESULT CLoader::Load_Stage1BossLoad()
 	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 
-	//Boss Solaris
-	if (FAILED(Load_Stage3_BossLoad()))
-		return E_FAIL;
+	////Boss Solaris
+	//if (FAILED(Load_Stage3_BossLoad()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -1703,13 +1704,11 @@ HRESULT CLoader::Ready_Stage2()
 
 HRESULT CLoader::Ready_Stage3()
 {
-	if (FAILED(Set_Stage3_Prototype()))
-		return E_FAIL;
+	//if (FAILED(Set_Stage3_Prototype()))
+	//	return E_FAIL;
 
 	if(FAILED(Load_Stage3_Object()))
 		return E_FAIL;
-
-
 
 	return S_OK;
 }
@@ -2297,9 +2296,9 @@ HRESULT CLoader::Load_MeshEffects()
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 		return E_FAIL;
 
-	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
-	//	"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_lowPoly_dist.fbx",
-	//	L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_lowPoly_dist.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 
 	return S_OK;
 }
@@ -2795,7 +2794,7 @@ HRESULT CLoader::Load_StaticEffects()
 		return E_FAIL;
 	}
 
-	//Energy 
+	//Energy
 	vector<CEffect_Energy::EF_PAR_ENERGY_DESC> vecEnergyParticle;
 	g_pGameInstance->LoadFile<CEffect_Energy::EF_PAR_ENERGY_DESC>(vecEnergyParticle, L"../bin/SaveData/Effect/Effect_Energy.dat");
 
@@ -2816,25 +2815,25 @@ HRESULT CLoader::Load_StaticEffects()
 	}
 
 
-	//EyeRazer 
-	vecHitParticle.clear();
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Razer.dat");
+	////EyeRazer 
+	//vecHitParticle.clear();
+	//g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Razer.dat");
 
-	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
-	vecHitParticle[0].Power = 2.5f;
+	//FullName = L"Proto_GameObject_Effect_Explosion";
+	//vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
+	//vecHitParticle[0].Power = 2.5f;
 
-	// 마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", pEffect, 30)))
-	{
-		MSGBOX("Falild to Add Effect_Razer in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
+	//// 마지막에 받을 Effect변수 넣기
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
+	//{
+	//	MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", pEffect, 30)))
+	//{
+	//	MSGBOX("Falild to Add Effect_Razer in CStage1::Ready_Effect()");
+	//	return E_FAIL;
+	//}
 
 #pragma endregion
 
