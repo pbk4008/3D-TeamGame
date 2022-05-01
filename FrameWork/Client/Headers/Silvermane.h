@@ -114,7 +114,7 @@ public: /* For.Weapon */
 	void Change_WeaponOnInventory(void);
 
 	HRESULT			Change_State(const wstring& _wstrStateTag);
-	void			RangeAttack();
+	void			RangeAttack(const _float _fForce = 1.f);
 	CWeapon*		Get_CurerntWeapon() { return m_pCurWeapon; }
 	CInventoryData* Get_InvenData(void) { return m_pInventoryData; }
 	CPlayerData*	Get_PlayerData(void) { return m_pPlayerData; }

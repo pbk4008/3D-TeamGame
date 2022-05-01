@@ -90,7 +90,7 @@ HRESULT CBackGround::Render()
 
 	CGameObject::FadeInOut(m_pRcTex);
 
-	m_pRcTex->Render(0);
+	m_pRcTex->Render(7);
 	
 
 	return S_OK;

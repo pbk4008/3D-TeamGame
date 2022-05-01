@@ -56,12 +56,17 @@ public:
 	void Set_Random_AttackAnim();
 
 public:
+	void Active_Light(); //라이트켜줄때 
+	void Set_LightDisTime(_float DisTime); //사라질 시간 정해주는 함수
+	void Setting_Light(); //라이트 정보세팅 
+
+public:
 	void OnEff_MeshExplosion(_bool Active);
 	void OnEff_MeshRazer(_bool Active);
 	void OnEff_MeshShield(_bool Active);
 	void OnEff_MeshEyeRazer(_bool Active);
 	void Set_RazerAngle(_bool Check);
-	
+
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
@@ -82,6 +87,10 @@ private:
 	_uint m_iPreAnim = 0;
 
 	_bool m_bFirstAnim = false;
+
+	_bool m_bFillShield = false;
+
+	_float m_fDisTime = 5.f;
 
 private:
 	_bool	m_bIsFall = false;

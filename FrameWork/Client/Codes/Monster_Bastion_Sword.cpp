@@ -645,6 +645,7 @@ _int CMonster_Bastion_Sword::Dead_Check()
 {
 	if(m_bDead)
 	{
+		Set_IsAttack(false);
 		if (m_pStateController->Get_CurStateTag() == L"Death")
 		{
 			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH

@@ -278,7 +278,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (m_pFillCKey2)
 		m_pFillCKey2->setActive(false);
 
-	m_isLootShield = true;
+	Set_AttackDesc_Damaga(10.f);
+	m_isLootShield = false;
 	
 	return S_OK;
 }
@@ -1604,10 +1605,10 @@ HRESULT CSilvermane::Change_State(const wstring& _wstrStateTag)
 	return m_pStateController->Change_State(_wstrStateTag);
 }
 
-void CSilvermane::RangeAttack()
+void CSilvermane::RangeAttack(const _float _fForce)
 {
 	if (m_pCurWeapon)
-		m_pCurWeapon->RangeAttack();
+		m_pCurWeapon->RangeAttack(_fForce);
 }
 
 const _float CSilvermane::Get_BlockTime() const

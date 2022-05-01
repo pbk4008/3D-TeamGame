@@ -127,6 +127,7 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
 	else
 	{
+		Set_IsAttack(false);
 		if (m_pStateController->Get_CurStateTag()== L"Death")
 		{
 			if (1 < m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 >= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())

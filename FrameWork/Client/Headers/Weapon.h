@@ -58,7 +58,7 @@ public:
 	void Set_RimInten(_float fparam) { m_rimintensity = fparam; }
 
 public:
-	virtual void RangeAttack();
+	virtual void RangeAttack(const _float _fForce = 1.f);
 
 protected:
 	//매개변수로 받은 행렬 크기 없애주는 함수

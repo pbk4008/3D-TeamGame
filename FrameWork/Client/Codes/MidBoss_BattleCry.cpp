@@ -50,6 +50,25 @@ _int CMidBoss_BattleCry::Tick(const _double& TimeDelta)
 			{
 				if (18 <= iCurKeyFrameIndex && 19 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 				{
+					CCameraShake::SHAKEEVENT tShakeEvent;
+					tShakeEvent.fDuration = 1.f;
+					tShakeEvent.fBlendInTime = 0.2f;
+					tShakeEvent.fBlendOutTime = 0.5f;
+					tShakeEvent.tWaveX.fAmplitude = 0.2f;
+					tShakeEvent.tWaveX.fFrequency = -9.f;
+					tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+					tShakeEvent.tWaveY.fAmplitude = 0.2f;
+					tShakeEvent.tWaveY.fFrequency = 9.f;
+					tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+					tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+					tShakeEvent.tWaveZ.fFrequency = 0.6f;
+					tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+					tShakeEvent.fInnerRadius = 10.f;
+					tShakeEvent.fOuterRadius = 20.f;
+					tShakeEvent.fDistanceRate = 20.f;
+
+					g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 					//무기앞에생기는이펙트
 					m_bEffectCheck = true;
 					pBoss->OnWeaponEffect();

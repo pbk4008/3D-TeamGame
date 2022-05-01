@@ -16,6 +16,8 @@
 #include "Effect_Floating_Speed.h"
 #include "Effect_Energy.h"
 
+#include "Boss_Bastion_Judicator.h"
+
 
 #include "UI.h"
 #include "UI_Blank_CKey.h"
@@ -94,6 +96,16 @@ _int CTestScene_JS::Tick(_double TimeDelta)
 		//if(pMonster)
 		//	pMonster->setActive(true);
 	}
+
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	{
+		CBoss_Bastion_Judicator* pMonster = nullptr;
+		_float3 fPos = { 0.f,5.f,20.f };
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
+
 	return _int();
 }
 
@@ -306,7 +318,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	//Manager에 넣을 Effect;
 #pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 
-//	//Player Dash
+//Player Dash
 	CEffect* pEffect = nullptr;
 	vector<CEffect_DashDust::EF_PAR_DASH_DESC> vecDashEffect;
 
@@ -610,7 +622,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vecFloatingUp[0].bSmall = true;
 
 	FullName = L"Proto_GameObject_Effect_FloatingUp";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Item", FullName, &vecFloatingUp[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_Item", FullName, &vecFloatingUp[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Item in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -631,7 +643,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	vecFloatingUp[0].bSmall = true;
 
 	FullName = L"Proto_GameObject_Effect_FloatingUp";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_Box", FullName, &vecFloatingUp[0], (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_Box", FullName, &vecFloatingUp[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Box in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -675,7 +687,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	tDesc.fWeight = 1.f;
 	tDesc.fSize = 3.f;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_HitImage", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_HitImage", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -699,7 +711,7 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 	tDesc.fSize = 6.f;
 
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Effect_DeadSmoke", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_DeadSmoke", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
 		return E_FAIL;
@@ -812,7 +824,199 @@ HRESULT CTestScene_JS::Ready_Data_Effect()
 		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	
+
+
+	//EyeRazer 
+	vecHitParticle.clear();
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Razer.dat");
+
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	vecHitParticle[0].ParticleColor = { 1.f , 0.4f, 0.3f ,1.f };
+	vecHitParticle[0].Power = 2.5f;
+
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", pEffect, 30)))
+	{
+		MSGBOX("Falild to Add Effect_Razer in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//Boss_Attack_Ground
+	vecFloatingSpeed.clear();
+	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Boss_Attack_Ground.dat");
+
+	FullName = L"Proto_GameObject_Effect_Floating_Speed";
+	vecFloatingSpeed[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	vecFloatingSpeed[0].Power = 1.f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Attack_Ground", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Boss_Attack_Ground in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Attack_Ground", pEffect, 2)))
+	{
+		MSGBOX("Falild to Add_Effect_Boss_Attack_Ground in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//Boss_AttackGround_2
+	vecHitFloating.clear();
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EF_PAR_HITFLOAT_DESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Boss_Attack_Ground_2.dat");
+
+	FullName = L"Proto_GameObject_Effect_Floating";
+	vecHitFloating[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	vecHitFloating[0].Power = 0.8f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Attack_Ground_2", FullName, &vecHitFloating[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Boss_Attack_Ground_2 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Attack_Ground_2", pEffect, 3)))
+	{
+		MSGBOX("Falild to Add_Effect_Boss_Attack_Ground_2 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	////HitGroundSmoke_Boss
+	vecDashEffect.clear();
+	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke_Boss.dat");
+
+	vecDashEffect[0].fAlpha = 0.1f;
+
+	FullName = L"Proto_GameObject_Effect_DashDust";
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGround_Smoke_Boss", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_HitGround_Smoke_Boss in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGround_Smoke_Boss", pEffect, 5)))
+	{
+		MSGBOX("Falild to Add_Effect_HitGround_Smoke_Boss in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	////Boss_Razer_Smoke
+	vecDashEffect.clear();
+	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Boss_Razer_Smoke.dat");
+
+	vecDashEffect[0].fAlpha = 0.08f;
+
+	FullName = L"Proto_GameObject_Effect_DashDust";
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Razer_Smoke", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Boss_Razer_Smoke in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Razer_Smoke", pEffect, 30)))
+	{
+		MSGBOX("Falild to Add_Effect_Boss_Razer_Smoke in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//boss_HitGround
+	vecHitParticle.clear();
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Hit_Ground.dat");
+
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	vecHitParticle[0].ParticleColor = { 1.f,0.5f,0.2f, 1.f };
+	vecHitParticle[0].Power = 2.5f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Hit_Ground", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Boss_Hit_Ground in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Hit_Ground", pEffect, 4)))
+	{
+		MSGBOX("Falild to Add_Effect_Boss_Hit_Ground in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	////Boss_Side_Attack_Smoke
+	vecDashEffect.clear();
+	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Boss_Side_Attack_Smoke.dat");
+
+	vecDashEffect[0].fAlpha = 0.08f;
+
+	FullName = L"Proto_GameObject_Effect_DashDust";
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Side_Attack_Smoke", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Boss_Side_Attack_Smoke in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Side_Attack_Smoke", pEffect, 6)))
+	{
+		MSGBOX("Falild to Add_Effect_Boss_Side_Attack_Smoke in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//Boss_Side_Attack
+	vecHitFloating.clear();
+	g_pGameInstance->LoadFile<CEffect_HitFloating::EF_PAR_HITFLOAT_DESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Boss_Side_Attack.dat");
+
+	FullName = L"Proto_GameObject_Effect_Floating";
+	vecHitFloating[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
+	vecHitFloating[0].Power = 0.7f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Side_Attack", FullName, &vecHitFloating[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Boss_Side_Attack in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Boss_Side_Attack", pEffect, 6)))
+	{
+		MSGBOX("Falild to Add_Effect_Boss_Side_Attack in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//BrokenPod
+	vecHitParticle.clear();
+	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Broken_Pod.dat");
+
+	FullName = L"Proto_GameObject_Effect_Explosion";
+	vecHitParticle[0].ParticleColor = { 1.f, 0.8f, 0.4f,1.f };
+	vecHitParticle[0].Power = 2.5f;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Broken_Pod", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Broken_Pod in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Broken_Pod", pEffect, 7)))
+	{
+		MSGBOX("Falild to Add_Effect_Broken_Pod in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+
+	//midboss energy
+	vecEnergyParticle.clear();
+	g_pGameInstance->LoadFile<CEffect_Energy::EF_PAR_ENERGY_DESC>(vecEnergyParticle, L"../bin/SaveData/Effect/Effect_Energy_MidBoss.dat");
+
+	FullName = L"Proto_GameObject_Effect_Energy";
+	vecEnergyParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
+	vecEnergyParticle[0].Power = 2.5f;
+
+	//마지막에 받을 Effect변수 넣기
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", FullName, &vecEnergyParticle[0], (CGameObject**)&pEffect)))
+	{
+		MSGBOX("Failed to Creating Effect_Player_Attack1 in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", pEffect, 2)))
+	{
+		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	return S_OK;

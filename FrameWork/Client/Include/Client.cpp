@@ -99,7 +99,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 				break;
 
             // 마우스 클라이언트에 락
-            if (g_pGameInstance->getkeyDown(DIK_PGDN))
+            if (g_pGameInstance->getkeyDown(DIK_M))
                 g_isLockMouse = !g_isLockMouse;
             if (g_isLockMouse)
             {

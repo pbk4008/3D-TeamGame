@@ -434,8 +434,11 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Quest.h" />
     <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\Silvermane_Bow.h" />
+    <ClInclude Include="..\Headers\UI_Bar_Mark.h" />
     <ClInclude Include="..\Headers\Subtitles.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
+    <ClInclude Include="..\Headers\UI_Boss_HpBar_Red.h" />
+    <ClInclude Include="..\Headers\UI_Boss_ShieldBar_Blue.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_1.h" />
     <ClInclude Include="..\Headers\UI_EquippedWeapon_Slot_2.h" />
@@ -643,6 +646,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_QuestText.h" />
     <ClInclude Include="..\Headers\UI_SelectEffect.h" />
     <ClInclude Include="..\Headers\UI_Shield_Meter.h" />
+    <ClInclude Include="..\Headers\UI_Skill_Meter.h" />
     <ClInclude Include="..\Headers\UI_SlotBackground.h" />
     <ClInclude Include="..\Headers\UI_SlotGrade.h" />
     <ClInclude Include="..\Headers\UI_SlotItemEffect.h" />
@@ -903,8 +907,11 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Quest.cpp" />
     <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Bow.cpp" />
+    <ClCompile Include="..\Codes\UI_Bar_Mark.cpp" />
     <ClCompile Include="..\Codes\Subtitles.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
+    <ClCompile Include="..\Codes\UI_Boss_HpBar_Red.cpp" />
+    <ClCompile Include="..\Codes\UI_Boss_ShieldBar_Blue.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_1.cpp" />
     <ClCompile Include="..\Codes\UI_EquippedWeapon_Slot_2.cpp" />
@@ -1120,6 +1127,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_QuestText.cpp" />
     <ClCompile Include="..\Codes\UI_SelectEffect.cpp" />
     <ClCompile Include="..\Codes\UI_Shield_Meter.cpp" />
+    <ClCompile Include="..\Codes\UI_Skill_Meter.cpp" />
     <ClCompile Include="..\Codes\UI_SlotBackground.cpp" />
     <ClCompile Include="..\Codes\UI_SlotGrade.cpp" />
     <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp" />

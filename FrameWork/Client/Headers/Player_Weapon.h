@@ -46,7 +46,7 @@ public:
 	virtual HRESULT	Render_Velocity() override;
 
 	virtual void OnTriggerEnter(CCollision& collision) override;
-	virtual void RangeAttack() override;
+	virtual void RangeAttack(const _float _fForce = 1.f) override;
 
 public: void	SetLightCheck(_bool check) { m_bLightCheck = check; }
 

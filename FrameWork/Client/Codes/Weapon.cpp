@@ -302,7 +302,7 @@ void CWeapon::RimIntensity(_float time)
 	}
 }
 
-void CWeapon::RangeAttack()
+void CWeapon::RangeAttack(const _float _fForce)
 {
 }
 

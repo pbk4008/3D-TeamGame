@@ -256,7 +256,7 @@ void CNeedle::OnTriggerExit(CCollision& collision)
 	}*/
 }
 
-void CNeedle::RangeAttack()
+void CNeedle::RangeAttack(const _float _fForce)
 {
 	OVERLAPDESC tOverlapDesc;
 	tOverlapDesc.geometry = PxSphereGeometry(4.f);

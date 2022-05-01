@@ -40,7 +40,7 @@ _int CBastion_Sword_Idle::Tick(const _double& _dDeltaTime)
 
 	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
 
-	if (fDist < 10.f)
+	if (fDist < 20.f)
 		m_pStateController->Change_State(L"Chase");
 
 	return _int();

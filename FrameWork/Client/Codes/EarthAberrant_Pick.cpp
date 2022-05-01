@@ -273,6 +273,10 @@ CGameObject* CEarthAberrant_Pick::Clone(const _uint _iSceneID, void* pArg)
 void CEarthAberrant_Pick::Free()
 {
 	CWeapon::Free();
+
+	if(m_pTrailEffect_Distortion != nullptr)
+		m_pTrailEffect_Distortion->Set_Remove(true);
+
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pTrailEffect_Distortion);
 }
