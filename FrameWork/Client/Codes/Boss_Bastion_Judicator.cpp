@@ -151,6 +151,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	
 	if (true == m_bGroggy || true == m_bDead )
 	{
+		Set_IsAttack(false);
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}

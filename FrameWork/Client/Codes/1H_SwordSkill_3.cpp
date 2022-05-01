@@ -25,6 +25,14 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 
 	CActor* pTarget = m_pSilvermane->Get_TargetExecution();
+	if (pTarget)
+	{
+		if (pTarget->Get_Dead())
+		{
+			pTarget = nullptr;
+			m_pSilvermane->Set_TargetExecution(nullptr);
+		}
+	}
 	if (pTarget && 20 > iCurKeyFrameIndex)
 	{
 		CTransform* pTargetTransform = pTarget->Get_Transform();
@@ -45,24 +53,12 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 
 		if (!m_isAttack && 18 < iCurKeyFrameIndex)
 		{
-			ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
-			tAttackDesc.fDamage += 50.f;
-			tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
-			pTarget->Hit(tAttackDesc);
+			//ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
+			//tAttackDesc.fDamage += 50.f;
+			//tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
+			//pTarget->Hit(tAttackDesc);
+			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack = true;
-
-			CCameraShake::SHAKEEVENT tShakeEvent;
-			tShakeEvent.fInnerRadius = 10.f;
-			tShakeEvent.fDuration = 0.4f;
-			tShakeEvent.fBlendOutTime = 0.3f;
-			tShakeEvent.tWaveX.fAmplitude = 0.06f;
-			tShakeEvent.tWaveX.fFrequency = 10.f;
-			tShakeEvent.tWaveY.fAmplitude = 0.06f;
-			tShakeEvent.tWaveY.fFrequency = 6.f;
-			tShakeEvent.tWaveZ.fAmplitude = 0.06f;
-			tShakeEvent.tWaveZ.fFrequency = 8.f;
-			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
-			g_pShakeManager->Shake(tShakeEvent, vPos);
 		}
 	}
 
@@ -72,7 +68,7 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 
 		_vector svPos = m_pTransform->Get_State(CTransform::STATE_POSITION);
 
-		svPos += XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * 14.f;
+		svPos += XMLoadFloat3(&m_vDir) * (_float)_dDeltaTime * 16.f;
 		_float3 vPos{}; XMStoreFloat3(&vPos, svPos);
 		m_pSilvermane->Set_FootPosition(vPos);
 
@@ -80,26 +76,39 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 
 		if (pTarget && !m_isAttack2 && 28 < iCurKeyFrameIndex)
 		{
-			ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
-			tAttackDesc.fDamage += 50.f;
-			tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
-			pTarget->Hit(tAttackDesc);
+			//ATTACKDESC tAttackDesc = m_pSilvermane->Get_AttackDesc();
+			//tAttackDesc.fDamage += 50.f;
+			//tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
+			//pTarget->Hit(tAttackDesc);
+			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack2 = true;
+		}
+	}
 
+	if (18 < iCurKeyFrameIndex && 20 > iCurKeyFrameIndex ||
+		28 < iCurKeyFrameIndex && 30 > iCurKeyFrameIndex)
+	{
+		if (!m_isShake)
+		{
 			CCameraShake::SHAKEEVENT tShakeEvent;
-			tShakeEvent.fInnerRadius = 10.f;
+			tShakeEvent.fInnerRadius = 100.f;
+			tShakeEvent.fOuterRadius = 100.f;
 			tShakeEvent.fDuration = 0.4f;
 			tShakeEvent.fBlendOutTime = 0.3f;
-			tShakeEvent.tWaveX.fAmplitude = 0.06f;
+			tShakeEvent.tWaveX.fAmplitude = 0.1f;
 			tShakeEvent.tWaveX.fFrequency = 10.f;
-			tShakeEvent.tWaveY.fAmplitude = 0.06f;
+			tShakeEvent.tWaveY.fAmplitude = 0.1f;
 			tShakeEvent.tWaveY.fFrequency = 6.f;
-			tShakeEvent.tWaveZ.fAmplitude = 0.06f;
+			tShakeEvent.tWaveZ.fAmplitude = 0.1f;
 			tShakeEvent.tWaveZ.fFrequency = 8.f;
 			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			g_pShakeManager->Shake(tShakeEvent, vPos);
+
+			m_isShake = true;
 		}
 	}
+	else
+		m_isShake = false;
 
 	if (m_pAnimationController->Is_Finished())
 		return ToIdle();
@@ -133,6 +142,7 @@ HRESULT C1H_SwordSkill_3::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Set_PlaySpeed(1.4f);
+	m_pAnimationController->Mul_MoveSpeed(1.4f);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsDash(true);
@@ -177,6 +187,7 @@ HRESULT C1H_SwordSkill_3::ExitState()
 		return E_FAIL;
 
 	m_pAnimationController->Set_PlaySpeed(1.f);
+	m_pAnimationController->Div_MoveSpeed(1.4f);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pSilvermane->Set_IsSkill(false);
@@ -185,6 +196,8 @@ HRESULT C1H_SwordSkill_3::ExitState()
 
 	m_isAttack = false;
 	m_isAttack2 = false;
+
+	m_isShake = false;
 	return S_OK;
 }
 

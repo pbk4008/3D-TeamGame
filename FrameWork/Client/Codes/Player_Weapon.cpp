@@ -244,7 +244,7 @@ void CPlayer_Weapon::OnTriggerEnter(CCollision& collision)
 
 }
 
-void CPlayer_Weapon::RangeAttack()
+void CPlayer_Weapon::RangeAttack(const _float _fForce)
 {
 	OVERLAPDESC tOverlapDesc;
 	switch (m_eType)
@@ -282,7 +282,7 @@ void CPlayer_Weapon::RangeAttack()
 			case (_uint)GAMEOBJECT::BOSS:
 			{
 				ATTACKDESC tAttackDesc = m_pOwner->Get_AttackDesc();
-				tAttackDesc.fDamage += m_fDamage * 0.8f;
+				tAttackDesc.fDamage += m_fDamage * _fForce * 0.8f;
 				tAttackDesc.iLevel = 2;
 				tAttackDesc.pHitObject = this;
 				pActor->Hit(tAttackDesc);

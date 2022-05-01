@@ -293,6 +293,16 @@ void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 	m_tAttackDesc = _tAttackDesc;
 }
 
+void CActor::Mul_AttackDesc_Damage(const _float _fValue)
+{
+	m_tAttackDesc.fDamage *= _fValue;
+}
+
+void CActor::Div_AttackDesc_Damage(const _float _fValue)
+{
+	m_tAttackDesc.fDamage /= _fValue;
+}
+
 void CActor::Set_FootPosition(const _float3& _vPos)
 {
 }
