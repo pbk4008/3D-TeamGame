@@ -111,8 +111,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		return -1;
 	}
 
-
-
 	if (0 >= m_fCurrentHp)
 	{
 		//m_bDead = true;
@@ -190,18 +188,25 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					m_pRenderer->SetRenderButton(CRenderer::FADEIN, true);
+
 				m_bDead = true;
 				//Set_Remove(true);
 				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(true);
 				m_bdissolve = true;
+
 				return 0;
 			}
 
 			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 > m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 				Active_Effect((_uint)EFFECT::DEATH);
+
+			if (m_lifetime >= 1.f)
+				m_bchanglevel = true;
 		}
 		else
 		{
