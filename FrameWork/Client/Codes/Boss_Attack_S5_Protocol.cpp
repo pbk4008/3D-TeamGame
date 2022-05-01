@@ -95,8 +95,14 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 
 	//점프하기직전까지 플레이어거리판단
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
-
 	cout << iCurKeyFrameIndex << endl;
+
+	if (34 < iCurKeyFrameIndex && 36 > iCurKeyFrameIndex)
+	{
+		//STOP_SOUND(CHANNEL::Boss_Skill1);
+		PLAY_SOUND(L"BeamMassacre_FlyUp_01", CHANNEL::Boss_Skill1);
+	}
+
 	if (40 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bFirstCheckDist)
 	{
 		//쉐이킹 & 이펙트
@@ -185,6 +191,9 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 				m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND2, XMVectorSet(0.f, -1.f, 0.f, 0.f));
 
 				m_bShakeCheck = true;
+
+				STOP_SOUND(CHANNEL::Boss_Skill1);
+				PLAY_SOUND(L"StrafeLazer_Explode_01", CHANNEL::Boss_Skill1);
 			}
 
 			m_pMonster->Set_IsAttack(true);
@@ -219,6 +228,9 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 3.5f + svRight * 1.1f);
 
 			m_bEffectCheck = true;
+
+			STOP_SOUND(CHANNEL::Boss_Skill2);
+			PLAY_SOUND(L"BeamMassacre_End_01", CHANNEL::Boss_Skill2);
 		}
 		else
 		{

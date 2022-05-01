@@ -34,16 +34,23 @@ _int CBoss_Attack_S6::Tick(const _double& TimeDelta)
 
 	//어택 체크
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
-	 
+
+	if (46 < iCurKeyFrameIndex && 48 > iCurKeyFrameIndex)
+	{
+		//STOP_SOUND(CHANNEL::Boss_Skill1);
+		PLAY_SOUND(L"Intermission_Start_01", CHANNEL::Boss);
+	}
+
 	if (59 <= iCurKeyFrameIndex && 123 >= iCurKeyFrameIndex)
 	{
 		m_pAnimator->Get_AnimController()->Set_PlaySpeed(0.4f);
 
-		
-
 		if (61 < iCurKeyFrameIndex && 64 > iCurKeyFrameIndex && false == m_bEffectCheck1)
 		{
 			static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshRazer(true);
+
+			STOP_SOUND(CHANNEL::Boss_Razer);
+			PLAY_SOUND(L"BeamMassacre_ChargeShot_01", CHANNEL::Boss_Razer);
 
 			m_bEffectCheck1 = true;
 		}
@@ -52,6 +59,9 @@ _int CBoss_Attack_S6::Tick(const _double& TimeDelta)
 		{
 			static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshRazer(true);
 
+			STOP_SOUND(CHANNEL::Boss_Razer);
+			PLAY_SOUND(L"BeamMassacre_ChargeShot_01", CHANNEL::Boss_Razer);
+
 			m_bEffectCheck2 = true;
 		}
 
@@ -59,12 +69,15 @@ _int CBoss_Attack_S6::Tick(const _double& TimeDelta)
 		{
 			static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshRazer(true);
 
+			STOP_SOUND(CHANNEL::Boss_Razer);
+			PLAY_SOUND(L"BeamMassacre_ChargeShot_01", CHANNEL::Boss_Razer);
+
 			m_bEffectCheck3 = true;
 		}
 
-		m_bEffectCheck1 = false;
-		m_bEffectCheck2 = false;
-		m_bEffectCheck3 = false;
+		//m_bEffectCheck1 = false;
+		//m_bEffectCheck2 = false;
+		//m_bEffectCheck3 = false;
 
 		m_pMonster->Set_IsAttack(true);
 		_float fDamage = 6.f;
@@ -77,6 +90,20 @@ _int CBoss_Attack_S6::Tick(const _double& TimeDelta)
 	{
 		m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 		m_pMonster->Set_IsAttack(false);
+	}
+
+
+	if (123 > iCurKeyFrameIndex && !IS_PLAYING(CHANNEL::Boss_Skill2))
+	{
+		PLAY_SOUND(L"BeamMassacre_Loop", CHANNEL::Boss_Skill2);
+	}
+	if (123 < iCurKeyFrameIndex)
+	{
+		if (!g_pGameInstance->IsPlaying(CHANNEL::Boss_Skill1))
+		{
+			STOP_SOUND(CHANNEL::Boss_Skill2);
+			PLAY_SOUND(L"BeamMassacre_End_01", CHANNEL::Boss_Skill1);
+		}
 	}
 
 	m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
@@ -131,6 +158,11 @@ HRESULT CBoss_Attack_S6::EnterState()
 
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_S6);
 
+	STOP_SOUND(CHANNEL::Boss_Skill1);
+	PLAY_SOUND(L"BeamMassacre_Start_01", CHANNEL::Boss_Skill1);
+	STOP_SOUND(CHANNEL::Boss_Skill2);
+	PLAY_SOUND(L"BeamMassacre_FlyUp_01", CHANNEL::Boss_Skill2);
+
 	return S_OK;
 }
 
@@ -145,6 +177,7 @@ HRESULT CBoss_Attack_S6::ExitState()
 	m_bEffectCheck2 = false;
 	m_bEffectCheck3 = false;
 
+	//STOP_SOUND(CHANNEL::Boss_Skill2);
 
 	return S_OK;
 }

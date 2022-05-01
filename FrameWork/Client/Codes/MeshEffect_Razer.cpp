@@ -60,11 +60,11 @@ _int CMeshEffect_Razer::Tick(_double _dDeltaTime)
 
 	//////////////////////////////////////////// Scale
 	m_vScale.x += (_float)_dDeltaTime * -1.f;
-	if (0.f >= m_vScale.x)
-		m_vScale.x = 0.f;
+	if (0.1f >= m_vScale.x)
+		m_vScale.x = 0.1f;
 	m_vScale.y += (_float)_dDeltaTime * -1.f;
-	if (0.f >= m_vScale.y)
-		m_vScale.y = 0.f;
+	if (0.1f >= m_vScale.y)
+		m_vScale.y = 0.1f;
 	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
 
 	return _int();
@@ -140,6 +140,9 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 		tShakeEvent.fDistanceRate = 10.f;
 
 		g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+		STOP_SOUND(CHANNEL::Boss_Razer);
+		PLAY_SOUND(L"BeamMassacre_Shoot_Explode_01", CHANNEL::Boss_Razer);
 
 		//√ ±‚»≠
 		m_vScale = { 1.f, 1.f, 1000.f };

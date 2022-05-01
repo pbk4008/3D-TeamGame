@@ -120,7 +120,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	m_bLightCheck = true;
 	m_pActiveLight->Set_Active(true);
 
-	//m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
 	//cout << m_fCurrentHp << endl;
 
 	if (0 >= m_fCurrentHp)
@@ -939,7 +939,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			m_iPreAnim = iRandom;
 		}
 	}
-
+	m_pStateController->Change_State(L"Back_Flip");
 }
 
 void CBoss_Solaris::Active_Light()

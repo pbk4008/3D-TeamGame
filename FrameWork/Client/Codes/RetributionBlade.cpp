@@ -267,7 +267,9 @@ CGameObject* CRetributionBlade::Clone(const _uint _iSceneID, void* _pArg)
 void CRetributionBlade::Free()
 {
 	CWeapon::Free();
-	m_pTrailEffect_Distortion->Set_Remove(true);
+
+	if (m_pTrailEffect_Distortion)
+		m_pTrailEffect_Distortion->Set_Remove(true);
 
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pTrailEffect_Distortion);
