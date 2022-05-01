@@ -28,6 +28,7 @@ public:
 		Jump_Node,
 		Item_Drop, Item_Drop_2,
 		Orin, Ravenna, Soras, Sanctum,
+		Cinema,
 		MAXCHANNEL};
 private:
 	NO_COPY(CSoundMgr);
@@ -66,6 +67,9 @@ private:
 	// 사운드 ,채널 객체 및 장치를 관리하는 객체 
 	FMOD_SYSTEM* m_pSystem; 
 	FMOD_CHANNELGROUP* m_pGroup;
+
+
+
 };
 END
 #endif

@@ -67,6 +67,9 @@ public:
 	void OnEff_MeshEyeRazer(_bool Active);
 	void Set_RazerAngle(_bool Check);
 
+public: void Set_ShieldDissolveOn();
+public: void Set_ShieldDissolveOff();
+
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
@@ -92,7 +95,7 @@ private:
 	_bool m_bFillShield = false; //실드다시채워졌는지 
 
 	_float m_fDisTime = 5.f;
-
+	_bool	m_bfirst = true;
 private:
 	_bool	m_bIsFall = false;
 public:

@@ -218,11 +218,6 @@ PS_OUT PS_MAIN(PS_IN In)
 		Out.vColor.a *= g_Alpha;
 	}
 	
-	if(g_FadeOut == true)
-	{
-		Out.vColor *= float4(g_Alpha.xxxx);
-	}
-	
 	return Out;	
 }
 
@@ -311,11 +306,6 @@ PS_OUT PS_MAIN_FADE(PS_IN In)
 	PS_OUT Out = (PS_OUT) 0;
 
 	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
-
-	if (g_Fade == true)
-	{
-		Out.vColor.a *= g_Alpha;
-	}
 	
 	if (g_FadeOut == true)
 	{

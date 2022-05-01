@@ -87,6 +87,18 @@ _int C1H_SwordSkill_2::Tick(const _double& _dDeltaTime)
 		}
 	}
 
+
+	m_fMTAcc += g_fDeltaTime;
+	if (0.3f < m_fMTAcc)
+	{
+		m_pSilvermane->Create_MotionTrail(m_motiontrailidx,false,false,0.65f);
+		++m_motiontrailidx;
+		m_fMTAcc = 0.f;
+	}
+
+	if (m_motiontrailidx >= 20)
+		m_motiontrailidx = 0;
+
 	if (m_pAnimationController->Is_Finished())
 		return ToIdle();
 
@@ -160,6 +172,9 @@ HRESULT C1H_SwordSkill_2::ExitState()
 	m_pSilvermane->Set_IsSkill(false);
 
 	m_isAttack = false;
+
+	if (m_pSilvermane->Get_RadialCheck() == true)
+		m_pSilvermane->Set_Radial(false);
 
 	return S_OK;
 }

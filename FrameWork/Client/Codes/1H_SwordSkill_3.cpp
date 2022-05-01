@@ -168,10 +168,10 @@ HRESULT C1H_SwordSkill_3::EnterState()
 	tShakeEvent.fDuration = 2.5f;
 	tShakeEvent.fBlendInTime = 0.5f;
 	tShakeEvent.fBlendOutTime = 2.f;
-	tShakeEvent.tWaveY.fAdditionalOffset = 2.f;
+	tShakeEvent.tWaveY.fAdditionalOffset = 3.f;
 	tShakeEvent.tWaveY.fFrequency = 0.01f;
 	tShakeEvent.tWaveY.fAmplitude = 0.01f;
-	tShakeEvent.tWaveZ.fAdditionalOffset = -8.f;
+	tShakeEvent.tWaveZ.fAdditionalOffset = -6.f;
 	tShakeEvent.tWaveZ.fFrequency = 0.01f;
 	tShakeEvent.tWaveZ.fAmplitude = 0.01f;
 
@@ -198,6 +198,10 @@ HRESULT C1H_SwordSkill_3::ExitState()
 	m_isAttack2 = false;
 
 	m_isShake = false;
+
+	if (m_pSilvermane->Get_RadialCheck() == true)
+		m_pSilvermane->Set_Radial(false);
+
 	return S_OK;
 }
 

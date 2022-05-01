@@ -175,6 +175,12 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 
 	if (STUN_END == m_pAnimator->Get_CurrentAnimNode())
 	{
+		if (m_bfirst)
+		{
+			Set_ShieldDissolveOn();
+			m_bfirst = false;
+		}
+
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
 			m_bGroggy = false;
@@ -992,6 +998,16 @@ void CBoss_Solaris::OnEff_MeshEyeRazer(_bool Active)
 void CBoss_Solaris::Set_RazerAngle(_bool Check)
 {
 	m_pEff_EyeRazer->Set_RazerRotate(Check);
+}
+
+void CBoss_Solaris::Set_ShieldDissolveOn()
+{
+	m_pEff_Shield->Set_DissolveON(true);
+}
+
+void CBoss_Solaris::Set_ShieldDissolveOff()
+{
+	m_pEff_Shield->Set_DissolveOFF(true);
 }
 
 CBoss_Solaris* CBoss_Solaris::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

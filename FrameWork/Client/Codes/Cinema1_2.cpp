@@ -3,6 +3,8 @@
 #include "CinemaCam.h"
 #include "CinemaActor.h"
 #include "CinemaWeapon.h"
+#include "Subtitles.h"
+
 #include "ScenematicManager.h"
 
 CCinema1_2::CCinema1_2()
@@ -175,8 +177,6 @@ _int CCinema1_2::Tick(_double dDeltaTime)
 	m_pGrayeHwak->Tick(dDeltaTime);
 	m_pSilvermane->Tick(dDeltaTime);
 
-
-
 	m_pGrayeHwakWeapon->Tick(dDeltaTime);
 
 	m_pScree0->Tick(dDeltaTime);
@@ -187,6 +187,53 @@ _int CCinema1_2::Tick(_double dDeltaTime)
 
 	m_pCam->Tick(dDeltaTime);
 
+	cout << m_pCam->Get_CamFrame() << endl;
+	if (m_pCam->Get_CamFrame() > 380.f && m_iSubTitleSequence == 0)
+	{
+		m_iSubTitleSequence = 1;
+		list<CGameObject*>* pList = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubTitle");
+		for (auto& pSubTitle : *pList)
+			pSubTitle->setActive(false);
+
+		g_pGameInstance->StopSound(CHANNEL::Cinema);
+		m_pSubTitleSilvermane->SetImage(L"Oring_1");
+		m_pSubTitleSilvermane->setActive(true);
+		g_pGameInstance->Play_Shot(L"YouUnderstandHow", CHANNEL::Cinema);
+	}
+	if (!g_pGameInstance->IsPlaying(CHANNEL::Cinema) && m_iSubTitleSequence == 1)
+	{
+		m_iSubTitleSequence = 2;
+		m_pSubTitleSilvermane->setActive(false);
+		g_pGameInstance->StopSound(CHANNEL::Cinema);
+	}
+	if (m_pCam->Get_CamFrame() > 790.f && m_iSubTitleSequence == 2)
+	{
+		m_iSubTitleSequence = 3;
+		m_pSubTitleGrayHwak->setActive(true);
+		g_pGameInstance->Play_Shot(L"Sir", CHANNEL::Cinema);
+	}
+	if (m_pCam->Get_CamFrame() > 850.f && m_iSubTitleSequence == 3)
+	{
+		m_iSubTitleSequence = 4;
+		m_pSubTitleGrayHwak->setActive(false);
+		g_pGameInstance->StopSound(CHANNEL::Cinema);
+	}
+	if (m_pCam->Get_CamFrame() > 1100.f && m_iSubTitleSequence == 4)
+	{
+		m_iSubTitleSequence = 5;
+		m_pSubTitlePhoenix->setActive(true);
+		g_pGameInstance->Play_Shot(L"YouCanCount", CHANNEL::Cinema);
+	}
+	if (m_pCam->Get_CamFrame() > 1250.f && m_iSubTitleSequence == 5)
+	{
+		m_iSubTitleSequence = 6;
+		m_pSubTitlePhoenix->setActive(false);
+		g_pGameInstance->StopSound(CHANNEL::Cinema);
+		m_pSubTitleSilvermane->SetImage(L"Oring_2");
+		m_pSubTitleSilvermane->setActive(true);
+		g_pGameInstance->Play_Shot(L"YouTwoCover", CHANNEL::Cinema);
+	}
+
 	return _int();
 }
 
@@ -196,9 +243,9 @@ _int CCinema1_2::LateTick(_double dDeltaTime)
 	{
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
-		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
-		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA1_2);
-		RELEASE_INSTANCE(CScenematicManager);
+		
+		m_pSubTitleSilvermane->setActive(false);
+
 		return 0;
 	}
 	m_pGrayeHwak->LateTick(dDeltaTime);
@@ -222,6 +269,7 @@ void CCinema1_2::Set_Active(_bool bCheck)
 	CScenematic::Set_Active(bCheck);
 	m_bActorAnimOn = false;
 
+	m_iSubTitleSequence = 0;
 	m_pSilvermane->AnimSpeed(1.25f);
 	m_pGrayeHwak->AnimSpeed(1.25f);;
 	m_pPhoenix->AnimSpeed(1.f);
@@ -299,6 +347,25 @@ HRESULT CCinema1_2::Ready_Components()
 	if (FAILED(Ready_Weapon(&m_pGrayeHwakWeapon, (_uint)CCinemaWeapon::WEAPONTYPE::TYPE_SPEAR)))
 		return E_FAIL;
 
+	CSubtitles::Desc tTitleDesc;
+	tTitleDesc.bUsingCinema = true;
+
+	m_pSubTitlePhoenix = g_pGameInstance->Clone_GameObject<CSubtitles>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_UI_Subtitle", &tTitleDesc);
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubTitle", m_pSubTitlePhoenix);
+	Safe_AddRef(m_pSubTitlePhoenix);
+	m_pSubTitlePhoenix->SetImage(L"Revena_2");
+
+	m_pSubTitleGrayHwak = g_pGameInstance->Clone_GameObject<CSubtitles>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_UI_Subtitle", &tTitleDesc);
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubTitle", m_pSubTitleGrayHwak);
+	Safe_AddRef(m_pSubTitleGrayHwak);
+	m_pSubTitleGrayHwak->SetImage(L"Soras_2");
+
+	m_pSubTitleSilvermane = g_pGameInstance->Clone_GameObject<CSubtitles>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_UI_Subtitle", &tTitleDesc);
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubTitle", m_pSubTitleSilvermane);
+	Safe_AddRef(m_pSubTitleSilvermane);
+	m_pSubTitleSilvermane->SetImage(L"Oring_1");
+
+
 	return S_OK;
 }
 
@@ -329,4 +396,10 @@ void CCinema1_2::Free()
 
 	Safe_Release(m_pPhoenixWeapon);
 	Safe_Release(m_pGrayeHwakWeapon);
+
+	Safe_Release(m_pSubTitleGrayHwak);
+	Safe_Release(m_pSubTitlePhoenix);
+	Safe_Release(m_pSubTitleSilvermane);
+
+
 }

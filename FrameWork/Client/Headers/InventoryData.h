@@ -40,7 +40,7 @@ public: /* Set Item */
 public:
 	std::vector<CItemData> InventoryItems;
 	_int m_iResources = 0;
-	_int m_iNumofPotion = 100;
+	_int m_iNumofPotion = 3;
 	const _int ModalMaxCount = 32;
 };
 

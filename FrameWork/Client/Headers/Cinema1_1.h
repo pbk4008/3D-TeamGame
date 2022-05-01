@@ -8,6 +8,7 @@ class CCinemaCam;
 class CCinemaActor;
 class CCinemaWeapon;
 class CWall;
+class CSubtitles;
 class CCinema1_1 final : public CScenematic
 {
 private:
@@ -41,6 +42,10 @@ private:
 	CCinemaWeapon* m_pGrayHwakSpear;
 private:
 	CWall* m_pCinemaPortal;
+private:
+	CSubtitles* m_pSubTitlePhoenix;
+	CSubtitles* m_pSubTitleGrayeHwak;
+	_uint m_iSubTitleSequence=0;
 };
 END
 #endif

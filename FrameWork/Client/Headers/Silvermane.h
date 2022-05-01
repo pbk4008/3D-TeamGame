@@ -79,8 +79,9 @@ public:
 	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
 	const SCENEMOVEDATA Get_SceneMoveData() const;
 
-	void Set_Radial(_bool check);
-	void Set_RadialCnt(_int radialCnt);
+	void  Set_Radial(_bool check);
+	void  Set_RadialCnt(_int radialCnt);
+	_bool Get_RadialCheck() { return m_pRenderer->Get_RenderButton(CRenderer::RADIAL); }
 
 	void Set_IsHit(const _bool _isHit);
 	void Set_IsFall(const _bool _isFall);
@@ -172,7 +173,8 @@ private:
 	const _int	Input(const _double& _dDeltaTime);
 	RIM			ColorChange_RimCheck(RIM& rimdesc);
 
-public:  HRESULT	Create_MotionTrail(_int idex,_bool runcheck = false, _bool throwcheck = false);
+public:  HRESULT	Create_MotionTrail(_int idex, _bool runcheck = false, _bool throwcheck = false, _float colorindx = 0.f);
+//public:  _bool		
 
 private: /* Components */
 	CStateController* m_pStateController = nullptr;

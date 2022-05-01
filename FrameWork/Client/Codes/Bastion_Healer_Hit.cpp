@@ -76,10 +76,6 @@ void CBastion_Healer_Hit::Look_Player(void)
 
 void CBastion_Healer_Hit::Look_Monster(void)
 {
-	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
-
-	if (pAnim->Is_Finished() && 0 < m_pMonster->Get_CurrentHp())
-		m_pStateController->Change_State(L"Idle");
 }
 
 CBastion_Healer_Hit* CBastion_Healer_Hit::Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext, void* _pArg)

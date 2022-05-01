@@ -65,18 +65,21 @@
 #include "UI_LevelUP_Fill_Left.h"
 #include "UI_LevelUP_Fill_Right.h"
 #include "UI_Death.h"
+#include "UI_LevelHUD.h"
 
 //Quest
 #include "Quest.h"
 #include "UI_QuestText.h"
 #include "UI_QuestHeadText.h"
 #include "UI_QuestClear.h"
+
 //Guide
 #include "UI_Guide_Background.h"
 #include "UI_Guide_Texture.h"
 #include "UI_EquippedWeapon.h"
 #include "UI_EquippedWeapon_Slot_1.h"
 #include "UI_EquippedWeapon_Slot_2.h"
+#include "UI_MapInfo.h"
 
 //Inventory UI Component
 #include "SingleImage.h"
@@ -488,6 +491,9 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 	//Level Up Fill Right
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_LevelUp_Fill_Right"), UI_LevelUP_Fill_Right::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
+	//Level Up HUD
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Level_HUD"), CUI_LevelHUD::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 	//////////////////////////////
 	//Guide UI
 	//Background
@@ -504,6 +510,9 @@ HRESULT CMainApp::Ready_GameObject_Prototype()
 		return E_FAIL;
 	//Equip Weapon Slot_2
 	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_EquipWeapon_Slot_2"), CUI_EquippedWeapon_Slot_2::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	//Map Info
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_MapInfo"), CMapInfo::Create(m_pDevice, m_pDeviceContext))))
 		return E_FAIL;
 	/////////////////////////////
 	//Voice SubTitle
