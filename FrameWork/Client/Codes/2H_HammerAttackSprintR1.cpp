@@ -94,6 +94,9 @@ _int C2H_HammerAttackSprintR1::Tick(const _double& _dDeltaTime)
 
 		m_pSilvermane->RangeAttack();
 		m_isRangeAttack = true;
+
+		STOP_SOUND(CHANNEL::Player_Sword_Attack);
+		PLAY_SOUND(L"Warhammer_R1_Impact_01", CHANNEL::Player_Sword_Attack);
 	}
 
 
@@ -146,6 +149,9 @@ HRESULT C2H_HammerAttackSprintR1::EnterState()
 	m_iAttackStartIndex = 30;
 	m_iAttackEndIndex = 50;
 	m_iShakeIndex = 36;
+
+	STOP_SOUND(CHANNEL::PLAYER1);
+	PLAY_SOUND(L"Warhammer_Running_Slam", CHANNEL::PLAYER1);
 	return S_OK;
 }
 

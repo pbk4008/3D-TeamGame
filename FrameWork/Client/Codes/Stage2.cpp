@@ -26,6 +26,7 @@
 #include "DropManager.h"
 #include "Potal.h"
 #include <Boss_Bastion_Judicator.h>
+#include "Pot.h"
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -91,6 +92,9 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
@@ -220,11 +224,11 @@ _int CStage2::Tick(_double TimeDelta)
 			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Boss")->front();
 			if (nullptr != pBoss)
 			{
-				if (m_iCountMonster == 0 && pBoss->Get_Dead())
+				if (m_iCountMonster == 0 && pBoss->Get_ChangeLevel())
 				{
+					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
 					g_pQuestManager->SetRender(false);
 					g_pInvenUIManager->SetRender(false);
-					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
 					if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
 						return -1;
 
@@ -513,7 +517,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Back2
@@ -524,7 +528,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -535,7 +539,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -546,7 +550,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -688,6 +692,29 @@ HRESULT CStage2::Ready_GameManager(void)
 	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE2)))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_Pot()
+{
+	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
+	g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/Stage2_Pot.dat");
+
+	for (auto& pData : vecEnvironmentData)
+	{
+		CPot::POTDESC tDesc;
+		ZeroMemory(&tDesc, sizeof(tDesc));
+		if (!lstrcmp(pData.FileName, L"S_Moon_Urn_1_03.fbx"))
+			tDesc.iType = 0;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_01.fbx"))
+			tDesc.iType = 1;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_Set02.fbx"))
+			tDesc.iType = 2;
+
+		tDesc.matWorld = pData.WorldMat;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Pot", L"Proto_GameObject_Pot", &tDesc)))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 
@@ -1512,7 +1539,7 @@ void CStage2::Portal_Spot1()
 		Open_Potal(XMVectorSet(57.f, 0.f, 4.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster == 3 && m_iPortalCount == 2)
+	else if (m_iCountMonster <= 3 && m_iPortalCount == 2)
 	{
 		m_iPortalCount = 4;
 		Open_Potal(XMVectorSet(58.f, 7.f, 57.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1521,7 +1548,7 @@ void CStage2::Portal_Spot1()
 		Open_Potal(XMVectorSet(46.f, 7.f, 48.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 4)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 4)
 		m_pTriggerSystem->Check_Clear();
 }
 
@@ -1544,7 +1571,7 @@ void CStage2::Portal_Spot2()
 		Open_Potal(XMVectorSet(37.f, 14.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster <=2  && m_iPortalCount == 6)
+	else if (m_iCountMonster <= 2  && m_iPortalCount == 6)
 	{
 		m_iPortalCount = 7;
 		Open_Potal(XMVectorSet(42.f, 13.f, 240.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -1595,8 +1622,14 @@ void CStage2::Portal_Spot3()
 		Open_Potal(XMVectorSet(28.f, 11.f, 281.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster <= 0 && m_iPortalCount == 11)
-		m_pTriggerSystem->Check_Clear();
+	else if (m_iCountMonster == 1 || m_iCountMonster == 0)
+	{
+		if (m_iPortalCount == 11)
+		{
+			m_iCountMonster = 0;
+			m_pTriggerSystem->Check_Clear();
+		}
+	}
 }
 
 void CStage2::Portal_Spot4()
@@ -1632,8 +1665,14 @@ void CStage2::Portal_Spot4()
 		Open_Potal(XMVectorSet(15.f, 17.f, 333.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster <= 0 && m_iPortalCount == 14)
-		m_pTriggerSystem->Check_Clear();
+	else if (m_iCountMonster == 1 || m_iCountMonster == 0)
+	{
+		if (m_iPortalCount == 14)
+		{
+			m_iCountMonster = 0;
+			m_pTriggerSystem->Check_Clear();
+		}
+	}
 }
 
 void CStage2::Portal_Spot5()
@@ -1691,10 +1730,14 @@ void CStage2::Portal_Spot5()
 		Open_Potal(XMVectorSet(66.f, 32.f, 444.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster <= 0 && m_iPortalCount == 19)
+	else if (m_iCountMonster == 1 || m_iCountMonster == 0)
 	{
-		m_pTriggerSystem->Check_Clear();
-		m_pTriggerSystem->setAllTriggerClear(true);
+		if (m_iPortalCount == 19)
+		{
+			m_iCountMonster = 0;
+			m_pTriggerSystem->Check_Clear();
+			m_pTriggerSystem->setAllTriggerClear(true);
+		}
 	}
 }
 

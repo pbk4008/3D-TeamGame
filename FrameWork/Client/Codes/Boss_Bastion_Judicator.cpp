@@ -83,7 +83,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pEff_Explosion->setActive(false);
 
 	//TODO : 아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
-	m_fMaxHp = 20.f;
+	m_fMaxHp = 700.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -110,8 +110,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		return -1;
 	}
-
-
 
 	if (this->Get_HpRatio()<0.3f)
 	{
@@ -192,18 +190,25 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
-			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
+			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
+				if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+					m_pRenderer->SetRenderButton(CRenderer::FADEIN, true);
+
 				m_bDead = true;
 				//Set_Remove(true);
 				m_pPanel->Set_Show(false);
 				m_pPanel->Set_UIRemove(true);
 				m_bdissolve = true;
+
 				return 0;
 			}
 
 			if (1 <= m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex() && 2 > m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex())
 				Active_Effect((_uint)EFFECT::DEATH);
+
+			if (m_lifetime >= 1.f)
+				m_bchanglevel = true;
 		}
 		else
 		{

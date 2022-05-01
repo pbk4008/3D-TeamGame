@@ -42,13 +42,12 @@ _int CBastion_2HSword_Attack::Tick(const _double& _dDeltaTime)
 		m_pOwner->set_RandAttack(-1);
 		m_pStateController->Change_State(L"Idle");
 	}
-
 	//keyframe에따라 데미지 다르게 들어가게 
 	CMonster_Bastion_2HSword* pMonster = (CMonster_Bastion_2HSword*)m_pStateController->Get_GameObject();
 	if (nullptr != pMonster)
 	{
 		_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
-		
+		cout << iCurKeyFrameIndex << endl;
 		if ((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1 == m_pAnimator->Get_CurrentAnimNode())
 		{
 			if (130 < iCurKeyFrameIndex && 160 > iCurKeyFrameIndex)
@@ -165,9 +164,14 @@ HRESULT CBastion_2HSword_Attack::ExitState()
 
 HRESULT CBastion_2HSword_Attack::EnterState(void* pArg)
 {
-	_int iRand = (*(_int*)pArg);
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.4f);
-	switch (iRand)
+
+	if (m_iType == 3)
+		m_iType = 0;
+	else
+		m_iType++;
+
+	switch (m_iType)
 	{
 	case 0:
 		if (FAILED(m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_ATTACK_R1)))
@@ -193,6 +197,48 @@ HRESULT CBastion_2HSword_Attack::EnterState(void* pArg)
 HRESULT CBastion_2HSword_Attack::ExitState(void* pArg)
 {
 	return S_OK;
+}
+
+void CBastion_2HSword_Attack::Play_Sound()
+{
+	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+	if (pAnim)
+	{
+		_uint iFrame=pAnim->Get_TrackPoition();
+		switch (m_iType)
+		{
+		case 0://강공130  270
+			if (iFrame >= 130 && iFrame < 131)
+				g_pGameInstance->Play_Shot(L"Spear_Attack_1", CHANNEL::Sword2H_Attack);
+			if (iFrame >= 270 && iFrame < 271)
+			{
+				g_pGameInstance->StopSound(CHANNEL::Sword2H_Attack);
+				g_pGameInstance->Play_Shot(L"Spear_Attack_1", CHANNEL::Sword2H_Attack);
+			}
+			break;
+		case 1:// 뛰는거40  200
+		{
+			if (iFrame >= 40 && iFrame < 41)
+				g_pGameInstance->BlendSound(L"Earth_Dash_1", L"Earth_Dash_2", CSoundMgr::CHANNELID::Earth_Attack_1, CSoundMgr::CHANNELID::Earth_Attack_2);
+			else if(iFrame>=200 &&iFrame<201)
+				g_pGameInstance->Play_Shot(L"Spear_Attack_1", CHANNEL::Sword2H_Attack);
+		}
+			break;
+		case 2://망치150  350
+			if (iFrame >= 150 && iFrame < 151)
+				g_pGameInstance->Play_Shot(L"MidBoss_Attack_End_3", CHANNEL::Sword2H_Attack);
+			if (iFrame >= 350 && iFrame < 351)
+				g_pGameInstance->Play_Shot(L"MidBoss_Attack_Down", CHANNEL::Sword2H_Attack);
+			break;
+		case 3://약공100
+			if (iFrame >= 100 && iFrame < 101)
+				g_pGameInstance->Play_Shot(L"H1_Attack_2", CHANNEL::Sword2H_Attack);
+			break;
+		default:
+			break;
+		}
+		
+	}
 }
 
 void CBastion_2HSword_Attack::Look_Player(void)

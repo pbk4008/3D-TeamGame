@@ -34,6 +34,7 @@ private:
 	HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
 	//HRESULT Ready_Data_UI(const _tchar* pDataFilePath);
 	HRESULT	Ready_GameManager(void);
+	HRESULT Ready_Pot();
 
 private:
 	HRESULT Ready_TriggerSystem(const _tchar* pTriggerFile);

@@ -86,6 +86,8 @@ void CBastion_Healer_Attack::Check_Attack()
 		return;
 	_uint iCurAnimFrame = pAnim->Get_CurrentKeyFrameIndex();
 
+	if (iCurAnimFrame >= 0 && iCurAnimFrame < 1)
+		g_pGameInstance->Play_Shot(L"Healer_Attack", CHANNEL::Healer_Attack);
 	if (iCurAnimFrame >= 160 && iCurAnimFrame<165)
 	{
 		OVERLAPDESC tOverlapDesc;

@@ -31,9 +31,17 @@ _int CBastion_2HSword_Rage::Tick(const _double& _dDeltaTime)
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	m_pAnimator->Tick(_dDeltaTime);
+	cout << m_pAnimator->Get_CurrentAnimation()->Get_CurrentKeyFrameIndex() << endl;
 
 	if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_BATTLECRY)
 	{
+		CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+		if (pAnim)
+		{
+			_uint iFrame = pAnim->Get_CurrentKeyFrameIndex();
+			if (iFrame >= 150 && iFrame < 151)
+				g_pGameInstance->Play_Shot(L"MidBoss_Roar_2", CHANNEL::Sword2H_Attack);
+		}
 		if (!m_pAnimator->Get_IsLerp())
 		{
 			if (m_pOwner->get_Attack())
@@ -48,6 +56,13 @@ _int CBastion_2HSword_Rage::Tick(const _double& _dDeltaTime)
 	}
 	else if (m_pAnimator->Get_CurrentAnimNode() == (_uint)CMonster_Bastion_2HSword::ANIM_TYPE::A_BATTLECRY_ED)
 	{
+		CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
+		if (pAnim)
+		{
+			_uint iFrame = pAnim->Get_CurrentKeyFrameIndex();
+			if (iFrame >= 150 && iFrame < 151)
+				g_pGameInstance->Play_Shot(L"MidBoss_Attack_End_3", CHANNEL::Sword2H_Attack);
+		}
 		if (m_pAnimator->Get_CurrentAnimation()->Is_Finished())
 		{
 			m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);

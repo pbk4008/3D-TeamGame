@@ -50,6 +50,9 @@ _int C2H_HammerSkill_1::Tick(const _double& _dDeltaTime)
 
 			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack = true;
+
+			STOP_SOUND(CHANNEL::PLAYER1);
+			PLAY_SOUND(L"Warhammer_R1_Impact_01", CHANNEL::PLAYER1);
 		}
 		m_pSilvermane->Set_IsAttack(false);
 	}
@@ -71,6 +74,9 @@ _int C2H_HammerSkill_1::Tick(const _double& _dDeltaTime)
 			g_pShakeManager->Shake(tShakeEvent, vPos);
 
 			m_isShake = true;
+
+			STOP_SOUND(CHANNEL::PLAYER2);
+			PLAY_SOUND(L"Hammer_Swing", CHANNEL::PLAYER2);
 		}
 	}
 	else if (35 < iCurKeyFrameIndex && 37 > iCurKeyFrameIndex)
@@ -138,6 +144,7 @@ HRESULT C2H_HammerSkill_1::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_2H_Hammer_Attack_L1_R2_Legacy", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
+	m_pAnimationController->Mul_MoveSpeed(0.8f);
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsAttack(true);
@@ -165,6 +172,9 @@ HRESULT C2H_HammerSkill_1::EnterState()
 	_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	g_pShakeManager->Shake(tShakeEvent, vPos);
 
+	STOP_SOUND(CHANNEL::PLAYER1);
+	PLAY_SOUND(L"Hammer_Swing", CHANNEL::PLAYER1);
+
 	return S_OK;
 }
 
@@ -172,6 +182,8 @@ HRESULT C2H_HammerSkill_1::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	m_pAnimationController->Div_MoveSpeed(0.8f);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
 	m_pSilvermane->Set_IsSkill(false);
