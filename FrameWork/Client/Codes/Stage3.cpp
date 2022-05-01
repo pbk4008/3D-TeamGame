@@ -412,13 +412,12 @@ HRESULT CStage3::Ready_Light()
 
 HRESULT CStage3::Ready_Data_Effect()
 {
-
-	//이펙트 매니저에 넣으면서 생성
-	// 주의 사항!! 넣을때 순서가 ENUM순서
-	//Manager에 넣을 Effect;
+	  //이펙트 매니저에 넣으면서 생성
+   // 주의 사항!! 넣을때 순서가 ENUM순서
+   //Manager에 넣을 Effect;
 #pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 
-   //Player Dash
+//   //Player Dash
 	CEffect* pEffect = nullptr;
 	vector<CEffect_DashDust::EF_PAR_DASH_DESC> vecDashEffect;
 
