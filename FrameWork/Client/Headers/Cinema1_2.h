@@ -6,6 +6,7 @@
 BEGIN(Client)
 class CCinemaCam;
 class CCinemaActor;
+class CSubtitles;
 class CCinema1_2 final : public CScenematic
 {
 private:
@@ -40,6 +41,12 @@ private:
 private:
 	CCinemaWeapon* m_pPhoenixWeapon;
 	CCinemaWeapon* m_pGrayeHwakWeapon;
+private:
+	CSubtitles* m_pSubTitlePhoenix;
+	CSubtitles* m_pSubTitleGrayHwak;
+	CSubtitles* m_pSubTitleSilvermane;
+private:
+	_uint m_iSubTitleSequence = 0;
 };
 END
 #endif

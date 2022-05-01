@@ -33,8 +33,11 @@ HRESULT CSubtitles::NativeConstruct(const _uint iSceneID, void* pArg)
 		desc = (*(Desc*)pArg);
 
 	/* for. check player Pos */
-	m_pTriggerTrans = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pTriggerTrans->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&desc.fPos));
+	if (!desc.bUsingCinema)
+	{
+		m_pTriggerTrans = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
+		m_pTriggerTrans->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&desc.fPos));
+	}
 
 	/* for. Texture Render*/
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, -215.f, 0.1f, 1.f });
@@ -50,11 +53,14 @@ _int CSubtitles::Tick(_double dDeltaTime)
 	if (FAILED(CUI::Tick(dDeltaTime)))
 		return -1;
 
-	m_pPlayer = *g_pGameInstance->getObjectList(g_pGameInstance->getCurrentLevel(), L"Layer_Silvermane")->begin();
-	_float dist = MathUtils::Length(m_pPlayer, m_pTriggerTrans);
+	if (!desc.bUsingCinema)
+	{
+		m_pPlayer = *g_pGameInstance->getObjectList(g_pGameInstance->getCurrentLevel(), L"Layer_Silvermane")->begin();
+		_float dist = MathUtils::Length(m_pPlayer, m_pTriggerTrans);
 
-	if (dist <= m_interactDist)
-		this->setActive(true);
+		if (dist <= m_interactDist)
+			this->setActive(true);
+	}
 	//else
 	//	this->setActive(false);
 
