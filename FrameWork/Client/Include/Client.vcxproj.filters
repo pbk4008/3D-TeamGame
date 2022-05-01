@@ -4032,8 +4032,8 @@
       <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Cinema5_2.cpp">
-    </ClCompile>
       <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-2</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\2H_HammerSkill_1.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill</Filter>
     </ClCompile>
