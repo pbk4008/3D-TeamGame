@@ -1493,7 +1493,7 @@ void CStage2::Portal_Spot2()
 		Open_Potal(XMVectorSet(44.f, 13.f, 232.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 7)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 7)
 		m_pTriggerSystem->Check_Clear();
 }
 
@@ -1531,7 +1531,7 @@ void CStage2::Portal_Spot3()
 		Open_Potal(XMVectorSet(28.f, 11.f, 281.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 11)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 11)
 		m_pTriggerSystem->Check_Clear();
 }
 

@@ -113,10 +113,12 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 
 
-	if (0 >= m_fCurrentHp)
+	if (this->Get_HpRatio()<0.3f)
 	{
-		//m_bDead = true;
-		m_pStateController->Change_State(L"Death");
+		m_bDead = true;
+		m_pWeapon->setActive(false);
+		
+		return 0;
 	}
 
 	m_pTransform->Set_Velocity(XMVectorZero());

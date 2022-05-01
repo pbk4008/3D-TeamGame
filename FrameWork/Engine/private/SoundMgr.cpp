@@ -467,6 +467,12 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot2/VO_SM1a1_002f_Orin_YouTwoCover.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"YouTwoCover", pSound); else return E_FAIL;
 	
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot3/VO_SM1a1_004a_Phalanxar_NoManShall.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"NoManShall", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot3/VO_SM1a1_004d_Phalanxar_Auuugh.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Auuugh", pSound); else return E_FAIL;
+
 	FMOD_System_Update(m_pSystem);
 
 	return S_OK;

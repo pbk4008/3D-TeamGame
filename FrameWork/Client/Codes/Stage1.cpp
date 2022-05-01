@@ -183,11 +183,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -218,7 +218,7 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -324,19 +324,6 @@ _int CStage1::Tick(_double TimeDelta)
 					m_bBossClear = true;
 					m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
 				}
-				else
-				{
-					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
-					{
-						m_pScenemaManager->ResetCinema();
-						g_pInvenUIManager->SetRender(true);
-						g_pQuestManager->SetRender(true);
-						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-							return -1;
-		
-						return 0;
-					}
-				}
 			}
 		}
 	}
@@ -440,20 +427,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
 		m_pScenemaManager->Tick(TimeDelta);
-
-		if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
-		{
-			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-			if (nullptr != pBoss)
-			{
-				pBoss->setActive(true);
-				m_pScenemaManager->ResetCinema();
-				SHOW_MAPINFO(TRUE, 1); /* 중간보스 HUD */
-			}
-		}
 	}
 
 	/*for Meteor*/
@@ -479,8 +455,12 @@ _int CStage1::Tick(_double TimeDelta)
 _int CStage1::LateTick(_double TimeDelta)
 {
 
-	if(m_pScenemaManager)
-		m_pScenemaManager->LateTick(TimeDelta);
+	if (m_pScenemaManager)
+	{
+		_uint iProgress = m_pScenemaManager->LateTick(TimeDelta);
+		if (iProgress == 1)
+			return 0;
+	}
 
 	if(g_pQuestManager)
 		g_pQuestManager->Late_Tick(TimeDelta);
@@ -643,6 +623,7 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 		return E_FAIL;
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
+
 
 	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
@@ -1412,7 +1393,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-176.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-181.f, 29.f, 307.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
 		Open_Potal(XMVectorSet(-175.f, 29.f, 314.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
-		Open_Potal(XMVectorSet(-178.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-175.f, 30.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		Open_Potal(XMVectorSet(-173.f, 30.f, 323.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 6;
 	}

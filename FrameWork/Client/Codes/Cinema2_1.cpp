@@ -3,6 +3,7 @@
 #include "CinemaCam.h"
 #include "CinemaActor.h"
 #include "CinemaWeapon.h"
+#include "Subtitles.h"
 
 #include "ScenematicManager.h"
 
@@ -81,6 +82,16 @@ _int CCinema2_1::Tick(_double dDeltaTime)
 	m_pCam->Tick(dDeltaTime);
 	m_pMidWeapon->Tick(dDeltaTime);
 
+	cout << "Cam : " << m_pCam->Get_CamFrame() << endl;
+	if (m_pCam->Get_CamFrame() > 610.f && m_iSubTitleSequence == 0)
+	{
+		m_iSubTitleSequence = 1;
+		g_pGameInstance->StopSound(CHANNEL::Cinema);
+		m_pSubTitleMidBoss->setActive(true);
+		g_pGameInstance->Play_Shot(L"NoManShall",CHANNEL::Cinema);
+	}
+	//if (m_pCam->Get_CamFrame() > 100.f && m_iSubTitleSequence==2)
+	//	m_iSubTitleSequence = 3;
 
 	return _int();
 }
@@ -100,8 +111,6 @@ _int CCinema2_1::LateTick(_double dDeltaTime)
 	m_pMidBoss->LateTick(dDeltaTime);
 	m_pMidWeapon->LateTick(dDeltaTime);
 
-	
-
 	return _int();
 }
 
@@ -114,6 +123,7 @@ void CCinema2_1::Set_Active(_bool bCheck)
 	m_pCam->Reset_Camera();
 	m_pMidBoss->Acotr_AnimFrameSet(260.0);
 	m_pCam->Set_Fov(XMConvertToRadians(90.f));
+	m_iSubTitleSequence = 0.f;
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }
@@ -153,6 +163,14 @@ HRESULT CCinema2_1::Ready_Components()
 	if (FAILED(Ready_Weapon(&m_pMidWeapon, 2)))
 		return E_FAIL;
 
+	CSubtitles::Desc tTitleDesc;
+	tTitleDesc.bUsingCinema = true;
+
+	m_pSubTitleMidBoss = g_pGameInstance->Clone_GameObject<CSubtitles>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_UI_Subtitle", &tTitleDesc);
+	g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubTitle", m_pSubTitleMidBoss);
+	Safe_AddRef(m_pSubTitleMidBoss);
+	m_pSubTitleMidBoss->SetImage(L"MidBoss_1");
+
 	return S_OK;
 }
 
@@ -174,4 +192,6 @@ void CCinema2_1::Free()
 	Safe_Release(m_pSilvermane);
 	Safe_Release(m_pMidBoss);
 	Safe_Release(m_pMidWeapon);
+
+	Safe_Release(m_pSubTitleMidBoss);
 }
