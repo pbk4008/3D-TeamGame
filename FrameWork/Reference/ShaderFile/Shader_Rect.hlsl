@@ -306,6 +306,24 @@ PS_OUT_TRAIL PS_MAIN_TRAIL(PS_IN_TRAIL In)
 	return Out;
 }
 
+PS_OUT PS_MAIN_FADE(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+
+	Out.vColor = g_DiffuseTexture.Sample(DefaultSampler, In.vTexUV);
+
+	if (g_Fade == true)
+	{
+		Out.vColor.a *= g_Alpha;
+	}
+	
+	if (g_FadeOut == true)
+	{
+		Out.vColor *= float4(g_Alpha.xxxx);
+	}
+	
+	return Out;
+}
 
 technique11			DefaultTechnique
 {
@@ -380,5 +398,15 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN_DAMAGEFONT_BG();
+	}
+
+	pass FADE
+	{
+		SetRasterizerState(CullMode_None);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_FADE();
 	}
 }

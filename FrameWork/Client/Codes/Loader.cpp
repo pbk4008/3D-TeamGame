@@ -229,14 +229,14 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1TriggerLod()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1Meteor()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1Meteor()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Stage1_Cinema_Object()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1_Cinema_Object()))
+	//	return E_FAIL;
 
-	if (FAILED(Load_Pot()))
-		return E_FAIL;
+	//if (FAILED(Load_Pot()))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -1429,8 +1429,8 @@ HRESULT CLoader::Load_Stage1BossLoad()
 		return E_FAIL;
 
 	//Boss Solaris
-	//if (FAILED(Load_Stage3_BossLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage3_BossLoad()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -2205,6 +2205,10 @@ HRESULT CLoader::Load_MeshEffects()
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_lowPoly_dist.fbx",
+		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+
 	return S_OK;
 }
 
@@ -2728,7 +2732,7 @@ HRESULT CLoader::Load_StaticEffects()
 	vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
 	vecHitParticle[0].Power = 2.5f;
 
-	//마지막에 받을 Effect변수 넣기
+	// 마지막에 받을 Effect변수 넣기
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");

@@ -183,11 +183,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 	if (FAILED(Ready_Indicator()))
 	{
 		MSGBOX("Indicator");
@@ -206,21 +206,21 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Pot()))
-		return E_FAIL;
+	//if (FAILED(Ready_Pot()))
+	//	return E_FAIL;
 
 	/// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
-	if (FAILED(Ready_Cinema()))
-	{
-		MSGBOX("Cinema");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Cinema()))
+	//{
+	//	MSGBOX("Cinema");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
-	if (FAILED(Ready_Obstacle()))
-		return E_FAIL;
+	//if (FAILED(Ready_Obstacle()))
+	//	return E_FAIL;
 	 
 	return S_OK;
 }
@@ -463,20 +463,20 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMidBoss->setActive(true);
 	//}
 	// monster
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CMonster_Crawler* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CMonster_Crawler* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -1543,15 +1543,19 @@ void CStage1::Portal_Spot5()
 void CStage1::Portal_Spot6()
 {
 	list<CGameObject*>* vecObj = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_2HSword");
-	auto iter = vecObj->begin();
-	CActor* pActor = static_cast<CActor*>(*iter);
-	if (pActor->Get_HpRatio() < 0.3f && m_iPortalCount ==16)
+
+	if (m_iPortalCount == 16&&vecObj&&!vecObj->empty())
 	{
-		m_iPortalCount = 17;
-		Open_Potal(XMVectorSet(-180.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		Open_Potal(XMVectorSet(-172.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		Open_Potal(XMVectorSet(-175.f, 52.f, 388.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		m_iCountMonster += 3;
+		auto iter = vecObj->begin();
+		CActor* pActor = static_cast<CActor*>(*iter);
+		if (pActor->Get_HpRatio() < 0.3f)
+		{
+			m_iPortalCount = 17;
+			Open_Potal(XMVectorSet(-180.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+			Open_Potal(XMVectorSet(-172.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+			Open_Potal(XMVectorSet(-175.f, 52.f, 388.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+			m_iCountMonster += 3;
+		}
 	}
 	else if (m_iPortalCount == 17 && m_iCountMonster <= 3)
 	{

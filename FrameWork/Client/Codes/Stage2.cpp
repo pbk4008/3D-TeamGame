@@ -49,11 +49,11 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(Ready_NaviMesh()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("MapObject");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("MapObject");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Player(L"Layer_Silvermane")))
 	{
