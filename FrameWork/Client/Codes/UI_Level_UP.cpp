@@ -7,6 +7,7 @@
 #include "UI_LevelUP_Fill_Lead_Right.h"
 #include "UI_LevelUP_Fill_Left.h"
 #include "UI_LevelUP_Fill_Right.h"
+#include "UI_LevelHUD.h"
 
 CLevel_UP::CLevel_UP(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CUI(pDevice, pDeviceContext)
@@ -48,6 +49,17 @@ _int CLevel_UP::Tick(_double dDeltaTime)
 	if (this->getActive())
 		ShowUp(dDeltaTime);
 
+	if (true == m_pLevelUp_HUD->getActive())
+	{
+		m_fTimeLevelUp_HUD += dDeltaTime;
+
+		if (3.f <= m_fTimeLevelUp_HUD)
+		{
+			m_fTimeLevelUp_HUD = 0.f;
+			HideLevelUp_HUD();
+		}
+
+	}
 	return _int();
 }
 
@@ -64,6 +76,9 @@ _int CLevel_UP::LateTick(_double TimeDelta)
 
 	m_pFIll_Left->LateTick(TimeDelta);
 	m_pFIll_Right->LateTick(TimeDelta);
+
+	if (m_pLevelUp_HUD->getActive())
+		m_pLevelUp_HUD->LateTick(TimeDelta);
 
 	return _int();
 }
@@ -135,6 +150,12 @@ HRESULT CLevel_UP::Ready_UIObject(void)
 			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_LevelUp_Fill_Right", &desc));
 		assert(m_pFIll_Right);
 
+	}
+	/* HUD */
+	{
+		m_pLevelUp_HUD = (CUI_LevelHUD*) static_cast<CUI*>(
+			g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Level_HUD"));
+		assert(m_pLevelUp_HUD);
 	}
 	return S_OK;
 }
@@ -216,6 +237,18 @@ void CLevel_UP::FadeInAll(void)
 	m_pFIll_Right->FadeIn();
 }
 
+void CLevel_UP::ShowLevelUp_HUD(_int iLevel)
+{
+	/* Level 0 값이 1레벨임 */
+	m_pLevelUp_HUD->SetImage(m_arrLevelTex[iLevel]);
+	m_pLevelUp_HUD->setActive(true);
+}
+
+void CLevel_UP::HideLevelUp_HUD(void)
+{
+	m_pLevelUp_HUD->setActive(false);
+}
+
 void CLevel_UP::SetLevelBG(_int PlayerLevel)
 {
 	m_pBg->SetBg(PlayerLevel);
@@ -259,4 +292,5 @@ void CLevel_UP::Free()
 	Safe_Release(m_pFIll_Right);
 	Safe_Release(m_pFill_Lead_Left);
 	Safe_Release(m_pFill_Lead_Right);
+	Safe_Release(m_pLevelUp_HUD);
 }

@@ -36,8 +36,8 @@ public:
 
 private:
 	CSingleImage* m_pSigleImageCom = nullptr;
-	CUI*		  m_pOwner = nullptr;
 	CTransform*	  m_pLocalTransform = nullptr;
+	CUI*		  m_pOwner = nullptr;
 	Desc		  desc;
 	_float		  m_fPosY = 182.f;
 	_bool		  m_bOffsetY = false;
