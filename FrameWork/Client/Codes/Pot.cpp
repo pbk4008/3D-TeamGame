@@ -143,7 +143,8 @@ void CPot::OnTriggerEnter(CCollision& collision)
 		CEffectManager* pInstance = GET_INSTANCE(CEffectManager);
 
 		CEffect* pEffect =pInstance->Get_Effect((_uint)EFFECT::HIT_FLOATING);
-		pEffect->setActive(true);
+		if(pEffect)
+			pEffect->setActive(true);
 
 		RELEASE_INSTANCE(CEffectManager);
 	}

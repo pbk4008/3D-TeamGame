@@ -183,11 +183,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 	if (FAILED(Ready_Indicator()))
 	{
 		MSGBOX("Indicator");
@@ -210,14 +210,14 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 
 	/// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
-	if (FAILED(Ready_Cinema()))
-	{
-		MSGBOX("Cinema");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Cinema()))
+	//{
+	//	MSGBOX("Cinema");
+	//	return E_FAIL;
+	//}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -227,6 +227,7 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {	
+	cout << "Mon : " << m_iCountMonster << endl;
 	//_float3 fPos = { 0.f,5.f,20.f };
 
 	//m_pPot->Tick(TimeDelta);
@@ -438,7 +439,7 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_3);
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 		m_pScenemaManager->Tick(TimeDelta);
 
@@ -836,7 +837,7 @@ HRESULT CStage1::Ready_GameManager(void)
 	if (FAILED(g_pDropManager->NativeConstruct((SCENEID::SCENE_STAGE1))))
 		return E_FAIL;
 
-	//m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
+	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
 	return S_OK;
@@ -1188,9 +1189,9 @@ HRESULT CStage1::Ready_Obstacle()
 
 HRESULT CStage1::Ready_Portal()
 {
-	for (_uint i = 1; i <= 73; i++)
+	for (_uint i = 0; i < 59; i++)
 	{
-		if (i <= 19)//19개
+		if (i <20)//20
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Sword")))
 			{
@@ -1198,7 +1199,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal");
 			}
 		}
-		else if(i>=20 && i<=38)//19
+		else if(i>=20 && i<37)//17
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Shooter")))
 			{
@@ -1206,7 +1207,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal");
 			}
 		}
-		else if(i>=39 && i<=54)//16개
+		else if(i>=37 && i<50)//13개
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Healer")))
 			{
@@ -1214,7 +1215,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal"); 
 			}
 		}
-		else if (i >= 55 && i <=63)
+		else if (i >= 50 && i <55)//5개
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Crawler")))
 			{
@@ -1222,7 +1223,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal");
 			}
 		}
-		else if (i >= 64 && i <=73)
+		else if (i >=55 && i <59)//4개
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_EarthAberrant")))
 			{
@@ -1267,13 +1268,11 @@ void CStage1::Portal_Spot1()
 	{
 		m_iPortalCount = 1;
 		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		Open_Potal(XMVectorSet(-38.f, -3.f, 87.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
 		Open_Potal(XMVectorSet(-33.f, -3.f, 87.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		Open_Potal(XMVectorSet(-37.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
 		Open_Potal(XMVectorSet(-37.f, -3.f, 83.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		m_iCountMonster += 5;
+		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster <= 5 && m_iPortalCount == 1)
+	else if (m_iCountMonster <= 3 && m_iPortalCount == 1)
 	{
 		m_iPortalCount = 2;
 		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1286,7 +1285,7 @@ void CStage1::Portal_Spot1()
 
 void CStage1::Portal_Spot2()
 {
-	if (m_iCountMonster <= 3 && m_iPortalCount == 2)
+	if (m_iCountMonster <= 5 && m_iPortalCount == 2)
 	{
 		m_iPortalCount = 3;
 		Open_Potal(XMVectorSet(-84.f, 15.f, 215.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1294,9 +1293,7 @@ void CStage1::Portal_Spot2()
 		Open_Potal(XMVectorSet(-70.f, 15.f, 228.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-61.f, 15.f, 227.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-60.f, 15.f, 217.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		Open_Potal(XMVectorSet(-62.f, 15.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
-		Open_Potal(XMVectorSet(-71.f, 15.f, 203.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		m_iCountMonster += 7;
+		m_iCountMonster += 5;
 	}
 	else if (m_iCountMonster <= 5 && m_iPortalCount == 3)
 	{
@@ -1343,23 +1340,16 @@ void CStage1::Portal_Spot3()
 		Open_Potal(XMVectorSet(-133.f, 19.f, 219.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iPortalCount == 7 && m_iCountMonster <= 1)
+	else if (m_iPortalCount == 7 && m_iCountMonster <= 2)
 	{
 		m_iPortalCount = 8;
-		Open_Potal(XMVectorSet(-141.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
-		Open_Potal(XMVectorSet(-141.f, 19.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		m_iCountMonster += 2;
-	}
-	else if (m_iPortalCount == 8 && m_iCountMonster <= 2)
-	{
-		m_iPortalCount = 9;
 		Open_Potal(XMVectorSet(-141.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
 		Open_Potal(XMVectorSet(-139.f, 19.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		Open_Potal(XMVectorSet(-133.f, 19.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-129.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iPortalCount == 9 && m_iCountMonster <= 0)
+	else if (m_iPortalCount == 8 && m_iCountMonster <= 0)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
@@ -1368,27 +1358,18 @@ void CStage1::Portal_Spot3()
 
 void CStage1::Portal_Spot4()
 {
-	if (m_iPortalCount == 9 && m_iCountMonster <= 3)
+	if (m_iPortalCount == 8 && m_iCountMonster <= 3)
 	{
-		m_iPortalCount = 10;
+		m_iPortalCount = 9;
 		Open_Potal(XMVectorSet(-130.f, 18.f, 255.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-139.f, 18.f, 255.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		Open_Potal(XMVectorSet(-136.f, 18.f, 262.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-126.f, 18.f, 267.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		Open_Potal(XMVectorSet(-135.f, 18.f, 273.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		m_iCountMonster += 5;
+		m_iCountMonster +=4;
 	}
-	else if (m_iPortalCount == 10 && m_iCountMonster <= 3)
+	else if (m_iPortalCount == 9 && m_iCountMonster <= 4)
 	{
-		m_iPortalCount = 11;
-		Open_Potal(XMVectorSet(-130.f, 18.f, 263.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
-		Open_Potal(XMVectorSet(-136.f, 18.f, 263.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
-		Open_Potal(XMVectorSet(-142.f, 18.f, 261.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
-		m_iCountMonster += 3;
-	}
-	else if (m_iPortalCount == 11 && m_iCountMonster <= 4)
-	{
-		m_iPortalCount = 12;
+		m_iPortalCount = 10;
 		Open_Potal(XMVectorSet(-131.f, 18.f, 256.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
 		Open_Potal(XMVectorSet(-141.f, 18.f, 258.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
 		Open_Potal(XMVectorSet(-136.f, 18.f, 261.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -1396,7 +1377,7 @@ void CStage1::Portal_Spot4()
 		Open_Potal(XMVectorSet(-139.f, 18.f, 274.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 5;
 	}
-	else if (m_iPortalCount == 12 && m_iCountMonster <= 0)
+	else if (m_iPortalCount == 10 && m_iCountMonster <= 0)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
@@ -1405,9 +1386,9 @@ void CStage1::Portal_Spot4()
 
 void CStage1::Portal_Spot5()
 {
-	if (m_iPortalCount == 12 && m_iCountMonster <= 3)
+	if (m_iPortalCount == 10 && m_iCountMonster <= 3)
 	{
-		m_iPortalCount = 13;
+		m_iPortalCount = 11;
 		Open_Potal(XMVectorSet(-178.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		Open_Potal(XMVectorSet(-178.f, 29.f, 309.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-171.f, 29.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -1415,17 +1396,9 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-165.f, 29.f, 309.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 5;
 	}
-	else if (m_iPortalCount == 13 && m_iCountMonster <= 3)
+	else if (m_iPortalCount == 11 && m_iCountMonster <= 5)
 	{
-		m_iPortalCount = 14;
-		Open_Potal(XMVectorSet(-176.f, 29.f, 304.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		Open_Potal(XMVectorSet(-177.f, 29.f, 317.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
-		Open_Potal(XMVectorSet(-174.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
-		m_iCountMonster += 3;
-	}
-	else if (m_iPortalCount == 14 && m_iCountMonster <= 2)
-	{
-		m_iPortalCount = 15;
+		m_iPortalCount = 12;
 		Open_Potal(XMVectorSet(-170.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-176.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-181.f, 29.f, 307.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
@@ -1434,15 +1407,15 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-173.f, 30.f, 323.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 6;
 	}
-	else if (m_iPortalCount == 15 && m_iCountMonster <= 6)
+	else if (m_iPortalCount == 12 && m_iCountMonster <= 6)
 	{
-		m_iPortalCount = 16;
+		m_iPortalCount = 13;
 		Open_Potal(XMVectorSet(-171.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-181.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-183.f, 29.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 3;
 	}
-	else if (m_iPortalCount == 16 && m_iCountMonster <= 0)
+	else if (m_iPortalCount == 13 && m_iCountMonster <= 0)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
@@ -1452,19 +1425,22 @@ void CStage1::Portal_Spot5()
 void CStage1::Portal_Spot6()
 {
 	list<CGameObject*>* vecObj = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_2HSword");
-	auto iter = vecObj->begin();
-	CActor* pActor = static_cast<CActor*>(*iter);
-	if (pActor->Get_HpRatio() < 0.3f && m_iPortalCount == 16)
+	if (vecObj && !vecObj->empty() && m_iPortalCount == 13)
 	{
-		m_iPortalCount = 17;
-		Open_Potal(XMVectorSet(-180.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		Open_Potal(XMVectorSet(-172.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		Open_Potal(XMVectorSet(-175.f, 52.f, 388.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		m_iCountMonster += 3;
+		auto iter = vecObj->begin();
+		CActor* pActor = static_cast<CActor*>(*iter);
+		if (pActor->Get_HpRatio() < 0.3f)
+		{
+			m_iPortalCount = 14;
+			Open_Potal(XMVectorSet(-180.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+			Open_Potal(XMVectorSet(-172.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
+			Open_Potal(XMVectorSet(-175.f, 52.f, 388.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
+			m_iCountMonster += 3;
+		}
 	}
-	else if (m_iPortalCount == 17 && m_iCountMonster <= 3)
+	else if (m_iPortalCount == 14 && m_iCountMonster <= 3)
 	{
-		m_iPortalCount = 18;
+		m_iPortalCount = 15;
 		Open_Potal(XMVectorSet(-178.f, 52.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-170.f, 52.f, 390.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-171.f, 52.f, 383.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
@@ -1513,7 +1489,6 @@ void CStage1::Open_Wall()
 			advance(iter, 3);
 			if ((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
-
 		}
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 9)
