@@ -1197,9 +1197,9 @@ HRESULT CStage1::Ready_Obstacle()
 
 HRESULT CStage1::Ready_Portal()
 {
-	for (_uint i = 1; i <= 73; i++)
+	for (_uint i = 0; i <= 73; i++)
 	{
-		if (i <= 19)//19개
+		if (i < 20)//19개
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Sword")))
 			{
@@ -1207,7 +1207,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal");
 			}
 		}
-		else if(i>=20 && i<=38)//19
+		else if(i >= 20 && i < 38)//19
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Shooter")))
 			{
@@ -1215,7 +1215,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal");
 			}
 		}
-		else if(i>=39 && i<=54)//16개
+		else if(i >= 38 && i< 54)//16개
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Bastion_Healer")))
 			{
@@ -1223,7 +1223,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal"); 
 			}
 		}
-		else if (i >= 55 && i <=63)
+		else if (i >= 54 && i < 63) // 9
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_Crawler")))
 			{
@@ -1231,7 +1231,7 @@ HRESULT CStage1::Ready_Portal()
 				MSGBOX("Failed to Create Portal");
 			}
 		}
-		else if (i >= 64 && i <=73)
+		else if (i >= 63 && i < 73)
 		{
 			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_PortalMonster", L"Proto_GameObject_Monster_EarthAberrant")))
 			{
