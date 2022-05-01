@@ -59,6 +59,14 @@ _int CUI_Guide_Texture::Tick(_double dDeltaTime)
 	else
 		this->setActive(false);
 
+	if (true == getActive() && false == m_bSoundPlay)
+	{
+		STOP_SOUND(CHANNEL::GUIDE);
+		PLAY_SOUND(L"UI_GuideImg", CHANNEL::GUIDE);
+		VOLUME_CHANGE(CHANNEL::GUIDE, 0.5f);
+		m_bSoundPlay = true;
+	}
+	
 	return _int();
 }
 

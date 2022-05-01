@@ -85,8 +85,7 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 
 		else if ((_uint)CMonster_Bastion_Sword::ANIM_TYPE::ATTACK_DOUBLE == m_pAnimator->Get_CurrentAnimNode())
 		{
-			cout << "Double : " << iCurKeyFrameIndex << endl;
-
+			//cout << "Double : " << iCurKeyFrameIndex << endl;
 			if (80 < iCurKeyFrameIndex && 200 > iCurKeyFrameIndex)
 			{
 				pMonster->Set_IsAttack(true);
@@ -191,14 +190,14 @@ void CBastion_Sword_Attack::Play_Sound()
 	case Client::CBastion_Sword_Attack::ATTACK_TYPE::ATTACK_SINGLE:
 		if (iCurKeyFrameIndex >= m_iSingleAtt && iCurKeyFrameIndex <= m_iSingleAtt+1)
 		{
-			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_1);
+			//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_1);
 			g_pGameInstance->Play_Shot(L"H1_Attack_1", CSoundMgr::CHANNELID::Sword1H_Attack_1);
 		}
 		break;
 	case Client::CBastion_Sword_Attack::ATTACK_TYPE::ATTACK_DOUBLE:
 		if (iCurKeyFrameIndex >= m_iDoubleAtt&& iCurKeyFrameIndex <= m_iDoubleAtt + 1)
 		{
-			g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_1);
+			//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_1);
 			g_pGameInstance->Play_Shot(L"H1_Attack_2", CSoundMgr::CHANNELID::Sword1H_Attack_1);
 			m_bDouble = true;
 		}
@@ -208,7 +207,7 @@ void CBastion_Sword_Attack::Play_Sound()
 		{
 			if (!m_bJump)
 			{
-				g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_2);
+				//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_2);
 				g_pGameInstance->Play_Shot(L"H1_Attack_3", CSoundMgr::CHANNELID::Sword1H_Attack_2);
 				m_bJump = true;
 			}
@@ -224,7 +223,7 @@ void CBastion_Sword_Attack::Play_Sound()
 		{
 			if (iCurKeyFrameIndex2 >= m_iDoubleAtt + 100 && iCurKeyFrameIndex2 >= m_iDoubleAtt + 101)
 			{
-				g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_2);
+				//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::Sword1H_Attack_2);
 				g_pGameInstance->Play_Shot(L"H1_Attack_3", CSoundMgr::CHANNELID::Sword1H_Attack_2);
 			}
 		}

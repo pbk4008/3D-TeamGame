@@ -3,6 +3,7 @@
 #include "CinemaCam.h"
 #include "CinemaActor.h"
 #include "CinemaWeapon.h"
+#include "Subtitles.h"
 
 #include "ScenematicManager.h"
 
@@ -64,6 +65,7 @@ _int CCinema3_2::Tick(_double dDeltaTime)
 	CTransform* pSilvermaneTr = m_pSilvermane->Get_Transform();
 	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-177.f, 52.f, 426.f, 1.f));
 	pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(260.f));
+
 
 
 

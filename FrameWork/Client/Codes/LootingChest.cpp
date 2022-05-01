@@ -24,6 +24,7 @@ _int CLootingChest::Tick(const _double& _dDeltaTime)
 
 	//m_pSilvermane->Raycast_DropBox(_dDeltaTime);
 
+
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (68 < iCurKeyFrameIndex)
 	{
@@ -59,7 +60,9 @@ _int CLootingChest::Tick(const _double& _dDeltaTime)
 	{
 		return ToIdle();
 	}
-	
+	PLAY_SOUND(L"Opeing_DropBox", CHANNEL::PLAYER2);
+
+
 	return _int();
 }
 
@@ -108,7 +111,7 @@ HRESULT CLootingChest::ExitState()
 	m_pSilvermane->Set_IsBoxOpen(false);
 
 	m_pSilvermane->Set_IsTrasceCamera(true);
-
+	STOP_SOUND(CHANNEL::PLAYER2);
 	return S_OK;
 }
 

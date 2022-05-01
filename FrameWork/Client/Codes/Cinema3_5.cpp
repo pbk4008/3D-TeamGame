@@ -4,6 +4,7 @@
 #include "CinemaActor.h"
 #include "CinemaWeapon.h"
 
+#include "Loading.h"
 #include "ScenematicManager.h"
 
 CCinema3_5::CCinema3_5()
@@ -101,12 +102,14 @@ _int CCinema3_5::LateTick(_double dDeltaTime)
 	{
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
+		g_pGameInstance->StopSound(CHANNEL::Cinema);
+		
+		g_pInvenUIManager->SetRender(true);
+		g_pQuestManager->SetRender(true);
+		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
+			return -1;
 
-		/*	list<CGameObject*>* objList = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Floor");
-
-			auto iter = objList->begin();
-			advance(iter, 4);
-			(*iter)->setActive(true);*/
+		return 1;
 	}
 	m_pMidBoss->LateTick(dDeltaTime);
 	m_pSilvermane->LateTick(dDeltaTime);

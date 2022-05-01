@@ -71,7 +71,7 @@ HRESULT CBoss_Stun::EnterState()
 
 	m_pMonster->Set_IsAttack(false);
 
-	cout << "Boss Stun" << endl;
+	//cout << "Boss Stun" << endl;
 
 	//static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(true);
 

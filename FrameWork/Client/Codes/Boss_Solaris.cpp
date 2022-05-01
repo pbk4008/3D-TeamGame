@@ -93,8 +93,8 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_tAttackDesc.iLevel = 3;
 
-	m_pWeapon->setActive(true);
-	setActive(true);
+	m_pWeapon->setActive(false);
+	setActive(false);
 
 	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
 	m_pCharacterController->Update_OwnerTransform();
@@ -293,7 +293,7 @@ void CBoss_Solaris::setActive(_bool bActive)
 
 	if (bActive)
 	{
-		if (!m_pCharacterController)
+		if (!m_pCharacterController);
 		{
 			/* for.Character Controller */
 			CCharacterController::DESC tCharacterControllerDesc;
@@ -860,7 +860,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	cout << fDistToPlayer << endl;
+	//cout << fDistToPlayer << endl;
 	if (0.66f < Get_HpRatio())
 	{
 		//레이저없음

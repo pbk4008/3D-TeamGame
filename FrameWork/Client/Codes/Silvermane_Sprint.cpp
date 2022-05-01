@@ -19,6 +19,7 @@ _int CSilvermane_Sprint::Tick(const _double& _dDeltaTime)
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
 	return _int();
 }
 

@@ -53,6 +53,8 @@ public:
 	void OnWeaponEffect();
 	void OnEff_MeshExplosion(_bool Active);
 
+public: _bool	Get_ChangeLevel() { return m_bchanglevel; }
+
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
@@ -67,6 +69,7 @@ private:
 	_bool	m_bIsFall = false;
 	_bool	m_bFirstHit = false; //맨처음들어와서 맞았을때 판넬크기바꿔줘야돼서
 	_bool	m_bFirst = false;
+	_bool	m_bchanglevel = false;
 
 public:
 	static CBoss_Bastion_Judicator* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

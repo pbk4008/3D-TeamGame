@@ -20,6 +20,9 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
+	VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
+
 	return _int();
 }
 
@@ -49,6 +52,7 @@ HRESULT CSilvermane_SprintFwdStart::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+
 	//if (m_pSilvermane->IsEquipWeapon())
 	//{
 	//	switch (m_pSilvermane->Get_WeaponType())
@@ -74,6 +78,9 @@ HRESULT CSilvermane_SprintFwdStart::ExitState()
 {
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
+
+	VOLUME_CHANGE(CHANNEL::PLAYER1, 1.f);
+
 
 	m_motiontrailidx = 0;
 	return S_OK;

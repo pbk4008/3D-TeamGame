@@ -1451,6 +1451,16 @@ const _bool CSilvermane::Change_Weapon()
 					m_pCurWeapon->Set_Owner(this);
 					m_pCurWeapon->setActive(true);
 					m_pPlayerData->EquipedSlot = 2;
+					if (Hammer == m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponType)
+					{
+						STOP_SOUND(CHANNEL::PLAYER3);
+						PLAY_SOUND(L"Swap_Hammer", CHANNEL::PLAYER3);
+					}
+					else if(LongSword == m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponType)
+					{
+						STOP_SOUND(CHANNEL::PLAYER3);
+						PLAY_SOUND(L"Swap_Longsword", CHANNEL::PLAYER3);
+					}
 					return true;
 				}
 			}
@@ -1485,6 +1495,18 @@ const _bool CSilvermane::Change_Weapon()
 					m_pCurWeapon->Set_Owner(this);
 					m_pCurWeapon->setActive(true);
 					m_pPlayerData->EquipedSlot = 1;
+
+					if (Hammer == m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponType)
+					{
+						STOP_SOUND(CHANNEL::PLAYER3);
+						PLAY_SOUND(L"Swap_Hammer", CHANNEL::PLAYER3);
+					}
+					else if (LongSword == m_pEquipmentData->GetEquipment(EEquipSlot::Weapon2).weaponData.weaponType)
+					{
+						STOP_SOUND(CHANNEL::PLAYER3);
+						PLAY_SOUND(L"Swap_Longsword", CHANNEL::PLAYER3);
+					}
+
 					return true;
 				}
 			}
@@ -1687,6 +1709,9 @@ void CSilvermane::End_ThrowShield()
 	m_isShieldThrow = false;
 	if (g_pObserver->Get_PlayerAttackAnimStart() || m_isBlock || m_isHit)
 		return;
+
+	STOP_SOUND(CHANNEL::PLAYER2);
+	PLAY_SOUND(L"Shield_Catch", CHANNEL::PLAYER2);
 
 	m_pStateController->Change_State(L"Shield_Throw");
 	Set_EquipShield(true);

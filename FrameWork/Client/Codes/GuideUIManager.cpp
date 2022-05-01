@@ -155,6 +155,7 @@ void CGuideUIManager::Ready_UIObject(void)
 
 void CGuideUIManager::Show()
 {
+	/* 인벤 가이드 */
 	g_pMainApp->Set_DeltaTimeZero(true);
 	m_pInvenGuide->setActive(true);
 	m_bGuideUIShow = true;
@@ -225,6 +226,9 @@ void CGuideUIManager::ShowNext(void)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_RETURN))
 		{
+			STOP_SOUND(CHANNEL::EFFECT);
+			PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
+			
 			if (m_iTexIdx + 1 < m_vecGuideTex[m_iCurrentTrigerrIdx]->GetNumTex())
 			{
 				++m_iTexIdx;
