@@ -183,11 +183,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -207,10 +207,9 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Pot()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Pot()))
+		return E_FAIL;
 
-	////// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
 	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");
@@ -219,7 +218,7 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -452,6 +451,7 @@ _int CStage1::Tick(_double TimeDelta)
 			{
 				pBoss->setActive(true);
 				m_pScenemaManager->ResetCinema();
+				SHOW_MAPINFO(TRUE, 1); /* 중간보스 HUD */
 			}
 		}
 	}
@@ -580,7 +580,7 @@ HRESULT CStage1::Ready_MapObject()
 				}
 			}
 		}
-	
+
 		if (pDesc.wstrInstaneTag == L"")
 			break;
 
@@ -1518,6 +1518,8 @@ void CStage1::Open_Wall()
 //땅강아지 3마리
 void CStage1::Trgger_Function1()
 {
+	SHOW_MAPINFO(TRUE, 0);
+
 	//TriggerSystem에서 저장된 몬스터 위치를 가져온다(MonsterType)
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Crawler");
 	//몬스터 위치를 통해서 클론한다
@@ -1568,6 +1570,8 @@ void CStage1::Trgger_Function1()
 //대지 1마리
 void CStage1::Trgger_Function2()
 {
+	SHOW_MAPINFO(TRUE, 0);
+
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_EarthAberrant");
 	//몬스터 위치를 통해서 클론한다
 	if (!pLayer)

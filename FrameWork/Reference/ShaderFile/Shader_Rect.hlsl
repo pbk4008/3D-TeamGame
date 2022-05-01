@@ -218,11 +218,7 @@ PS_OUT PS_MAIN(PS_IN In)
 		Out.vColor.a *= g_Alpha;
 	}
 	
-	if(g_FadeOut == true)
-	{
-		Out.vColor *= float4(g_Alpha.xxxx);
-	}
-	
+
 	return Out;	
 }
 

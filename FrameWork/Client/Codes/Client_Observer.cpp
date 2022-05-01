@@ -154,8 +154,8 @@ void CClient_Observer::Set_Exp(_float fExp)
 	if (true == m_pPlayer->Get_PlayerData()->SetExp(fExp))
 	{
 		m_bLevelUp = true;
+		g_pInvenUIManager->ShowLevelUpHUD(m_pPlayer->Get_PlayerData()->Get_Level());
 	}
-
 	g_pInvenUIManager->ShowLevelUp();
 }
 

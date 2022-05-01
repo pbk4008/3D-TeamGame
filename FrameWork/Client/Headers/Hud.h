@@ -12,6 +12,7 @@ class CEquipmentData;
 class CUI_EquippedWeapon;
 class CUI_EquippedWeapon_Slot_1;
 class CUI_EquippedWeapon_Slot_2;
+class CMapInfo;
 
 class CHud : public CUI
 {
@@ -25,6 +26,13 @@ public:
 		_float2   fInitPos = { 0.f, 0.f };
 		_float2   fInitScale = { 1.2f, 1.2f };
 		_float2   fEndScale = { 1.0f, 1.0f };
+	};
+
+public:
+	const std::wstring arrMapInfo[2]
+	{
+		L"T_HUD_Stage_1",
+		L"T_HUD_MidBoss",
 	};
 
 public:
@@ -48,6 +56,8 @@ public:
 public:
 	void PullingEquipmentUI(void);
 	void ShowLevelUp_HUD(void);
+	void ShowMapInfo_HUD(_bool bOnOff, _int TexIdx);
+	void ShowLevelUp_HUD(_int iLevel);
 
 public:
 	void OnLootEquipment(void* pItemData);
@@ -63,10 +73,11 @@ public:
 	void EquipmentRenderYes(void);
 
 private:
-	CLevel_UP*			m_pLevelUp = nullptr;
-	CUI_EquippedWeapon* m_pEquipWeapon = nullptr;
+	CLevel_UP*				   m_pLevelUp = nullptr;
+	CUI_EquippedWeapon*		   m_pEquipWeapon = nullptr;
 	CUI_EquippedWeapon_Slot_1* m_pEquipWeapon_Slot_1 = nullptr;
 	CUI_EquippedWeapon_Slot_2* m_pEquipWeapon_Slot_2 = nullptr;
+	CMapInfo*				   m_pMapInfo = nullptr;
 
 private:
 	CPlayerData*	m_pPlayerData = nullptr;
@@ -78,7 +89,9 @@ private:
 private:
 	_bool  m_bOnLevelUpUI = false;
 	_bool  m_bHideLevelUpUI = false;
+	_bool  m_bShowMapInfo_HUD = false;
 	_float m_fOnTime = 0.f;
+	_float m_fMapInfoTime = 0.f;
 	_bool  m_bRender = true;
 
 public:

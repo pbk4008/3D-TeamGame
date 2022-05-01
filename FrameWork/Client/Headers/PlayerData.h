@@ -15,7 +15,7 @@ public:
 	void Reset(void);
 	_float GetExp(void);
 	_bool SetExp(_float iExp);
-
+	_int  Get_Level(void);
 public:
 	_int Level	    = 0;
 	_float MaxExp   = 100;
