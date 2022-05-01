@@ -238,7 +238,7 @@ _int CStage1::Tick(_double TimeDelta)
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
 
-	cout << "monster count : " << m_iCountMonster << endl;
+	//cout << "monster count : " << m_iCountMonster << endl;
 
 	if (m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();

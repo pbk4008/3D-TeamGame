@@ -84,8 +84,8 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Cinema()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Cinema()))
+		return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;

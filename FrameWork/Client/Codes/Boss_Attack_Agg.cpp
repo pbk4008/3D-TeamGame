@@ -94,13 +94,13 @@ _int CBoss_Attack_Agg::Tick(const _double& TimeDelta)
 	{
 		if (20.f <= fDistToPlayer)
 		{
-			cout << "agg -> Walk" << endl;
+			//cout << "agg -> Walk" << endl;
 
 			m_pStateController->Change_State(L"Walk_Front");
 		}
 		else if (20.f > fDistToPlayer)
 		{
-			cout << "agg -> turn" << endl;
+			//cout << "agg -> turn" << endl;
 
 			m_pStateController->Change_State(L"Turn");
 		}
@@ -133,7 +133,7 @@ HRESULT CBoss_Attack_Agg::EnterState()
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 
-	cout << "Attack_Agg" << endl;
+	//cout << "Attack_Agg" << endl;
 
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;

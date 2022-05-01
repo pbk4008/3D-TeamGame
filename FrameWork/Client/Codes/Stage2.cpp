@@ -105,7 +105,7 @@ HRESULT CStage2::NativeConstruct()
 
 _int CStage2::Tick(_double TimeDelta)
 {
-	cout << "monster count : " << m_iCountMonster << endl;
+	//cout << "monster count : " << m_iCountMonster << endl;
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))

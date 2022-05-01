@@ -1151,12 +1151,12 @@ HRESULT CLoader::Load_Stage3_Object()
 		return E_FAIL;
 
 #pragma region 이펙트들
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
-	if (FAILED(Load_TrailEffects())) //소드
-		return E_FAIL;
-	if (FAILED(Load_MeshEffects())) //매쉬
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
+	//if (FAILED(Load_TrailEffects())) //소드
+	//	return E_FAIL;
+	//if (FAILED(Load_MeshEffects())) //매쉬
+	//	return E_FAIL;
 	//if (FAILED(Load_StaticEffects())) //
 	//	return E_FAIL;
 #pragma endregion
