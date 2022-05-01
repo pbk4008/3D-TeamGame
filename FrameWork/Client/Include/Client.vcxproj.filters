@@ -1230,9 +1230,9 @@
     </Filter>
     <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3">
       <UniqueIdentifier>{3ca64b96-bfed-46e0-a1a1-7a42d1276480}</UniqueIdentifier>
+	</Filter>
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill">
       <UniqueIdentifier>{b98ba130-da3b-4b61-9ac1-8c68855bfd06}</UniqueIdentifier>
-        </Filter>
     </Filter>
   </ItemGroup>
   <ItemGroup>
