@@ -101,6 +101,8 @@ void CCinema4_1::Set_Active(_bool bCheck)
 		m_pSilvermane->Actor_AnimPlay(14);;
 		m_pBoss->Actor_AnimReset();
 		m_pSilvermane->Actor_AnimReset();
+		STOP_SOUND(CHANNEL::BGM);
+		PLAY_SOUND(L"Stage3_Opening", CHANNEL::BGM);
 	}
 }
 

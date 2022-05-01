@@ -167,7 +167,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
-	if (g_pGameInstance->getCurrentLevel() != 1)
+	if (g_pGameInstance->getCurrentLevel() != 0)
 	{
 		if (FAILED(Render_SkyBox())) MSGBOX("Failed To Rendering SkyPass");
 

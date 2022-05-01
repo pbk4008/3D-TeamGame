@@ -86,7 +86,10 @@ _bool CBastion_Healer_CastProtect::Link()
 	if (pAnim)
 	{
 		_uint dFrame = pAnim->Get_CurrentKeyFrameIndex();
-		/*cout << dFrame << endl;*/
+
+		if (dFrame >= 100 && dFrame < 101)
+			g_pGameInstance->Play_Shot(L"Healer_Reinforce", CHANNEL::Healer_Reinforce);
+
 		if (dFrame > 100)
 			m_pOwner->Link();
 	}

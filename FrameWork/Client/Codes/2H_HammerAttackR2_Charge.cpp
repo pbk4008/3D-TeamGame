@@ -34,6 +34,18 @@ _int C2H_HammerAttackR2_Charge::Tick(const _double& _dDeltaTime)
 		m_pSilvermane->Set_IsTrasceCamera(false);
 
 
+	if (51 < iCurKeyFrameIndex && 53 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::Player_Sword_Attack);
+		PLAY_SOUND(L"Hammer_Swing", CHANNEL::Player_Sword_Attack);
+	}
+	if (70 < iCurKeyFrameIndex && 72 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::PLAYER1);
+		PLAY_SOUND(L"Hammer_Swing", CHANNEL::PLAYER1);
+	}
+
+
 	if (iCurKeyFrameIndex == m_iShakeIndex2)
 	{
 		if (!m_isShake2)

@@ -57,12 +57,12 @@ HRESULT CBastion_Healer_Death::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
-	g_pGameInstance->BlendSound(L"Healer_Death", L"Monster_Death", CSoundMgr::CHANNELID::Healer_Death, CSoundMgr::MONSTER);
+	g_pGameInstance->BlendSound(L"Bastion_Death", L"Monster_Death", CSoundMgr::CHANNELID::Healer_Death, CSoundMgr::CHANNELID::MONSTER);
 	g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::Healer_Death, 1.5f);
 	g_pShakeManager->Shake(CShakeManager::ETemplate::MonsterDeath, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CMonster_Bastion_Healer::ANIM_TYPE::A_DEATH);
 	g_pMainApp->FreezeTime();
-	g_pObserver->Set_Exp(10.f);
+	g_pObserver->Set_Exp(2.f);
 
 	return S_OK;
 }

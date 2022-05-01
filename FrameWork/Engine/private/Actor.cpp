@@ -370,6 +370,7 @@ void CActor::LightOnOff(LIGHTDESC Desc, _float deltaspeed)
 	{
 		m_LightRange += g_fDeltaTime * -deltaspeed;
 
+		Desc.fRange = m_LightRange;
 		m_pActiveLight->Set_Desc(Desc);
 
 		if (m_LightRange <= 0.f)

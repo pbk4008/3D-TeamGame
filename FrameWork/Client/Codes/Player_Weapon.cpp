@@ -239,6 +239,7 @@ void CPlayer_Weapon::OnTriggerEnter(CCollision& collision)
 			m_HitPosition = static_cast<CActor*>(collision.pGameObject)->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		}
 
+		static_cast<CSilvermane*>(m_pOwner)->Add_SkillGuage(10.f);
 
 		break;
 	}
@@ -297,6 +298,8 @@ void CPlayer_Weapon::RangeAttack(const _float _fForce)
 				break;
 			}
 		}
+
+		static_cast<CSilvermane*>(m_pOwner)->Add_SkillGuage(10.f);
 	}
 }
 

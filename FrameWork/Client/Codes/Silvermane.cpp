@@ -296,7 +296,7 @@ _int CSilvermane::Tick(_double _dDeltaTime)
 
 	if (!m_isSkill)
 	{
-		m_fSkillGuage += (_float)_dDeltaTime * 10.f;
+		m_fSkillGuage += (_float)_dDeltaTime * 2.f;
 		if (100.f < m_fSkillGuage)
 			m_fSkillGuage = 100.f;
 	}
@@ -2248,6 +2248,9 @@ void CSilvermane::Set_Skill(const _bool _isSkil)
 
 void CSilvermane::Add_SkillGuage(const _float _fValue)
 {
+	if (m_isSkill)
+		return;
+
 	m_fSkillGuage += _fValue;
 }
 

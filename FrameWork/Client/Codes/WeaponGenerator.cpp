@@ -39,14 +39,14 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 	{
 		// Fury
 		weaponDataDesc.weaponName = L"Fury";
-		weaponDataDesc.damage = 50.f;
+		weaponDataDesc.damage = 55.f;
 		weaponDataDesc.weaponType = EWeaponType::Hammer;
 		CWeaponData weaponData(weaponDataDesc);
 
 		desc.weaponName = L"Fury";
 		desc.modelName = L"Model_Fury";
 		desc.arrMaterial = g_arrMI_Fury;
-		desc.damage = 50.f;
+		desc.damage = 55.f;
 		desc.NumMat = 4;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Hammer_2H;
@@ -82,14 +82,14 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 	{
 		//Eclipse
 		weaponDataDesc.weaponName = L"Eclipse";
-		weaponDataDesc.damage = 60.f;
+		weaponDataDesc.damage = 70.f;
 		weaponDataDesc.weaponType = EWeaponType::LongSword;
 		CWeaponData weaponData(weaponDataDesc);
 
 		desc.weaponName = L"Eclipse";
 		desc.modelName = L"Model_Eclipse";
 		desc.arrMaterial = g_arrMI_Eclipse;
-		desc.damage = 60.f;
+		desc.damage = 70.f;
 		desc.NumMat = 4;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Sword_1H;
@@ -104,14 +104,14 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 	{
 		//Dragon
 		weaponDataDesc.weaponName = L"Dragon";
-		weaponDataDesc.damage = 60.f;
+		weaponDataDesc.damage = 65.f;
 		weaponDataDesc.weaponType = EWeaponType::LongSword;
 		CWeaponData weaponData(weaponDataDesc);
 
 		desc.weaponName = L"Dragon";
 		desc.modelName = L"Model_Dragon";
 		desc.arrMaterial = g_arrMI_Dragon;
-		desc.damage = 60.f;
+		desc.damage = 65.f;
 		desc.NumMat = 4;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Sword_1H;
@@ -169,14 +169,14 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 	{
 		//Legend1
 		weaponDataDesc.weaponName = L"Legend1";
-		weaponDataDesc.damage = 60.f;
+		weaponDataDesc.damage = 80.f;
 		weaponDataDesc.weaponType = EWeaponType::Hammer;
 		CWeaponData weaponData(weaponDataDesc);
 
 		desc.weaponName = L"Legend1";
 		desc.modelName = L"Model_Legend1";
 		desc.arrMaterial = g_arrMI_Legend1;
-		desc.damage = 60.f;
+		desc.damage = 80.f;
 		desc.NumMat = 5;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Hammer_2H;
@@ -190,14 +190,14 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 	{
 		//Ironstone
 		weaponDataDesc.weaponName = L"Ironstone";
-		weaponDataDesc.damage = 60.f;
+		weaponDataDesc.damage = 75.f;
 		weaponDataDesc.weaponType = EWeaponType::Hammer;
 		CWeaponData weaponData(weaponDataDesc);
 
 		desc.weaponName = L"Ironstone";
 		desc.modelName = L"Model_Ironstone";
 		desc.arrMaterial = g_arrMI_Ironstone;
-		desc.damage = 60.f;
+		desc.damage = 75.f;
 		desc.NumMat = 4;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Hammer_2H;
@@ -274,14 +274,14 @@ HRESULT CWeaponGenerator::NativeConstruct(ID3D11Device* pDevice, ID3D11DeviceCon
 	{
 		//Legend5
 		weaponDataDesc.weaponName = L"Legend5";
-		weaponDataDesc.damage = 60.f;
+		weaponDataDesc.damage = 70.f;
 		weaponDataDesc.weaponType = EWeaponType::Hammer;
 		CWeaponData weaponData(weaponDataDesc);
 
 		desc.weaponName = L"Legend5";
 		desc.modelName = L"Model_Legend5";
 		desc.arrMaterial = g_arrMI_Legend5;
-		desc.damage = 60.f;
+		desc.damage = 70.f;
 		desc.NumMat = 4;
 		desc.pHierarchyNode = pHierarchyNode;
 		desc.EWeaponType = CWeapon::EType::Hammer_2H;

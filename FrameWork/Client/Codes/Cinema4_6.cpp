@@ -71,6 +71,10 @@ _int CCinema4_6::LateTick(_double dDeltaTime)
 		list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss");
 		pLayer->front()->setActive(true);
 
+		STOP_SOUND(CHANNEL::BGM);
+		PLAY_SOUND(L"Stage3_BGM", CHANNEL::BGM);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.1f);
+
 		return 0;
 	}
 	m_pBoss->LateTick(dDeltaTime);

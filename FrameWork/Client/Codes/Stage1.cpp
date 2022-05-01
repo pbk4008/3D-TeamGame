@@ -213,7 +213,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
-	//// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
+	////// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
 	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");
@@ -325,7 +325,6 @@ _int CStage1::Tick(_double TimeDelta)
 		}
 	}
 
-
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 
@@ -355,13 +354,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -376,6 +375,7 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
+
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD4))
 	//{
 	//	CMonster_Bastion_Healer* pMonster = nullptr;
@@ -383,13 +383,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	//{
-	//	CMonster_Bastion_2HSword* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	{
+		CMonster_Bastion_2HSword* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
 	//	CMonster_Bastion_Spear* pMonster = nullptr;
@@ -730,7 +730,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Back2
@@ -741,7 +741,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -752,7 +752,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -763,7 +763,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -1478,7 +1478,7 @@ void CStage1::Open_Wall()
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
 			PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
-			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+			VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
 		}
 		if (m_iCountMonster == 0)
 		{
@@ -1495,7 +1495,7 @@ void CStage1::Open_Wall()
 			if ((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
 			PLAY_SOUND(L"Monster_Battle_2", CHANNEL::BATTLE);
-			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+			VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
 		}
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)

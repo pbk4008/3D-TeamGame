@@ -41,8 +41,6 @@ private:
 private:
 	CCinemaWeapon* m_pGrayHwakSpear;
 private:
-	CWall* m_pCinemaPortal;
-private:
 	CSubtitles* m_pSubTitlePhoenix;
 	CSubtitles* m_pSubTitleGrayeHwak;
 	_uint m_iSubTitleSequence=0;

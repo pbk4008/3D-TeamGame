@@ -61,6 +61,9 @@ _int C1H_SwordSkill_2::Tick(const _double& _dDeltaTime)
 
 			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack = true;
+
+			STOP_SOUND(CHANNEL::Player_Sword_Attack);
+			PLAY_SOUND(L"Needle_Attack_R_Slam_3", CHANNEL::Player_Sword_Attack);
 		}
 
 		if (!m_isShake)
@@ -158,6 +161,9 @@ HRESULT C1H_SwordSkill_2::EnterState()
 	_float3 vPos{}; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	g_pShakeManager->Shake(tShakeEvent, vPos);
 
+
+	STOP_SOUND(CHANNEL::Player_Sword_Attack);
+	PLAY_SOUND(L"Skill_3_Jump", CHANNEL::Player_Sword_Attack);
 	return S_OK;
 }
 

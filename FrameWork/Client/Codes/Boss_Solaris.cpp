@@ -83,7 +83,24 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	if (FAILED(Set_Boss_Effect()))
 		return E_FAIL;
+
+	//라이트세팅
+	LIGHTDESC LightDesc;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 5.f;
+	LightDesc.vDiffuse = _float4(1.f, 0.5f, 0.3f, 1.f);
+	LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	LightDesc.vAmbient = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.bactive = false;
+	LightDesc.vPosition = _float3(0, 0, 0);
+	m_LightRange = LightDesc.fRange;
+	m_OrigLightRange = LightDesc.fRange;
+
+	m_MyLightDesc = LightDesc;
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc, &m_pMyLight))) MSGBOX("Failed To Adding PointLight");
 	
+	//기본정보 
 	m_iObectTag = (_uint)GAMEOBJECT::BOSS;
 	m_fMaxHp = 10000.f;
 	m_fCurrentHp = m_fMaxHp;
@@ -117,10 +134,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 		return -1;
 	}
 
-	m_bLightCheck = true;
-	m_pActiveLight->Set_Active(true);
-
-	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+	//m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
 	//cout << m_fCurrentHp << endl;
 
 	if (0 >= m_fCurrentHp)
@@ -136,9 +150,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	{
 		return iProgress;
 	}
-
-	if (m_bIsFall)
-		m_pTransform->Fall(TimeDelta);
+	m_pTransform->Fall(TimeDelta);
 
 	if (nullptr != m_pWeapon)
 	{
@@ -163,6 +175,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 		//두번째그로기가 안온상태로 첫번재 그로기만 당하고 피가 30%정도 남았을때 다시 실드채워줌
 		m_fGroggyGauge = m_fMaxGroggyGauge;
 		m_bFillShield = true;
+		m_bfirst = true;
 	}
 	
 	if (0.f >= m_fGroggyGauge && m_bFillShield && m_bFirstGroggy && !m_bSecondGroggy)
@@ -187,13 +200,10 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 		}
 	}
 
-	//m_bGroggy = false;
-	//m_fGroggyGauge = 500.f;
-	//m_fCurrentHp = 500.f;
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), m_vLightColor, 10.f);
 
-	Setting_Light();
-	
 	m_pCharacterController->Move(TimeDelta, m_pTransform->Get_Velocity());
+
 	return 0;
 }
 
@@ -744,6 +754,19 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
+	STOP_SOUND(CHANNEL::Boss);
+	PLAY_SOUND(L"Longsword_v_Metal_01", CHANNEL::Boss);
+
+	// 라이트
+	Set_LightCheck(true);
+	Set_LightOrigRange(10.f);
+	Set_LightColor(XMVectorSet(1.f, 0.5f, 0.3f, 1.f));
+
+	if ("CFlyingShield" == typeid(_tAttackDesc.pHitObject).name())
+	{
+		m_pStateController->Change_State(L"Stagger_Left");
+	}
+
 	if (0 < m_fGroggyGauge)
 	{
 		//실드게이지가있을때는 실드게이지를 깎고 
@@ -754,6 +777,8 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 	{
 		//실드게이지가 모두 닳았을때는 피를 깎아줌 
 		m_fCurrentHp -= _tAttackDesc.fDamage;
+
+		
 	}
 
 	if (!m_bGroggy && ATTACK_AGG_SPIN_360 != m_pAnimator->Get_CurrentAnimNode()
@@ -789,7 +814,7 @@ void CBoss_Solaris::Hit(const ATTACKDESC& _tAttackDesc)
 		}
 	}
 
-	if (3 <= m_iHitCount && ATTACK_S6 != m_pAnimator->Get_CurrentAnimNode()  
+	if (3 <= m_iHitCount && ATTACK_S6 != m_pAnimator->Get_CurrentAnimNode() && ATTACK_R2 != m_pAnimator->Get_CurrentAnimNode()
 		&& STUN_END != m_pAnimator->Get_CurrentAnimNode() && STUN_START != m_pAnimator->Get_CurrentAnimNode() && STUN_LOOP != m_pAnimator->Get_CurrentAnimNode())
 	{
 		uniform_int_distribution<_uint> iRange(0, 1);
@@ -926,7 +951,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 		}
 		if (8.f <= fDistToPlayer)
 		{
-			uniform_int_distribution<_uint> iRange(0, 3);
+			uniform_int_distribution<_uint> iRange(0, 2);
 			_uint iRandom = iRange(g_random);
 
 			while (iRandom == m_iPreAnim)
@@ -945,30 +970,34 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			case 2:
 				m_pStateController->Change_State(L"Attack_R1");
 				break;
-			case 3:
-				m_pStateController->Change_State(L"Attack_S2_Variant");
-				break;
 			}
 			m_iPreAnim = iRandom;
 		}
 	}
-	m_pStateController->Change_State(L"Back_Flip");
 }
 
-void CBoss_Solaris::Active_Light()
+void CBoss_Solaris::Set_ChangeLight(_float fSpeed, _float FinalRange, _bool bPlus)
 {
-	m_bLightCheck = true;
-	m_pActiveLight->Set_Active(true);
-}
+	m_MyLightDesc.fRange += g_fDeltaTime * fSpeed;
 
-void CBoss_Solaris::Setting_Light()
-{
-	CActor::LightOnOff(*m_pActiveLight->Get_LightDesc(), m_fDisTime);
-}
+	m_pMyLight->Set_Desc(m_MyLightDesc);
 
-void CBoss_Solaris::Set_LightDisTime(_float DisTime)
-{
-	m_fDisTime = DisTime;
+	if (true == bPlus)
+	{
+		if (m_MyLightDesc.fRange >= FinalRange)
+		{
+			m_MyLightDesc.fRange = m_OrigLightRange;
+			m_pMyLight->Set_Active(false);
+		}
+	}
+	else
+	{
+		if (m_MyLightDesc.fRange <= FinalRange)
+		{
+			m_MyLightDesc.fRange = 0.f;
+			m_pMyLight->Set_Active(false);
+		}
+	}
 }
 
 void CBoss_Solaris::OnEff_MeshExplosion(_bool Active)

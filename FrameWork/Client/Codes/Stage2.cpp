@@ -26,6 +26,7 @@
 #include "DropManager.h"
 #include "Potal.h"
 #include <Boss_Bastion_Judicator.h>
+#include "Pot.h"
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -91,6 +92,9 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
@@ -513,7 +517,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Back2
@@ -524,7 +528,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -535,7 +539,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -546,7 +550,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -688,6 +692,29 @@ HRESULT CStage2::Ready_GameManager(void)
 	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE2)))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_Pot()
+{
+	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
+	g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/Stage2_Pot.dat");
+
+	for (auto& pData : vecEnvironmentData)
+	{
+		CPot::POTDESC tDesc;
+		ZeroMemory(&tDesc, sizeof(tDesc));
+		if (!lstrcmp(pData.FileName, L"S_Moon_Urn_1_03.fbx"))
+			tDesc.iType = 0;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_01.fbx"))
+			tDesc.iType = 1;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_Set02.fbx"))
+			tDesc.iType = 2;
+
+		tDesc.matWorld = pData.WorldMat;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Pot", L"Proto_GameObject_Pot", &tDesc)))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 
@@ -1084,6 +1111,9 @@ void CStage2::Trgger_Function6()
 	if (!pLayer)
 		return;
 
+	PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
+
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
@@ -1173,6 +1203,8 @@ void CStage2::Trgger_Function7()
 	if (!pLayer)
 		return;
 
+	VOLUME_CHANGE(CHANNEL::BGM, 1.f);
+
 	if (m_bDebug)
 	{
 		auto iter = pLayer->begin();
@@ -1239,6 +1271,9 @@ void CStage2::Trgger_Function9()
 	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Bastion_Sword");
 	if (!pLayer)
 		return;
+
+	PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
 
 	if (m_bDebug)
 	{
@@ -1513,7 +1548,7 @@ void CStage2::Portal_Spot1()
 		Open_Potal(XMVectorSet(46.f, 7.f, 48.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 4)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 4)
 		m_pTriggerSystem->Check_Clear();
 }
 
@@ -1536,7 +1571,7 @@ void CStage2::Portal_Spot2()
 		Open_Potal(XMVectorSet(37.f, 14.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster <=2  && m_iPortalCount == 6)
+	else if (m_iCountMonster <= 2  && m_iPortalCount == 6)
 	{
 		m_iPortalCount = 7;
 		Open_Potal(XMVectorSet(42.f, 13.f, 240.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -1551,8 +1586,12 @@ void CStage2::Portal_Spot2()
 
 void CStage2::Portal_Spot3()
 {
+
 	if (m_iCountMonster <= 4 && m_iPortalCount == 7)
 	{
+		PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+
 		m_iPortalCount = 8;
 		Open_Potal(XMVectorSet(8.f, 10.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
 		Open_Potal(XMVectorSet(4.f, 10.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
@@ -1597,6 +1636,9 @@ void CStage2::Portal_Spot4()
 {
 	if (m_iCountMonster <= 3 && m_iPortalCount == 11)
 	{
+		PLAY_SOUND(L"Monster_Battle_2", CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+
 		m_iPortalCount = 12;
 		Open_Potal(XMVectorSet(5.f, 17.f, 353.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		Open_Potal(XMVectorSet(16.f, 17.f, 332.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
