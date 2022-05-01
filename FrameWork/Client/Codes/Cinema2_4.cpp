@@ -81,6 +81,12 @@ _int CCinema2_4::LateTick(_double dDeltaTime)
 	if (m_pCam->Get_CamMoveEnd())
 	{
 		m_bCinemaEnd = true;
+		CGameObject* pBoss = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
+		if (nullptr != pBoss)
+		{
+			pBoss->setActive(true);
+			SHOW_MAPINFO(TRUE, 1); /* 중간보스 HUD */
+		}
 		/*CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
 		pInstance->Change_Cinema((_uint)CINEMA_INDEX::CINEMA3_1);
 		RELEASE_INSTANCE(CScenematicManager);*/

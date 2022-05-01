@@ -68,6 +68,9 @@ HRESULT CBoss_Stagger_Left::EnterState()
 	//g_pGameInstance->Play_Shot(L"MidBoss_Roar", CSoundMgr::CHANNELID::MidBoss);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::STAGGER_LEFT);
 
+	STOP_SOUND(CHANNEL::Boss_Skill1);
+	PLAY_SOUND(L"Intermission_Hit_01", CHANNEL::Boss_Skill1);
+
 	return S_OK;
 }
 

@@ -3,6 +3,7 @@
 
 #include "Animation.h"
 #include "Boss_Solaris.h"
+#include "Light.h"
 
 CBoss_Attack_R2::CBoss_Attack_R2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CMonster_FSM(pDevice, pDeviceContext)
@@ -35,11 +36,23 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 	//어택 체크
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 	 
-	//cout << iCurKeyFrameIndex << endl;
+	cout << iCurKeyFrameIndex << endl;
 
 	if (15 <= iCurKeyFrameIndex && 38 >= iCurKeyFrameIndex )
 	{
 		m_pAnimator->Get_AnimController()->Set_PlaySpeed(0.4f);
+
+		LIGHTDESC Desc = static_cast<CBoss_Solaris*>(m_pMonster)->Get_MyLightDesc();
+		_vector Pos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		Desc.vPosition = _float3(XMVectorGetX(Pos), XMVectorGetY(Pos), XMVectorGetZ(Pos));
+		Desc.vAmbient = { 5.f,5.f,5.f,1.f };
+		Desc.bactive = true;
+		static_cast<CBoss_Solaris*>(m_pMonster)->Set_LightDesc(Desc);
+		static_cast<CBoss_Solaris*>(m_pMonster)->Set_ChangeLight(2.f, 7.f, true);
+	}
+	if (50 <= iCurKeyFrameIndex )
+	{
+		static_cast<CBoss_Solaris*>(m_pMonster)->Set_ChangeLight(-18.f, 0.f, false);
 	}
 
 	if (9 <= iCurKeyFrameIndex && 12 >= iCurKeyFrameIndex && false == m_bEffectCheck)

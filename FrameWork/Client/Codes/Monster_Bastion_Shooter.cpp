@@ -601,7 +601,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_UI()
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 5.f;
+	m_fMaxHp = 100.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;

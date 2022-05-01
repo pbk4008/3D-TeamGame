@@ -36,6 +36,12 @@ _int CBoss_Attack_S2_Variant::Tick(const _double& TimeDelta)
 	_uint iCurKeyFrameIndex = m_pAnimator->Get_AnimController()->Get_CurKeyFrameIndex();
 	 
 	//cout << iCurKeyFrameIndex << endl;
+	
+	if (38 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::Boss_Skill1);
+		PLAY_SOUND(L"BeamMassacre_Start_01", CHANNEL::Boss_Skill1);
+	}
 
 	if (42 <= iCurKeyFrameIndex && 44 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 	{
@@ -99,6 +105,9 @@ HRESULT CBoss_Attack_S2_Variant::EnterState()
 	m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
  	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::ATTACK_S2_VARIANT);
 
+	STOP_SOUND(CHANNEL::Boss_Skill1);
+	PLAY_SOUND(L"Intermission_Start_01", CHANNEL::Boss_Skill1);
+
 	return S_OK;
 }
 
@@ -112,6 +121,7 @@ HRESULT CBoss_Attack_S2_Variant::ExitState()
 	m_bShakeCheck = false;
 	m_bEffectCheck = false;
 
+	STOP_SOUND(CHANNEL::Boss_Skill1);
 	return S_OK;
 }
 

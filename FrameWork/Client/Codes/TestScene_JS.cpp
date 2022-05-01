@@ -304,7 +304,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Back2
@@ -315,7 +315,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -326,7 +326,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -337,7 +337,7 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Blank_Ckey

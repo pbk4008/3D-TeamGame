@@ -59,6 +59,9 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 			//pTarget->Hit(tAttackDesc);
 			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack = true;
+
+			STOP_SOUND(CHANNEL::Player_Sword_Attack);
+			PLAY_SOUND(L"Player_Gap_Closer", CHANNEL::Player_Sword_Attack);
 		}
 	}
 
@@ -82,6 +85,9 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 			//pTarget->Hit(tAttackDesc);
 			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack2 = true;
+
+			STOP_SOUND(CHANNEL::Player_Sword_Attack);
+			PLAY_SOUND(L"Player_Gap_Closer", CHANNEL::Player_Sword_Attack);
 		}
 	}
 
@@ -147,7 +153,7 @@ HRESULT C1H_SwordSkill_3::EnterState()
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsDash(true);
 	m_pSilvermane->Set_IsSkill(true);
-	//m_pSilvermane->Add_SkillGuage(-50.f);
+	m_pSilvermane->Add_SkillGuage(-50.f);
 
 	if (!m_pSilvermane->IsEquipWeapon())
 	{
@@ -178,6 +184,9 @@ HRESULT C1H_SwordSkill_3::EnterState()
 	_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 	g_pShakeManager->Shake(tShakeEvent, vPos);
 
+	g_pGameInstance->VolumeChange(CHANNEL::Player_Sword_Attack, 4.f);
+	STOP_SOUND(CHANNEL::Player_Sword_Attack);
+	PLAY_SOUND(L"Dash_Leap_01", CHANNEL::Player_Sword_Attack);
 	return S_OK;
 }
 
@@ -202,6 +211,7 @@ HRESULT C1H_SwordSkill_3::ExitState()
 	if (m_pSilvermane->Get_RadialCheck() == true)
 		m_pSilvermane->Set_Radial(false);
 
+	g_pGameInstance->VolumeChange(CHANNEL::Player_Sword_Attack, 1.f);
 	return S_OK;
 }
 

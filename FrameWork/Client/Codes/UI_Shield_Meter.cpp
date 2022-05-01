@@ -93,11 +93,14 @@ _int CUI_Shield_Meter::Tick(_double TimeDelta)
 		else if (15 <= m_iTextureNum)
 		{
 			//마지막까지 다 찼으면 쿨타임끝
+			STOP_SOUND(CHANNEL::PLAYER3);
+			PLAY_SOUND(L"Shield_Recharge", CHANNEL::PLAYER3);
+
 			m_iTextureNum = 15;
 			m_bCoolTime = false;
 			g_pObserver->Get_Player()->Set_IsShieldCoolTime(false);
 		}
-
+		
 		m_fFillTimeAcc = 0.f;
 	}
 

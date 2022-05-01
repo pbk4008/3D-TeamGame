@@ -56,9 +56,13 @@ public:
 	void Set_Random_AttackAnim();
 
 public:
-	void Active_Light(); //라이트켜줄때 
-	void Set_LightDisTime(_float DisTime); //사라질 시간 정해주는 함수
-	void Setting_Light(); //라이트 정보세팅 
+	const LIGHTDESC Get_MyLightDesc() const { return m_MyLightDesc; } //라이트 정보세팅 
+	CLight* Get_MyLight() const { return m_pMyLight; } //라이트 정보세팅 
+
+public:
+	void Set_ChangeLight(_float fSpeed, _float FinalRange, _bool bPlus);
+	void Set_LightDesc(LIGHTDESC Desc) { m_MyLightDesc = Desc; }
+	void Set_LightColor(_fvector vColor) { m_vLightColor = vColor; }
 
 public:
 	void OnEff_MeshExplosion(_bool Active);
@@ -96,6 +100,11 @@ private:
 
 	_float m_fDisTime = 5.f;
 	_bool	m_bfirst = true;
+
+	LIGHTDESC m_MyLightDesc;
+	CLight* m_pMyLight = nullptr;
+
+	_vector		m_vLightColor = XMVectorZero();
 private:
 	_bool	m_bIsFall = false;
 public:

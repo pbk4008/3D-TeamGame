@@ -66,6 +66,9 @@ HRESULT C2H_HammerChargeStage1_Start::EnterState()
 	}
 	m_pSilvermane->Set_IsTrasceCamera(false);
 
+	STOP_SOUND(CHANNEL::PLAYER1);
+	PLAY_SOUND(L"Hammer_L2_ChargeBuild", CHANNEL::PLAYER1);
+
 	return S_OK;
 }
 

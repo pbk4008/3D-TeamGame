@@ -50,10 +50,13 @@ HRESULT CSilvermane_SprintFwdStop::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	STOP_SOUND(CHANNEL::PLAYER1);
+
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Sprint_Fwd_Stop_Player", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
-	
+
+
 	return S_OK;
 }
 

@@ -24,6 +24,13 @@ _int CSilvermane_Heal::Tick(const _double& _dDeltaTime)
 	if(20 < iCurKeyFrameIndex && 80 > iCurKeyFrameIndex)
 		m_pSilvermane->Add_HP(m_fValue * (_float)_dDeltaTime);
 
+
+	if (65 < iCurKeyFrameIndex/* && 69 > iCurKeyFrameIndex*/)
+	{
+		STOP_SOUND(CHANNEL::Ravenna);
+		PLAY_SOUND(L"Player_Heal", CHANNEL::PLAYER2);
+	}
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		return ToIdle();
@@ -62,6 +69,8 @@ HRESULT CSilvermane_Heal::EnterState()
 	m_fValue = m_pSilvermane->Get_MaxHp() * 0.2f;
 
 	m_pSilvermane->Get_InvenData()->UsingPotion();
+
+	PLAY_SOUND(L"Player_Heal_Start", CHANNEL::Ravenna);
 
 	return S_OK;
 }

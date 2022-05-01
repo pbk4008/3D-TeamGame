@@ -75,6 +75,10 @@ HRESULT C2H_HammerChargeStage1_Loop::EnterState()
 
 
 	m_iShakeIndex = 0;
+
+	STOP_SOUND(CHANNEL::PLAYER2);
+	PLAY_SOUND(L"Hammer_L2_ChargeIgnite", CHANNEL::PLAYER2);
+
 	return S_OK;
 }
 

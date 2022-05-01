@@ -69,6 +69,17 @@ _int C2H_HammerSkill_2::Tick(const _double& _dDeltaTime)
 	else
 		m_isAttack = false;
 
+	if (36 < iCurKeyFrameIndex && 38 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::PLAYER1);
+		PLAY_SOUND(L"JustFrame_Throw_01", CHANNEL::PLAYER1);
+	}
+	if (67 < iCurKeyFrameIndex && 69 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::PLAYER1);
+		PLAY_SOUND(L"JustFrame_Catch_01", CHANNEL::PLAYER1);
+	}
+
 	if (m_pAnimationController->Is_Finished())
 		return ToIdle();
 
@@ -129,6 +140,9 @@ HRESULT C2H_HammerSkill_2::EnterState()
 	g_pShakeManager->Shake(tShakeEvent, vPos);
 
 	m_iCutIndex = 80;
+
+	STOP_SOUND(CHANNEL::PLAYER1);
+	PLAY_SOUND(L"Hammer_L2_ChargeBuild", CHANNEL::PLAYER1);
 
 	return S_OK;
 }

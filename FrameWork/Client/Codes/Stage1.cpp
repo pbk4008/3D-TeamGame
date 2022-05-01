@@ -142,17 +142,17 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_MapObject()))
-	//{
-	//	MSGBOX("Stage1 MapObject");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_MapObject()))
+	{
+		MSGBOX("Stage1 MapObject");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//{
-	//	MSGBOX("Stage1 Trigger");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
+		MSGBOX("Stage1 Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -186,11 +186,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -198,11 +198,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Wall()))
 	{
@@ -213,16 +213,16 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
-	//// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
-	//if (FAILED(Ready_Cinema()))
-	//{
-	//	MSGBOX("Cinema");
-	//	return E_FAIL;
-	//}
+	////// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
+	if (FAILED(Ready_Cinema()))
+	{
+		MSGBOX("Cinema");
+		return E_FAIL;
+	}
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -237,16 +237,8 @@ _int CStage1::Tick(_double TimeDelta)
 	//m_pPot->Tick(TimeDelta);
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
-	
 
-	if (g_pGameInstance->getkeyDown(DIK_F8))
-	{
-		g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
-	}
-	if (g_pGameInstance->getkeyDown(DIK_F7))
-	{
-		g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
-	}
+	cout << "monster count : " << m_iCountMonster << endl;
 
 	if (m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();
@@ -279,6 +271,7 @@ _int CStage1::Tick(_double TimeDelta)
 		else
 		{
 			SHOW_GUIDE();
+			PLAY_SOUND(L"UI_InvenOpen", CHANNEL::EFFECT);
 			g_pInvenUIManager->OpenModal();
 			g_pMainApp->Set_DeltaTimeZero(true);
 		}
@@ -332,7 +325,6 @@ _int CStage1::Tick(_double TimeDelta)
 		}
 	}
 
-
 #pragma region Using Debug
 	_float3 fPos = { 0.f,5.f,20.f };
 
@@ -362,13 +354,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -431,8 +423,8 @@ _int CStage1::Tick(_double TimeDelta)
 
 	if (m_pScenemaManager)
 	{
-		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
+		if (g_pGameInstance->getkeyDown(DIK_N))
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_4);;
 
 		m_pScenemaManager->Tick(TimeDelta);
 	}
@@ -738,7 +730,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Back2
@@ -749,7 +741,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -760,7 +752,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
 		return E_FAIL;
 
 	//Player Skill_Meter_Gauge
@@ -771,7 +763,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	DescBack.fSize = { 85.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -1342,6 +1334,8 @@ void CStage1::Portal_Spot2()
 	else if (m_iCountMonster <= 0 && m_iPortalCount == 6)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		STOP_SOUND(CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.0f);
 		m_pTriggerSystem->Check_Clear();
 	}
 }
@@ -1397,6 +1391,8 @@ void CStage1::Portal_Spot4()
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
+		STOP_SOUND(CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.0f);
 	}
 }
 
@@ -1481,6 +1477,8 @@ void CStage1::Open_Wall()
 			advance(iter, 0);
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
+			PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 		}
 		if (m_iCountMonster == 0)
 		{
@@ -1496,6 +1494,8 @@ void CStage1::Open_Wall()
 			advance(iter, 2);
 			if ((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
+			PLAY_SOUND(L"Monster_Battle_2", CHANNEL::BATTLE);
+			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 		}
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)

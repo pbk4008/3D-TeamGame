@@ -31,6 +31,12 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 
 	if (!m_isJumpEnd)
 	{
+		if (5 < iCurKeyFrameIndex)
+		{
+			PLAY_SOUND(L"JumpNode_Flying", CHANNEL::EFFECT);
+			PLAY_SOUND(L"JumpNode_Flying", CHANNEL::PLAYER1);
+			VOLUME_CHANGE(CHANNEL::EFFECT, 1.f);
+		}
 		if (7 < iCurKeyFrameIndex)
 		{
 			m_pSilvermane->Set_IsTrasceCamera(false);
@@ -50,6 +56,8 @@ _int CTraverse_JumpNodeJog::Tick(const _double& _dDeltaTime)
 	}
 	else
 	{
+		STOP_SOUND(CHANNEL::EFFECT);
+
 		if (m_radialcnt > 1)
 		{
 			m_pSilvermane->Set_RadialCnt(m_radialcnt);

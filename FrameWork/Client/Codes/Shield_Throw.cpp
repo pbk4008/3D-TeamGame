@@ -141,6 +141,8 @@ _int CShield_Throw::Input(const _double& _dDeltaTime)
 			else
 			{
 				m_pAnimationController->Set_PlaySpeed(0.f);
+				//STOP_SOUND(CHANNEL::PLAYER2);
+				PLAY_SOUND(L"Shield_Charge", CHANNEL::PLAYER2);
 			}
 		}
 	}

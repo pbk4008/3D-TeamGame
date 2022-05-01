@@ -38,7 +38,8 @@ private:
 	CGameObject*	m_pPlayer = nullptr;
 
 private:
-	_int m_interactDist = 5;
+	_int  m_interactDist = 5;
+	_bool m_bSoundPlay = false;
 	Desc desc;
 
 public:
