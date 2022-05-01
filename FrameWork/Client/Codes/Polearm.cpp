@@ -113,7 +113,7 @@ _int CPolearm::LateTick(_double _dDeltaTime)
 		{
 			m_pTrailEffect_Distortion->Clear_Points();
 			m_pTrailEffect_Distortion->Set_IsRender(false);
-			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+			//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 		}
 	}
 

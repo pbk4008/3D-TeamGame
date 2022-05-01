@@ -500,6 +500,24 @@ HRESULT CSoundMgr::LoadSoundFile()
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Hit_01", pSound); else MSGBOX(L"보스 사운드 로드 실패");
 #pragma endregion
 
+	/* for. Cinema */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot1/VO_SM1a1_002a_Soras_ThisWontBe.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"ThisWontBe", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot1/VO_SM1a1_002b_Ravenna_IfAnyoneCan.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"IfAnyoneCan", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot2/VO_SM1a1_002c_Soras_Sir.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Sir", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot2/VO_SM1a1_002d_Orin_YouUnderstandHow.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"YouUnderstandHow", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot2/VO_SM1a1_002e_Ravenna_YouCanCount.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"YouCanCount", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Cinema/Shot2/VO_SM1a1_002f_Orin_YouTwoCover.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"YouTwoCover", pSound); else return E_FAIL;
 	
 	FMOD_System_Update(m_pSystem);
 

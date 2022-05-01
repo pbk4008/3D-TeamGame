@@ -41,7 +41,7 @@ _int CBastion_Sword_Chase::Tick(const _double& _dDeltaTime)
 	//m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 	//일정 거리가 되면 바로 공
 	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
-	if (fDist >= 10.f)
+	if (fDist >= 21.f)
 		m_pStateController->Change_State(L"Idle");
 	else
 	{

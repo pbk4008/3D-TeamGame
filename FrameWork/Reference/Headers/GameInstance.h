@@ -24,6 +24,7 @@
 BEGIN(Engine)
 
 class CComponent;
+
 class ENGINE_DLL CGameInstance final : public CSingleTon<CGameInstance>
 {
 	friend CSingleTon;

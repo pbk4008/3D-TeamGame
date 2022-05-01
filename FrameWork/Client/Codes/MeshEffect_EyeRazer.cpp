@@ -249,6 +249,7 @@ HRESULT CMeshEffect_EyeRazer::Ready_Components()
 	Safe_AddRef(m_pTexture);
 
 	m_pModel = g_pGameInstance->Clone_Component<CModel>((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer");
+	
 	if (FAILED(m_pModel->Add_Material(m_pMaterial, 0)))
 		return E_FAIL;
 

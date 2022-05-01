@@ -321,8 +321,8 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 {
 	if (!m_bDead)
 	{
-		if (true == g_pObserver->IsAttack()) //플레이어공격일때
-		{
+		//if (true == g_pObserver->IsAttack()) //플레이어공격일때
+		//{
 			if (false == m_bFirstHit)
 			{
 				m_bFirstHit = true; //딱 한번 true로 변경해줌
@@ -351,7 +351,7 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 			}
 			else
 				m_pStateController->Change_State(L"Idle");
-		}
+		//}
 	}
 }
 
@@ -363,6 +363,9 @@ void CMonster_Bastion_Healer::Hit(const ATTACKDESC& _tAttackDesc)
 	m_pPanel->Set_Show(true);
 
 	m_fCurrentHp -= _tAttackDesc.fDamage;
+	if (m_fCurrentHp <= 0.f)
+		m_fCurrentHp = 0.f;
+
 	CCollision collision;
 	collision.pGameObject = _tAttackDesc.pHitObject;
 

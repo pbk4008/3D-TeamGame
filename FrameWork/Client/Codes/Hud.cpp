@@ -7,6 +7,7 @@
 #include "UI_EquippedWeapon.h"
 #include "UI_EquippedWeapon_Slot_1.h"
 #include "UI_EquippedWeapon_Slot_2.h"
+#include "UI_MapInfo.h"
 
 CHud::CHud(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CUI(pDevice, pDeviceContext)
@@ -78,7 +79,21 @@ _int CHud::Tick(_double dDeltaTime)
 		if (m_pLevelUp->getActive())
 			m_pLevelUp->Tick(dDeltaTime);
 	}
-	
+
+	if (true == m_bShowMapInfo_HUD)
+	{
+		m_fMapInfoTime += (_float)dDeltaTime;
+
+		if (5.0f <= m_fMapInfoTime)
+		{
+			m_pMapInfo->FadeOut();
+			if (8.0f <= m_fMapInfoTime)
+			{
+				ShowMapInfo_HUD(false, 0);
+				m_fMapInfoTime = 0.f;
+			}
+		}
+	}
 	return _int();
 }
 
@@ -119,6 +134,9 @@ _int CHud::LateTick(_double TimeDelta)
 				m_pLevelUp->LateTick(TimeDelta);
 		}
 	}
+	if (m_bShowMapInfo_HUD)
+		m_pMapInfo->LateTick(TimeDelta);
+
 	return _int();
 }
 
@@ -166,6 +184,11 @@ HRESULT CHud::Ready_UIObject(void)
 	assert(m_pEquipWeapon_Slot_2);
 	m_pEquipWeapon_Slot_2->setActive(false);
 
+	m_pMapInfo = (CMapInfo*) static_cast<CHud*>(
+		g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_MapInfo"));
+	assert(m_pMapInfo);
+	m_pMapInfo->setActive(false);
+
 	return S_OK;
 }
 
@@ -189,8 +212,28 @@ void CHud::PullingEquipmentUI(void)
 
 void CHud::ShowLevelUp_HUD(void)
 {
-	m_pLevelUp->Show(m_pPlayerData);
+ 	m_pLevelUp->Show(m_pPlayerData);
 	m_bOnLevelUpUI = true;
+}
+
+void CHud::ShowMapInfo_HUD(_bool bOnOff, _int TexIdx)
+{
+	if (true == bOnOff)
+	{
+		m_bShowMapInfo_HUD = true;
+		m_pMapInfo->SetImage(arrMapInfo[TexIdx]);
+		m_pMapInfo->setActive(true);
+	}
+	else
+	{
+		m_bShowMapInfo_HUD = false;
+		m_pMapInfo->setActive(false);
+	}
+}
+
+void CHud::ShowLevelUp_HUD(_int iLevel)
+{
+	m_pLevelUp->ShowLevelUp_HUD(iLevel);
 }
 
 void CHud::OnLootEquipment(void* pItemData)
@@ -347,7 +390,6 @@ void CHud::SetLevelBG(_int PlayerLevel)
 		return;
 
 	m_pLevelUp->SetLevelBG(PlayerLevel);
-	
 }
 
 void CHud::FixPos(void)
@@ -404,4 +446,5 @@ void CHud::Free()
 	Safe_Release(m_pEquipWeapon);
 	Safe_Release(m_pEquipWeapon_Slot_1);
 	Safe_Release(m_pEquipWeapon_Slot_2);
+	Safe_Release(m_pMapInfo);
 }

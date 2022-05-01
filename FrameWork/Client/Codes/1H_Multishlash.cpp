@@ -158,6 +158,9 @@ HRESULT C1H_Multishlash::ExitState()
 
 	m_isAttack = false;
 
+	if (m_pSilvermane->Get_RadialCheck() == true)
+		m_pSilvermane->Set_Radial(false);
+
 	return S_OK;
 }
 

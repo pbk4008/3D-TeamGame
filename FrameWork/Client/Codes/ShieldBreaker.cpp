@@ -132,7 +132,7 @@ _int CShieldBreaker::LateTick(_double TimeDelta)
 		{
 			m_pTrailEffect_Distortion->Clear_Points();
 			m_pTrailEffect_Distortion->Set_IsRender(false);
-			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+			//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 		}
 	}
 
@@ -300,7 +300,7 @@ void CShieldBreaker::Free()
 {
 	CWeapon::Free();
 
-	if (m_pTrailEffect_Distortion)
+	if(m_pTrailEffect_Distortion)
 		m_pTrailEffect_Distortion->Set_Remove(true);
 
 	Safe_Release(m_pCollider);

@@ -418,6 +418,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\JumpNode.h" />
     <ClInclude Include="..\Headers\JumpTrigger.h" />
     <ClInclude Include="..\Headers\Level_Logo.h" />
+    <ClInclude Include="..\Headers\UI_LevelHUD.h" />
+    <ClInclude Include="..\Headers\UI_MapInfo.h" />
     <ClInclude Include="..\Headers\MeshEffect_Boss_Effect.h" />
     <ClInclude Include="..\Headers\MeshEffect_Boss_Explosion.h" />
     <ClInclude Include="..\Headers\MeshEffect_Boss_Shield.h" />
@@ -644,7 +646,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_QuestText.h" />
     <ClInclude Include="..\Headers\UI_SelectEffect.h" />
     <ClInclude Include="..\Headers\UI_Shield_Meter.h" />
-    <ClInclude Include="..\Headers\UI_Skill_Meter.h" />
+    <ClInclude Include="..\Headers\UI_Skill_Meter_Back.h" />
+    <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge.h" />
+    <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge_Right.h" />
     <ClInclude Include="..\Headers\UI_SlotBackground.h" />
     <ClInclude Include="..\Headers\UI_SlotGrade.h" />
     <ClInclude Include="..\Headers\UI_SlotItemEffect.h" />
@@ -889,6 +893,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\ItemData.cpp" />
     <ClCompile Include="..\Codes\JumpBox.cpp" />
     <ClCompile Include="..\Codes\JumpTrigger.cpp" />
+    <ClCompile Include="..\Codes\UI_LevelHUD.cpp" />
+    <ClCompile Include="..\Codes\UI_MapInfo.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Boss_Effect.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Boss_Explosion.cpp" />
     <ClCompile Include="..\Codes\MeshEffect_Boss_Shield.cpp" />
@@ -1123,7 +1129,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_QuestText.cpp" />
     <ClCompile Include="..\Codes\UI_SelectEffect.cpp" />
     <ClCompile Include="..\Codes\UI_Shield_Meter.cpp" />
-    <ClCompile Include="..\Codes\UI_Skill_Meter.cpp" />
+    <ClCompile Include="..\Codes\UI_Skill_Meter_Back.cpp" />
+    <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge.cpp" />
+    <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge_Right.cpp" />
     <ClCompile Include="..\Codes\UI_SlotBackground.cpp" />
     <ClCompile Include="..\Codes\UI_SlotGrade.cpp" />
     <ClCompile Include="..\Codes\UI_SlotItemEffect.cpp" />

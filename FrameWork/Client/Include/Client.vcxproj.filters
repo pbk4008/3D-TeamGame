@@ -1221,7 +1221,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가">
       <UniqueIdentifier>{b504f21a-177f-4a8e-a1c5-665b050676a8}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.System\11.VoiceManager">
       <UniqueIdentifier>{d737128b-16a7-4924-af73-5c4889d9665e}</UniqueIdentifier>
     </Filter>
@@ -1243,8 +1243,17 @@
     <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill">
       <UniqueIdentifier>{b98ba130-da3b-4b61-9ac1-8c68855bfd06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\06.MapInfo">
+      <UniqueIdentifier>{4b385d2c-0c4f-4571-bbe0-f4257c008d4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD">
+      <UniqueIdentifier>{140774dc-f4a9-4523-bf9c-55894a22d9f5}</UniqueIdentifier>
+	</Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill">
       <UniqueIdentifier>{7a178c9b-7704-4488-8efd-15c4bc74b6dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill\00.Back">
+      <UniqueIdentifier>{963b881a-041a-4e37-9aab-cdbd0ac86e78}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2648,7 +2657,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Bar_Mark.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\VoiceManager.h">
       <Filter>03.System\11.VoiceManager</Filter>
     </ClInclude>
@@ -2676,6 +2685,20 @@
     <ClInclude Include="..\Headers\1H_SwordSkill_3.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_Skill_Meter_Back.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill\00.Back</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge_Right.h">
+	</ClInclude>
+    <ClInclude Include="..\Headers\UI_MapInfo.h">
+      <Filter>02.GameObject\05.UI\05.Hud\06.MapInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_LevelHUD.h">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\UI_Skill_Meter.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClInclude>
@@ -4051,7 +4074,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Bar_Mark.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\VoiceManager.cpp">
       <Filter>03.System\11.VoiceManager</Filter>
     </ClCompile>
@@ -4079,6 +4102,20 @@
     <ClCompile Include="..\Codes\1H_SwordSkill_3.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Skill_Meter_Back.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill\00.Back</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge_Right.cpp">
+	</ClCompile>
+    <ClCompile Include="..\Codes\UI_MapInfo.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\06.MapInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_LevelHUD.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\UI_Skill_Meter.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClCompile>

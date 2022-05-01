@@ -8,6 +8,9 @@ _double g_dDeltaTime;
 _float g_fImmutableTime;
 _double g_dImmutableTime;
 
+
+
+
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
 	, m_pLevel_Manager(CLevel_Manager::GetInstance())

@@ -127,7 +127,7 @@ _int CEarthAberrant_Pick::LateTick(_double TimeDelta)
 		{
 			m_pTrailEffect_Distortion->Clear_Points();
 			m_pTrailEffect_Distortion->Set_IsRender(false);
-			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+			//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 		}
 	}
 
