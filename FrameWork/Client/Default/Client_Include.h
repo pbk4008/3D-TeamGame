@@ -18,6 +18,7 @@ using namespace Client;
 #include "ShakeManager.h"
 #include "DataManager.h"
 #include "Inven_UIManager.h"
+#include "VoiceManager.h"
 #include "WeaponGenerator.h"
 #include "DropManager.h"
 #include "InteractManager.h"

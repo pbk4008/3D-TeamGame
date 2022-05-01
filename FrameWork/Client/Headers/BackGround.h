@@ -10,7 +10,6 @@ BEGIN(Client)
 class CBackGround final : public CGameObject
 {
 private:
-	explicit CBackGround();
 	explicit CBackGround(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	explicit CBackGround(const CBackGround& rhs);
 	virtual ~CBackGround() = default;
@@ -20,9 +19,11 @@ public:
 	virtual _int Tick(_double fDeltaTime) override;
 	virtual _int LateTick(_double fDeltaTime) override;
 	virtual HRESULT Render() override;
+
 public:
 	virtual CGameObject* Clone(const _uint _iSceneID, void* pArg) override;
 	static CBackGround* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
+
 private:
 	HRESULT Ready_GameObject(void* pArg);
 private:

@@ -150,7 +150,7 @@ _int CMonster_Bastion_Sword::Tick(_double _dDeltaTime)
 		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
 
-		m_fUIShowTimeAcc += _dDeltaTime;
+		m_fUIShowTimeAcc += (_float)_dDeltaTime;
 	}
 	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
 	{
@@ -229,6 +229,7 @@ HRESULT CMonster_Bastion_Sword::Render()
 			break;
 		default:
 			ZeroMemory(&desc, sizeof(SCB));
+			desc.metalic = 0.1f;
 			desc.color = _float4(1.f, 1.f, 0.f, 1.f);
 			desc.empower = 1.f;
 			CActor::BindConstantBuffer(wstrCamTag, &desc, &RimDesc);

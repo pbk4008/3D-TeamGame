@@ -41,6 +41,9 @@
 #include "Cinema4_4.h"
 #include "Cinema4_5.h"
 #include "Cinema4_6.h"
+#include "Cinema5_1.h"
+#include "Cinema5_2.h"
+#include "Cinema5_3.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -73,8 +76,13 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
+	if (FAILED(Ready_Cinema()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Data_Effect()))
+		return E_FAIL;
+
+	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
@@ -109,7 +117,12 @@ _int CStage3::Tick(_double TimeDelta)
 		}
 	}
 	if (m_pCinematicManager)
+	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pCinematicManager->Active_Scenema(8);
+
 		m_pCinematicManager->Tick(TimeDelta);
+	}
 
 
 	CTransform* pParticle =  g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_Stage3_Env_Respawn")->front()->Get_Transform();
@@ -257,9 +270,9 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
 	_float3 vpos = { 48.f, 5.f, 146.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris"), &vpos))
-
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos)))
 		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1102,8 +1115,6 @@ HRESULT CStage3::Ready_Data_Effect()
 		return E_FAIL;
 	}
 
-	
-
 #pragma endregion
 
 	//이펙트매니저 안들어가는거 
@@ -1133,6 +1144,7 @@ HRESULT CStage3::Ready_Data_Effect()
 
 	return S_OK;
 }
+#pragma endregion
 
 
 HRESULT CStage3::Ready_Cinema()
@@ -1150,6 +1162,21 @@ HRESULT CStage3::Ready_Cinema()
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
 		return E_FAIL;
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CStage3::Ready_GameManager(void)
+{
+	g_pVoiceManager = CVoiceManager::GetInstance();
+	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE3)))
 		return E_FAIL;
 
 	return S_OK;

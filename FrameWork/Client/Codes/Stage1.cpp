@@ -112,6 +112,7 @@ HRESULT CStage1::NativeConstruct()
 #ifndef _DEBUG 
 	m_bDebug = false;
 #endif // DEBUG
+
 	g_pWeaponGenerator = CWeaponGenerator::GetInstance();
 
 	if (FAILED(CLevel::NativeConstruct()))
@@ -187,7 +188,6 @@ HRESULT CStage1::NativeConstruct()
 		MSGBOX("Meteor");
 		return E_FAIL;
 	}
-
 	if (FAILED(Ready_Indicator()))
 	{
 		MSGBOX("Indicator");
@@ -209,7 +209,7 @@ HRESULT CStage1::NativeConstruct()
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
-	/* 릭 남슴요 */
+	/// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
 	if (FAILED(Ready_Cinema()))
 	{
 		MSGBOX("Cinema");
@@ -221,17 +221,26 @@ HRESULT CStage1::NativeConstruct()
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
-
+	 
 	return S_OK;
 }
 
 _int CStage1::Tick(_double TimeDelta)
-{
+{	
 	//_float3 fPos = { 0.f,5.f,20.f };
 
 	//m_pPot->Tick(TimeDelta);
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
+	
+	if (g_pGameInstance->getkeyDown(DIK_F8))
+	{
+		g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F7))
+	{
+		g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
+	}
 
 	if (m_pIndicatorManager)
 		m_pIndicatorManager->Active_Indicator();
@@ -303,107 +312,6 @@ _int CStage1::Tick(_double TimeDelta)
 			}
 		}
 
-
-		//if (m_iCountMonster == 0 && m_bFirst)//트리거 몬스터 다 잡힘
-		//{
-		//	//포탈 위치 체크 
-		//	if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 4)
-		//	{
-		//		if (m_iPortalCount == 0)
-		//		{
-		//			m_pTriggerSystem->Trigger_Clear();
-
-		//			m_iPortalCount = 4;
-		//			Open_Potal(XMVectorSet(-58.f, 15.f, 213.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-64.f, 15.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-77.f, 15.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-62.f, 15.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		//			m_iCountMonster += 4;
-		//		}
-		//		else if (m_iPortalCount == 4)
-		//		{
-		//			Open_Potal(XMVectorSet(-80.f, 15.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-56.f, 18.f, 222.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		//			m_iCountMonster += 2;
-		//			m_iPortalCount += 2;
-		//			m_bPortalClear = true;
-		//		}
-		//		else if (m_bPortalClear)
-		//		{
-		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
-		//			m_pTriggerSystem->Next_TriggerOn();
-		//			m_bPortalClear = false;
-		//		}
-		//	}
-		//	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
-		//	{
-		//		if (m_iPortalCount == 6)
-		//		{
-		//			m_pTriggerSystem->Trigger_Clear();
-		//			Open_Potal(XMVectorSet(-130.f, 20.f, 216.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		//			m_iPortalCount++;
-		//			m_iCountMonster++;
-		//		}
-		//		else if (m_iPortalCount == 7)
-		//		{
-		//			Open_Potal(XMVectorSet(-126.f, 20.f, 220.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-127.f, 20.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		//			m_iCountMonster += 2;
-		//			m_iPortalCount += 2;
-		//			m_bPortalClear = true;
-		//		}
-		//		else if (m_bPortalClear)
-		//		{
-		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
-		//			m_bPortalClear = false;
-		//			m_pTriggerSystem->Next_TriggerOn();
-		//		}
-		//	}
-		//	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 6)
-		//	{
-		//		if (m_iPortalCount == 9)
-		//		{
-		//			m_pTriggerSystem->Trigger_Clear();
-		//			Open_Potal(XMVectorSet(-135.f, 18.f, 255, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-		//			Open_Potal(XMVectorSet(-129.f, 18.f, 257.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		//			Open_Potal(XMVectorSet(-138, 18.f, 266.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			m_iPortalCount+=3;
-		//			m_iCountMonster+=3;
-		//			m_bPortalClear = true;
-		//		}
-		//		else if (m_bPortalClear)
-		//		{
-		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
-		//			m_bPortalClear = false;
-		//			m_pTriggerSystem->Next_TriggerOn();
-		//		}
-		//	}
-		//	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 7)
-		//	{
-		//		if (m_iPortalCount == 12)
-		//		{
-		//			m_pTriggerSystem->Trigger_Clear();
-		//			Open_Potal(XMVectorSet(-177.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-172.f, 29.f, 316.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-168.f, 29.f, 306.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		//			Open_Potal(XMVectorSet(-173.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-		//			m_iCountMonster += 4;
-		//			m_iPortalCount += 4;
-		//			m_bPortalClear = true;
-		//		}
-		//		else if (m_bPortalClear)
-		//		{
-		//			CLEAR_QUEST(L"T_HUD_KillAllMonster");
-		//			m_pTriggerSystem->Next_TriggerOn();
-		//			m_bPortalClear = false;
-		//		}
-		//	}
-		//	else
-		//		m_pTriggerSystem->Check_Clear();
-
-		//	CLEAR_QUEST(L"T_HUD_KillAllMonster"); /* 포탈로 등장하는 몬스터가 아닌 경우에 몹이 다 잡힌 경우 */
-		//}
-
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
 		{
@@ -454,20 +362,20 @@ _int CStage1::Tick(_double TimeDelta)
 	//	pMidBoss->setActive(true);
 	//}
 	// monster
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	//{
-	//	CMonster_Crawler* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
-	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	//{
-	//	CMonster_EarthAberrant* pMonster = nullptr;
-	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-	//		return -1;
-	//	pMonster->setActive(true);
-	//}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	{
+		CMonster_Crawler* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Crawler", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	{
+		CMonster_EarthAberrant* pMonster = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+			return -1;
+		pMonster->setActive(true);
+	}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -556,6 +464,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
+	if (g_pVoiceManager)
+		g_pVoiceManager->Tick(TimeDelta);
+
 	Open_Wall();
 
 
@@ -573,6 +484,9 @@ _int CStage1::LateTick(_double TimeDelta)
 
 	if (g_pGuideManager)
 		g_pGuideManager->Late_Tick(g_dImmutableTime);
+
+	if (g_pVoiceManager)
+		g_pVoiceManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -617,7 +531,17 @@ HRESULT CStage1::Ready_MapObject()
 	_uint iTmpIndx = 0;
 	for (auto& pDesc : tEnvironmentDesc)
 	{
-		if (pDesc.wstrInstaneTag == L"Brazier_Large_01.fbx")
+		if (pDesc.wstrInstaneTag == L"")
+			continue;
+		if (pDesc.wstrInstaneTag == L"PavementDecor_01_Lod0.fbx")
+		{
+			for (auto pMatrix : pDesc.tInstanceDesc.vecMatrix)
+			{
+				if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Floor", L"Proto_GameObject_Circle_Floor", &pMatrix)))
+					MSGBOX("Failed To Clone Circle_Floor");
+			}
+		}
+		else if (pDesc.wstrInstaneTag == L"Brazier_Large_01.fbx")
 		{
 			for (auto& iter : pDesc.tInstanceDesc.vecMatrix)
 			{
@@ -655,12 +579,12 @@ HRESULT CStage1::Ready_MapObject()
 				}
 			}
 		}
-
-		if (pDesc.wstrInstaneTag == L"")
-			break;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
+		else
 		{
-			return E_FAIL;
+			if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Environment", L"Proto_GameObject_Environment", &pDesc)))
+			{
+				return E_FAIL;
+			}
 		}
 	}
 
@@ -921,547 +845,20 @@ HRESULT CStage1::Ready_GameManager(void)
 	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
 	m_pScenemaManager = GET_INSTANCE(CScenematicManager);
 
+	g_pVoiceManager = CVoiceManager::GetInstance();
+	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE1)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CStage1::Ready_Data_Effect()
 {
-	//이펙트 매니저에 넣으면서 생성
-	// 주의 사항!! 넣을때 순서가 ENUM순서
-	//Manager에 넣을 Effect;
-#pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
-
-//	//Player Dash
-	CEffect* pEffect = nullptr;
-	vector<CEffect_DashDust::EF_PAR_DASH_DESC> vecDashEffect;
-
-	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_Player_Foot_Dash.dat");
-	vecDashEffect[0].fAlpha = 0.05f;
-
-	wstring FullName = L"Proto_GameObject_Effect_DashDust";
-
-	////마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Foot_Dash", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Foot_Dash in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Foot_Dash", pEffect, 20)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Foot_Dash in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-
-	////HitGroundSmoke
-	vecDashEffect.clear();
-	g_pGameInstance->LoadFile<CEffect_DashDust::EF_PAR_DASH_DESC>(vecDashEffect, L"../bin/SaveData/Effect/Effect_HitGround_Smoke.dat");
-
-	vecDashEffect[0].fAlpha = 0.1f;
-
-	FullName = L"Proto_GameObject_Effect_DashDust";
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGroundSmoke", FullName, &vecDashEffect[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_HitGroundSmoke in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitGroundSmoke", pEffect, 6)))
-	{
-		MSGBOX("Falild to Add_Effect_HitGroundSmoke in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Player Atttack1
-	vector<CEffect_HitParticle::EF_PAR_HIT_DESC> vecHitParticle;
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Player_Attack1.dat");
-
-	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
-	vecHitParticle[0].Power = 2.5f;
-
-	//마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack1", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack1 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	//매니저에 이펙트 넣기 (마지막 매개변수 : 같은 이펙트 추가로 넣을 갯수)
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack1", pEffect, 20)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack1 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Player Atttack2 Floating
-	vector<CEffect_HitFloating::EF_PAR_HITFLOAT_DESC> vecHitFloating;
-	g_pGameInstance->LoadFile<CEffect_HitFloating::EF_PAR_HITFLOAT_DESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating";
-	vecHitFloating[0].ParticleColor = { 1.f , 0.8f, 0.5f ,1.f };
-	vecHitFloating[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating", FullName, &vecHitFloating[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack2_Floating in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating", pEffect, 20)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack2_Floating in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	
-	//Player Atttack2 Floating2
-	vector<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC> vecFloatingSpeed;
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack2_Floating_2.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 1.f,0.5f,0.4f, 1.f };
-	vecFloatingSpeed[0].Power = 2.0f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating2", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack2_Floating2 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack2_Floating2", pEffect, 20)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack2_Floating2 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//MonsterDeath
-	vecHitParticle.clear();
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Monster_Death.dat");
-
-	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 0.5f, 1.0f, 0.1f ,1.f };
-	vecHitParticle[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Death", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Monster_Death in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Death", pEffect, 1)))
-	{
-		MSGBOX("Falild to Add_Effect_Monster_Death in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Player Hit
-	vecHitParticle.clear();
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Player_Hit.dat");
-
-	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
-	vecHitParticle[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Hit", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Hit in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Hit", pEffect, 8)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Hit in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Monster Guard
-	vecHitParticle.clear();
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Monster_Guard.dat");
-
-	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 0.3f, 0.3f, 1.f ,1.f };
-	vecHitParticle[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Guard", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Monster_Guard in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Guard", pEffect, 8)))
-	{
-		MSGBOX("Falild to Add_Effect_Monster_Guard in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//AttackLeft
-	vecFloatingSpeed.clear();
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Left.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	
-	vecFloatingSpeed[0].ParticleColor = { 1.f, 0.9f, 0.5f, 1.f };
-	vecFloatingSpeed[0].Power = 2.0f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack_Left in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Left", pEffect, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack_Left in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//AttackRight
-	vecFloatingSpeed.clear();
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Right.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 1.f, 0.9f, 0.5f, 1.f };
-	vecFloatingSpeed[0].Power = 2.0f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack_Right in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right", pEffect, 10)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack_Right in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//AttackRight_Last
-	vecFloatingSpeed.clear();
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Right_Last.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 1.f, 0.9f, 0.5f, 1.f };
-	vecFloatingSpeed[0].Power = 2.0f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right_Last", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack_Right_Last in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Right_Last", pEffect, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack_Right_Last in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//HitGround
-	vecHitParticle.clear();
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Hit_Ground.dat");
-
-	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 0.9f,0.5f,0.2f, 1.f };
-	vecHitParticle[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Hit_Ground in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hit_Ground", pEffect, 6)))
-	{
-		MSGBOX("Falild to Add_Effect_Hit_Ground in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-
-	//OpenBox
-	vecFloatingSpeed.clear();
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Open_Box.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 0.3f,0.5f,1.f, 1.f };
-	vecFloatingSpeed[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Open_Box in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Open_Box", pEffect, 3)))
-	{
-		MSGBOX("Falild to Add_Effect_Open_Box in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//PlayerAttackGround
-	vecFloatingSpeed.clear();
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
-	vecFloatingSpeed[0].Power = 1.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground", pEffect, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack_Ground in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//PlayerAttackGround_2
-	vecHitFloating.clear();
-	g_pGameInstance->LoadFile<CEffect_HitFloating::EF_PAR_HITFLOAT_DESC>(vecHitFloating, L"../bin/SaveData/Effect/Effect_Player_Attack_Ground_2.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating";
-	vecHitFloating[0].ParticleColor = { 1.f,0.3f,0.3f, 1.f };
-	vecHitFloating[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", FullName, &vecHitFloating[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Player_Attack_Ground2", pEffect, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Player_Attack_Ground2 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Item 
-	vector<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC> vecFloatingUp;
-	g_pGameInstance->LoadFile<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC>(vecFloatingUp, L"../bin/SaveData/Effect/Effect_Item.dat");
-
-	vecFloatingUp[0].ParticleColor = { 0.5f,1.0f,0.3f, 1.f };
-	vecFloatingUp[0].Power = 1.5f;
-	vecFloatingUp[0].fRespawnPosY = 5.f;
-	vecFloatingUp[0].bSmall = true;
-
-	FullName = L"Proto_GameObject_Effect_FloatingUp";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Item", FullName, &vecFloatingUp[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Item in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Item", pEffect, 30)))
-	{
-		MSGBOX("Falild to Add_Effect_Item in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Box 
-	vecFloatingUp.clear();
-	g_pGameInstance->LoadFile<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC>(vecFloatingUp, L"../bin/SaveData/Effect/Effect_Box.dat");
-
-	vecFloatingUp[0].ParticleColor = { 0.5f,1.0f,0.7f, 1.f };
-	vecFloatingUp[0].Power = 1.5f;
-	vecFloatingUp[0].fRespawnPosY = 5.f;
-	vecFloatingUp[0].bSmall = true;
-
-	FullName = L"Proto_GameObject_Effect_FloatingUp";
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_Box", FullName, &vecFloatingUp[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Box in CStage1::Ready_Effect()");
-		return E_FAIL; 
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Box", pEffect, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Box in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//EatItem
-	vecFloatingSpeed.clear();
-	g_pGameInstance->LoadFile<CEffect_Floating_Speed::EF_PAR_FLOATSPEED_DESC>(vecFloatingSpeed, L"../bin/SaveData/Effect/Effect_Eat_Item.dat");
-
-	FullName = L"Proto_GameObject_Effect_Floating_Speed";
-	vecFloatingSpeed[0].ParticleColor = { 1.f,1.f,0.7f, 1.f };
-	vecFloatingSpeed[0].Power = 2.5f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Eat_Item", FullName, &vecFloatingSpeed[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Eat_Item in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Eat_Item", pEffect, 16)))
-	{
-		MSGBOX("Falild to Add_Effect_Eat_Item in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	////Hit_Image
-	CEffect_Dead_Spray::IMAGEEFFECTDESC tDesc;
-	ZeroMemory(&tDesc, sizeof(tDesc));
-
-	_tcscpy_s(tDesc.TextureTag, L"T_Hit");
-	tDesc.iRenderPassNum = 1;
-	tDesc.iImageCountX = 4;
-	tDesc.iImageCountY = 2;
-	tDesc.fFrame = 4;
-	tDesc.fEffectPlaySpeed = 20.f;
-	tDesc.fAlpha = 1.f;
-	tDesc.fWeight = 1.f;
-	tDesc.fSize = 3.f;
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_HitImage", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_HitImage", pEffect, 16)))
-	{
-		MSGBOX("Falild to Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Death smoke image
-	ZeroMemory(&tDesc, sizeof(tDesc));
-	_tcscpy_s(tDesc.TextureTag, L"Smoke_4x4_1");
-	tDesc.iRenderPassNum = 1;
-	tDesc.iImageCountX = 4;
-	tDesc.iImageCountY = 4;
-	tDesc.fFrame = 16;
-	tDesc.fEffectPlaySpeed = 1.f;
-	tDesc.fAlpha = 0.8f;
-	tDesc.fWeight = 0.f;
-	tDesc.fSize = 6.f;
-
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Effect_DeadSmoke", L"Proto_GameObject_Effect_HitImage", &tDesc, (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_DeadSmoke", pEffect, 16)))
-	{
-		MSGBOX("Falild to Proto_GameObject_Effect_HitImage in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-
-	//Explosion Rock mesh
-	CExplosion_Rock* pObj = nullptr;
-	CExplosion_Rock::ROCKINFO DescRock;
-	FullName = L"Proto_GameObject_Explosion_Rock";
-	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Up_Anim");
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", FullName, &DescRock, (CGameObject**)&pObj)))
-	{
-		MSGBOX("Failed to Creating Effect_Explosion Rock_Up in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Up", pObj, 10)))
-	{
-		MSGBOX("Falild to Add_Effect_Explosion Rock in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//explosion rock left mesh
-	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Left_Anim");
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Left", FullName, &DescRock, (CGameObject**)&pObj)))
-	{
-		MSGBOX("Failed to Creating Effect_Explosion Rock_Left in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Left", pObj, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Explosion Rock Left in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//explosion rock right mesh
-	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Right_Anim");
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Right", FullName, &DescRock, (CGameObject**)&pObj)))
-	{
-		MSGBOX("Failed to Creating Effect_Explosion Rock_Right in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock_Right", pObj, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Explosion ROck Right in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//explosion rock mesh
-	_tcscpy_s(DescRock.ModelTag, L"Model_Explosion_Rock_Anim");
-
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock", FullName, &DescRock, (CGameObject**)&pObj)))
-	{
-		MSGBOX("Failed to Creating Effect_Explosion Rock in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Explosion_Rock", pObj, 5)))
-	{
-		MSGBOX("Falild to Add_Effect_Explosion ROck CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Hammer_Dust image
-	CEffect_Hammer_Dust* pHammer = nullptr;
-	CEffect_Hammer_Dust::EFFECTDESC Desc;
-	ZeroMemory(&Desc, sizeof(Desc));
-	_tcscpy_s(Desc.TextureTag, L"Hammer_Dust_2");
-	Desc.iRenderPassNum = 1;
-	Desc.iImageCountX = 8;
-	Desc.iImageCountY = 4;
-	Desc.fFrame = 32.f;
-	Desc.fEffectPlaySpeed = 1.f;
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", L"Proto_GameObject_Effect_Hammer_Dust", &Desc, (CGameObject**)&pHammer)))
-	{
-		MSGBOX("Failed to Creating Effect_Hammer_Dust in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Hammer_Dust", pHammer, 7)))
-	{
-		MSGBOX("Falild to Add_Effect_Explosion ROck in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-	//Energy 
-	vector<CEffect_Energy::EF_PAR_ENERGY_DESC> vecEnergyParticle;
-	g_pGameInstance->LoadFile<CEffect_Energy::EF_PAR_ENERGY_DESC>(vecEnergyParticle, L"../bin/SaveData/Effect/Effect_Energy.dat");
-
-	FullName = L"Proto_GameObject_Effect_Energy";
-	vecEnergyParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
-	vecEnergyParticle[0].Power = 2.5f;
-
-	//마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", FullName, &vecEnergyParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Player_Attack1 in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Energy", pEffect, 2)))
-	{
-		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-
-	//EyeRazer 
-	vecHitParticle.clear();
-	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Razer.dat");
-
-	FullName = L"Proto_GameObject_Effect_Explosion";
-	vecHitParticle[0].ParticleColor = { 1.f , 0.6f, 0.3f ,1.f };
-	vecHitParticle[0].Power = 2.5f;
-
-	//마지막에 받을 Effect변수 넣기
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
-	{
-		MSGBOX("Failed to Creating Effect_Razer in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Razer", pEffect, 30)))
-	{
-		MSGBOX("Falild to Add Effect_Razer in CStage1::Ready_Effect()");
-		return E_FAIL;
-	}
-
-#pragma endregion
-
 #pragma region 이펙트매니저에 안들어가는것들
 	////공중에떠있는환경파티클
 	//Env floating
+	wstring FullName = L"";
+
 	vector<CEffect_Env_Floating::EFFECTDESC> vecEnvFloating;
 	g_pGameInstance->LoadFile<CEffect_Env_Floating::EFFECTDESC>(vecEnvFloating, L"../bin/SaveData/Effect/Effect_Env_Floating_2.dat");
 	FullName = L"Proto_GameObject_Effect_Env_Floating";
@@ -1876,7 +1273,7 @@ void CStage1::CheckTriggerForQuest(void)
 
 void CStage1::Portal_Spot1()
 {
-	if (m_iCountMonster == 2 && m_iPortalCount == 0)
+	if (m_iCountMonster <= 2 && m_iPortalCount == 0)
 	{
 		m_iPortalCount = 1;
 		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1886,20 +1283,20 @@ void CStage1::Portal_Spot1()
 		Open_Potal(XMVectorSet(-37.f, -3.f, 83.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		m_iCountMonster += 5;
 	}
-	else if (m_iCountMonster == 5 && m_iPortalCount == 1)
+	else if (m_iCountMonster <= 5 && m_iPortalCount == 1)
 	{
 		m_iPortalCount = 2;
 		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-46.f, -3.f, 79.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 2;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 2)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 2)
 		m_pTriggerSystem->Check_Clear();
 }
 
 void CStage1::Portal_Spot2()
 {
-	if (m_iCountMonster == 3 && m_iPortalCount == 2)
+	if (m_iCountMonster <= 3 && m_iPortalCount == 2)
 	{
 		m_iPortalCount = 3;
 		Open_Potal(XMVectorSet(-84.f, 15.f, 215.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1911,7 +1308,7 @@ void CStage1::Portal_Spot2()
 		Open_Potal(XMVectorSet(-71.f, 15.f, 203.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 7;
 	}
-	else if (m_iCountMonster == 5 && m_iPortalCount == 3)
+	else if (m_iCountMonster <= 5 && m_iPortalCount == 3)
 	{
 		m_iPortalCount = 4;
 		Open_Potal(XMVectorSet(-81.f, 15.f, 208.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -1920,7 +1317,7 @@ void CStage1::Portal_Spot2()
 		Open_Potal(XMVectorSet(-73.f, 15.f, 205.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
 		m_iCountMonster += 4;
 	}
-	else if (m_iCountMonster == 3 && m_iPortalCount == 4)
+	else if (m_iCountMonster <= 3 && m_iPortalCount == 4)
 	{
 		m_iPortalCount = 5;
 		Open_Potal(XMVectorSet(-76.f, 15.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1931,7 +1328,7 @@ void CStage1::Portal_Spot2()
 		Open_Potal(XMVectorSet(-56.f, 15.f, 234.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		m_iCountMonster += 6;
 	}
-	else if (m_iCountMonster == 5 && m_iPortalCount == 5)
+	else if (m_iCountMonster <= 5 && m_iPortalCount == 5)
 	{
 		m_iPortalCount = 6;
 		Open_Potal(XMVectorSet(-59.f, 15.f, 223.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1939,7 +1336,7 @@ void CStage1::Portal_Spot2()
 		Open_Potal(XMVectorSet(-76.f, 15.f, 233.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 6)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 6)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
@@ -1948,7 +1345,7 @@ void CStage1::Portal_Spot2()
 
 void CStage1::Portal_Spot3()
 {
-	if (m_iPortalCount == 6 && m_iCountMonster == 1)
+	if (m_iPortalCount == 6 && m_iCountMonster <= 1)
 	{
 		m_iPortalCount = 7;
 		Open_Potal(XMVectorSet(-131.f, 19.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -1956,14 +1353,14 @@ void CStage1::Portal_Spot3()
 		Open_Potal(XMVectorSet(-133.f, 19.f, 219.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iPortalCount == 7 && m_iCountMonster == 1)
+	else if (m_iPortalCount == 7 && m_iCountMonster <= 1)
 	{
 		m_iPortalCount = 8;
 		Open_Potal(XMVectorSet(-141.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
 		Open_Potal(XMVectorSet(-141.f, 19.f, 221.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 2;
 	}
-	else if (m_iPortalCount == 8 && m_iCountMonster == 2)
+	else if (m_iPortalCount == 8 && m_iCountMonster <= 2)
 	{
 		m_iPortalCount = 9;
 		Open_Potal(XMVectorSet(-141.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
@@ -1972,7 +1369,7 @@ void CStage1::Portal_Spot3()
 		Open_Potal(XMVectorSet(-129.f, 19.f, 214.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iPortalCount == 9 && m_iCountMonster == 0)
+	else if (m_iPortalCount == 9 && m_iCountMonster <= 0)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
@@ -1981,7 +1378,7 @@ void CStage1::Portal_Spot3()
 
 void CStage1::Portal_Spot4()
 {
-	if (m_iPortalCount == 9 && m_iCountMonster == 3)
+	if (m_iPortalCount == 9 && m_iCountMonster <= 3)
 	{
 		m_iPortalCount = 10;
 		Open_Potal(XMVectorSet(-130.f, 18.f, 255.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -1991,7 +1388,7 @@ void CStage1::Portal_Spot4()
 		Open_Potal(XMVectorSet(-135.f, 18.f, 273.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		m_iCountMonster += 5;
 	}
-	else if (m_iPortalCount == 10 && m_iCountMonster == 3)
+	else if (m_iPortalCount == 10 && m_iCountMonster <= 3)
 	{
 		m_iPortalCount = 11;
 		Open_Potal(XMVectorSet(-130.f, 18.f, 263.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
@@ -1999,7 +1396,7 @@ void CStage1::Portal_Spot4()
 		Open_Potal(XMVectorSet(-142.f, 18.f, 261.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
 		m_iCountMonster += 3;
 	}
-	else if (m_iPortalCount == 11 && m_iCountMonster == 4)
+	else if (m_iPortalCount == 11 && m_iCountMonster <= 4)
 	{
 		m_iPortalCount = 12;
 		Open_Potal(XMVectorSet(-131.f, 18.f, 256.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
@@ -2009,7 +1406,7 @@ void CStage1::Portal_Spot4()
 		Open_Potal(XMVectorSet(-139.f, 18.f, 274.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 5;
 	}
-	else if (m_iPortalCount == 12 && m_iCountMonster == 0)
+	else if (m_iPortalCount == 12 && m_iCountMonster <= 0)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
@@ -2018,7 +1415,7 @@ void CStage1::Portal_Spot4()
 
 void CStage1::Portal_Spot5()
 {
-	if (m_iPortalCount == 12 && m_iCountMonster == 3)
+	if (m_iPortalCount == 12 && m_iCountMonster <= 3)
 	{
 		m_iPortalCount = 13;
 		Open_Potal(XMVectorSet(-178.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
@@ -2028,7 +1425,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-165.f, 29.f, 309.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 5;
 	}
-	else if (m_iPortalCount == 13 && m_iCountMonster == 3)
+	else if (m_iPortalCount == 13 && m_iCountMonster <= 3)
 	{
 		m_iPortalCount = 14;
 		Open_Potal(XMVectorSet(-176.f, 29.f, 304.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
@@ -2036,7 +1433,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-174.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_ABERRANT);
 		m_iCountMonster += 3;
 	}
-	else if (m_iPortalCount == 14 && m_iCountMonster == 2)
+	else if (m_iPortalCount == 14 && m_iCountMonster <= 2)
 	{
 		m_iPortalCount = 15;
 		Open_Potal(XMVectorSet(-170.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
@@ -2047,7 +1444,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-173.f, 30.f, 323.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 6;
 	}
-	else if (m_iPortalCount == 15 && m_iCountMonster == 6)
+	else if (m_iPortalCount == 15 && m_iCountMonster <= 6)
 	{
 		m_iPortalCount = 16;
 		Open_Potal(XMVectorSet(-171.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -2055,7 +1452,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-183.f, 29.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 3;
 	}
-	else if (m_iPortalCount == 16 && m_iCountMonster == 0)
+	else if (m_iPortalCount == 16 && m_iCountMonster <= 0)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
@@ -2067,7 +1464,7 @@ void CStage1::Portal_Spot6()
 	list<CGameObject*>* vecObj = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Bastion_2HSword");
 	auto iter = vecObj->begin();
 	CActor* pActor = static_cast<CActor*>(*iter);
-	if (pActor->Get_HpRatio() < 0.3f && m_iPortalCount ==16)
+	if (pActor->Get_HpRatio() < 0.3f && m_iPortalCount == 16)
 	{
 		m_iPortalCount = 17;
 		Open_Potal(XMVectorSet(-180.f, 52.f, 393.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
@@ -2075,7 +1472,7 @@ void CStage1::Portal_Spot6()
 		Open_Potal(XMVectorSet(-175.f, 52.f, 388.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iPortalCount == 17 && m_iCountMonster == 3)
+	else if (m_iPortalCount == 17 && m_iCountMonster <= 3)
 	{
 		m_iPortalCount = 18;
 		Open_Potal(XMVectorSet(-178.f, 52.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -2772,31 +2169,34 @@ void CStage1::Trgger_FunctionBoss()
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
 	g_pGameInstance->PlayBGM(L"Stage1_Boss_BGM");
 
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
-
-	list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
-	if (!pLayer)
-		return;
-	/*if (m_bDebug)
-	{
-		auto iter = pLayer->begin();
-		advance(iter, 0);
-		(*iter)->setActive(true);
-		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
-	}
+	if(m_pScenemaManager)
+		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);
 	else
 	{
-		auto iter = pLayer->begin();
-		CActor* pActor = static_cast<CActor*>((*iter));
-		while (pActor->Get_HpRatio() == 0)
+		list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
+		if (!pLayer)
+			return;
+		if (m_bDebug)
 		{
-			iter++;
-			pActor->Set_Remove(true);
-			pActor = static_cast<CActor*>((*iter));
+			auto iter = pLayer->begin();
+			advance(iter, 0);
+			(*iter)->setActive(true);
+			m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
 		}
-		(*iter)->setActive(true);
-		m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
-	}*/
+		else
+		{
+			auto iter = pLayer->begin();
+			CActor* pActor = static_cast<CActor*>((*iter));
+			while (pActor->Get_HpRatio() == 0)
+			{
+				iter++;
+				pActor->Set_Remove(true);
+				pActor = static_cast<CActor*>((*iter));
+			}
+			(*iter)->setActive(true);
+			m_pTriggerSystem->Add_CurrentTriggerMonster((*iter));
+		}
+	}
 }
 
 HRESULT CStage1::Ready_Trigger_Lod(const _tchar* pDataFilePath)
@@ -3070,5 +2470,5 @@ void CStage1::Free()
 	m_vecMeteor.clear();
 
 	CWeaponGenerator::DestroyInstance();
-
+	CVoiceManager::DestroyInstance();
 }

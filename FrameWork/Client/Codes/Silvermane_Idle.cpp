@@ -136,6 +136,11 @@ _int CSilvermane_Idle::Input(const _double& _dDeltaTime)
 		}
 	}
 
+	if (g_pGameInstance->getkeyPress(DIK_E))
+	{
+		return ToSkill();
+	}
+
 	if (g_pGameInstance->getMouseKeyDown(CInputDev::MOUSESTATE::MB_LBUTTON))
 	{
 		switch (m_pSilvermane->Get_WeaponType())

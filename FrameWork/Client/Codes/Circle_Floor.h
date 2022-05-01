@@ -22,7 +22,6 @@ public:
 	virtual HRESULT	Render_Shadow() override;
 private:
 	HRESULT Ready_Component();
-	HRESULT Culling();
 public:
 	static CCircle_Floor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual CCircle_Floor* Clone(const _uint _iSceneID, void* pArg);
@@ -32,7 +31,6 @@ private:
 	const LIGHTDESC* m_LightDesc = nullptr;
 	_ulong				m_Nummeshcontainer = 0;
 	CModel* m_pModel;
-	CModel* m_pCrackModel;
 };
 END
 #endif

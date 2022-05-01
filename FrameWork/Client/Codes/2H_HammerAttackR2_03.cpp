@@ -60,7 +60,7 @@ HRESULT C2H_HammerAttackR2_03::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 
-	m_iCutIndex = 50;
+	m_iCutIndex = 30;
 	m_pAnimationController->Add_TrackAcc(6.0);
 
 

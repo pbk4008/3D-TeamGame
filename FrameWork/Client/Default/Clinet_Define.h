@@ -25,4 +25,6 @@ extern CDropManager*	 g_pDropManager;
 extern CWeaponGenerator* g_pWeaponGenerator;
 extern CQuestManager*	 g_pQuestManager;
 extern CGuideUIManager*  g_pGuideManager;
+extern CVoiceManager*	 g_pVoiceManager;
+
 #endif

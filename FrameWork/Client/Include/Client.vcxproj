@@ -220,6 +220,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\1H_SwordJogRight.h" />
     <ClInclude Include="..\Headers\1H_SwordJogRightPivot180.h" />
     <ClInclude Include="..\Headers\1H_SwordJogRightStart.h" />
+    <ClInclude Include="..\Headers\1H_SwordSkill_2.h" />
+    <ClInclude Include="..\Headers\1H_SwordSkill_3.h" />
     <ClInclude Include="..\Headers\1H_SwordSupermanStab.h" />
     <ClInclude Include="..\Headers\1H_SwordDodgeSpinFwd_V3.h" />
     <ClInclude Include="..\Headers\1H_SwordEquipOff.h" />
@@ -259,6 +261,8 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\2H_HammerJogRightPivot180.h" />
     <ClInclude Include="..\Headers\2H_HammerJogRightStart.h" />
     <ClInclude Include="..\Headers\2H_HammerRicochetReaction.h" />
+    <ClInclude Include="..\Headers\2H_HammerSkill_1.h" />
+    <ClInclude Include="..\Headers\2H_HammerSkill_2.h" />
     <ClInclude Include="..\Headers\Aberrant_Attack.h" />
     <ClInclude Include="..\Headers\Aberrant_Dash_Bwd.h" />
     <ClInclude Include="..\Headers\Aberrant_Death.h" />
@@ -357,6 +361,9 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\Cinema4_4.h" />
     <ClInclude Include="..\Headers\Cinema4_5.h" />
     <ClInclude Include="..\Headers\Cinema4_6.h" />
+    <ClInclude Include="..\Headers\Cinema5_1.h" />
+    <ClInclude Include="..\Headers\Cinema5_2.h" />
+    <ClInclude Include="..\Headers\Cinema5_3.h" />
     <ClInclude Include="..\Headers\CinemaActor.h" />
     <ClInclude Include="..\Headers\CinemaCam.h" />
     <ClInclude Include="..\Headers\CinemaWeapon.h" />
@@ -426,6 +433,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\QuestManager.h" />
     <ClInclude Include="..\Headers\Silvermane_Bow.h" />
     <ClInclude Include="..\Headers\UI_Bar_Mark.h" />
+    <ClInclude Include="..\Headers\Subtitles.h" />
     <ClInclude Include="..\Headers\UI_Blank_FKey.h" />
     <ClInclude Include="..\Headers\UI_Boss_HpBar_Red.h" />
     <ClInclude Include="..\Headers\UI_Boss_ShieldBar_Blue.h" />
@@ -642,6 +650,7 @@ call Update_Client.bat</Command>
     <ClInclude Include="..\Headers\UI_SlotItemIcon.h" />
     <ClInclude Include="..\Headers\UI_Tuto_Base.h" />
     <ClInclude Include="..\Headers\UI_Tuto_Font.h" />
+    <ClInclude Include="..\Headers\VoiceManager.h" />
     <ClInclude Include="..\Headers\Wall.h" />
     <ClInclude Include="..\Headers\Weapon.h" />
     <ClInclude Include="..\Headers\WeaponData.h" />
@@ -686,6 +695,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\1H_SwordJogRight.cpp" />
     <ClCompile Include="..\Codes\1H_SwordJogRightPivot180.cpp" />
     <ClCompile Include="..\Codes\1H_SwordJogRightStart.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordSkill_2.cpp" />
+    <ClCompile Include="..\Codes\1H_SwordSkill_3.cpp" />
     <ClCompile Include="..\Codes\1H_SwordSupermanStab.cpp" />
     <ClCompile Include="..\Codes\1H_SwordDodgeSpinFwd_V3.cpp" />
     <ClCompile Include="..\Codes\1H_SwordEquipOff.cpp" />
@@ -725,6 +736,8 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\2H_HammerEquipOff.cpp" />
     <ClCompile Include="..\Codes\2H_HammerEquipOn.cpp" />
     <ClCompile Include="..\Codes\2H_HammerRicochetReaction.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerSkill_1.cpp" />
+    <ClCompile Include="..\Codes\2H_HammerSkill_2.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Dash_Bwd.cpp" />
     <ClCompile Include="..\Codes\Aberrant_Death.cpp" />
@@ -821,6 +834,9 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\Cinema4_4.cpp" />
     <ClCompile Include="..\Codes\Cinema4_5.cpp" />
     <ClCompile Include="..\Codes\Cinema4_6.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_1.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_2.cpp" />
+    <ClCompile Include="..\Codes\Cinema5_3.cpp" />
     <ClCompile Include="..\Codes\CinemaActor.cpp" />
     <ClCompile Include="..\Codes\CinemaCam.cpp" />
     <ClCompile Include="..\Codes\CinemaWeapon.cpp" />
@@ -887,6 +903,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\QuestManager.cpp" />
     <ClCompile Include="..\Codes\Silvermane_Bow.cpp" />
     <ClCompile Include="..\Codes\UI_Bar_Mark.cpp" />
+    <ClCompile Include="..\Codes\Subtitles.cpp" />
     <ClCompile Include="..\Codes\UI_Blank_FKey.cpp" />
     <ClCompile Include="..\Codes\UI_Boss_HpBar_Red.cpp" />
     <ClCompile Include="..\Codes\UI_Boss_ShieldBar_Blue.cpp" />
@@ -1111,6 +1128,7 @@ call Update_Client.bat</Command>
     <ClCompile Include="..\Codes\UI_SlotItemIcon.cpp" />
     <ClCompile Include="..\Codes\UI_Tuto_Base.cpp" />
     <ClCompile Include="..\Codes\UI_Tuto_Font.cpp" />
+    <ClCompile Include="..\Codes\VoiceManager.cpp" />
     <ClCompile Include="..\Codes\Wall.cpp" />
     <ClCompile Include="..\Codes\Weapon.cpp" />
     <ClCompile Include="..\Codes\WeaponData.cpp" />

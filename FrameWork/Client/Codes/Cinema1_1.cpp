@@ -207,12 +207,13 @@ HRESULT CCinema1_1::Ready_Components()
 	tDesc.fAspect = (_float)g_iWinCx / g_iWinCy;
 
 	CCinemaCam::CINEMADESC tCinemaDesc;
-	ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
+	//ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
 
 	tCinemaDesc.tCameraDesc = tDesc;
 	tCinemaDesc.iShotTag = (_uint)CINEMA_INDEX::CINEMA1_1;
 
-	m_pCam=g_pGameInstance->Clone_GameObject<CCinemaCam>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaCamera", &tCinemaDesc);
+	m_pCam = g_pGameInstance->Clone_GameObject<CCinemaCam>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaCamera", &tCinemaDesc);
+
 	if (!m_pCam)
 	{
 		MSGBOX("Came Create Fail");

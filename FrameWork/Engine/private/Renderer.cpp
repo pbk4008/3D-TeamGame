@@ -18,6 +18,11 @@ CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	Safe_AddRef(m_pTargetMgr);
 }
 
+void CRenderer::TargetClear()
+{
+	m_pTargetMgr->All_Clear(m_pDeviceContext);
+}
+
 void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 {
 	switch (ebutton)
@@ -57,6 +62,12 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 		break;
 	case CRenderer::MOTIONTRAIL:
 		m_bRenderbtn[MOTIONTRAIL] = check;
+		break;
+	case CRenderer::FADEIN:
+		m_bRenderbtn[FADEIN] = check;
+		break;
+	case CRenderer::FADEOUT:
+		m_bRenderbtn[FADEOUT] = check;
 		break;
 	}
 }
@@ -184,15 +195,15 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 			if (FAILED(Render_Alpha()))	MSGBOX("Failed To Rendering AlphaPass");
 
-			/*if (FAILED(Render_AlphaNoBloom()))	MSGBOX("Failed To Rendering AlphaNoBloomPass");*/
-
 			if (FAILED(m_pHDR->Render_HDRBase(m_pTargetMgr, m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering HDRBasePass");
-
-			//if (FAILED(m_pLuminance->DownSampling(m_pTargetMgr)))MSGBOX("Failed To Rendering DownSamplingPass");
 
 			if (FAILED(m_pPostProcess->PossProcessing(m_pTonemapping, m_pTargetMgr, m_bRenderbtn[HDR]))) MSGBOX("Failed To Rendering PostProcessPass");
 
+			CalcFadeTime();
+
 			if (FAILED(Render_Final())) MSGBOX("Failed To Rendering FinalPass");
+
+			if (FAILED(Render_FinalAlpha())) MSGBOX("Failed To Rendering FinalAlphaPass");
 		}
 
 		if (FAILED(Render_UI()))
@@ -265,6 +276,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		}
 #endif // _DEBUG
 	}
+
 	return S_OK;
 }
 
@@ -357,7 +369,7 @@ HRESULT CRenderer::Render_Alpha()
 
 HRESULT CRenderer::Render_AlphaNoBloom()
 {
-	//if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_AlphaNoBloom")))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->Begin_MRT(m_pDeviceContext, TEXT("Target_AlphaNoBloom")))) return E_FAIL;
 
 	AlphaSorting(RENDER_ALPHANB);
 
@@ -370,7 +382,7 @@ HRESULT CRenderer::Render_AlphaNoBloom()
 	}
 	m_RenderGroup[RENDER_ALPHANB].clear();
 
-	//if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
+	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
 	return S_OK;
 }
@@ -604,18 +616,44 @@ HRESULT CRenderer::Render_Final()
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_MotionblurCnt", &cnt, sizeof(_int)))) MSGBOX("Render Final Value RaidalCnt Not Apply");
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_thick", &thick, sizeof(_float)))) MSGBOX("Render Final Value thick Not Apply");
 
-	//if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
+	if (m_bRenderbtn[FADEIN] == true)
+	{
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadein", &m_bRenderbtn[FADEIN], sizeof(_bool)))) MSGBOX("Render Final Value g_fog Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadetime", &m_fadeintime, sizeof(_float)))) MSGBOX("Render Final Value g_fog Not Apply");
+	}
+	else if (m_bRenderbtn[FADEOUT] == true)
+	{
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadeout", &m_bRenderbtn[FADEOUT], sizeof(_bool)))) MSGBOX("Render Final Value g_fog Not Apply");
+		if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadetime", &m_fadeouttime, sizeof(_float)))) MSGBOX("Render Final Value g_fog Not Apply");
+	}
+
 	if (FAILED(m_pVIBuffer->Render(1))) MSGBOX("Final Rendering Failed");
 
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_FinalAlpha()
+{
 	if (FAILED(Render_AlphaNoBloom()))	MSGBOX("Failed To Rendering AlphaNoBloomPass");
 
 	if (m_bRenderbtn[PARTICLE] == true)
 	{
 		if (FAILED(m_pPostProcess->AlphaBlur(m_pTargetMgr, m_bRenderbtn[PARTICLE]))) MSGBOX("Alpha Blur Failed");
 		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaTexture", m_pTargetMgr->Get_SRV(L"Target_Alpha")))) MSGBOX("Alpha Render Failed");
-		//if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
-		if (FAILED(m_pVIBuffer->Render(2))) MSGBOX("Alpha Rendering Failed");
+		if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_AlphaNBTexture", m_pTargetMgr->Get_SRV(L"Target_AlphaNoBloom")))) MSGBOX("Alpha Render Failed");
 
+		if (m_bRenderbtn[FADEIN] == true)
+		{
+			if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadein", &m_bRenderbtn[FADEIN], sizeof(_bool)))) MSGBOX("Render Final Value g_fog Not Apply");
+			if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadetime", &m_fadeintime, sizeof(_float)))) MSGBOX("Render Final Value g_fog Not Apply");
+		}
+		else if (m_bRenderbtn[FADEOUT] == true)
+		{
+			if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadeout", &m_bRenderbtn[FADEOUT], sizeof(_bool)))) MSGBOX("Render Final Value g_fog Not Apply");
+			if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_fadetime", &m_fadeouttime, sizeof(_float)))) MSGBOX("Render Final Value g_fog Not Apply");
+		}
+
+		if (FAILED(m_pVIBuffer->Render(2))) MSGBOX("Alpha Rendering Failed");
 	}
 
 	return S_OK;
@@ -656,20 +694,6 @@ HRESULT CRenderer::Render_PhysX()
 		DX::DrawTriangle(m_pBatch, vPos0, vPos1, vPos0, XMLoadFloat4(&vColor));
 	}
 
-	//PxU32 iNBTriangles = rb.getNbTriangles();
-	//for (PxU32 i = 0; i < iNBLines; ++i)
-	//{
-	//	const PxDebugTriangle triangle = rb.getTriangles()[i];
-	//	_float3 pos0 = FromPxVec3(triangle.pos0);
-	//	_float3 pos1 = FromPxVec3(triangle.pos1);
-	//	_float3 pos2 = FromPxVec3(triangle.pos2);
-	//	_vector vPos0 = XMLoadFloat4(&_float4(pos0.x, pos0.y, pos0.z, 1.f));
-	//	_vector vPos1 = XMLoadFloat4(&_float4(pos1.x, pos1.y, pos1.z, 1.f));
-	//	_vector vPos2 = XMLoadFloat4(&_float4(pos2.x, pos2.y, pos2.z, 1.f));
-
-	//	DX::DrawTriangle(m_pBatch, vPos0, vPos1, vPos2, XMLoadFloat4(&vColor));
-	//}
-
 	m_pBatch->End();
 
 	return S_OK;
@@ -696,6 +720,30 @@ HRESULT CRenderer::AlphaSorting(RENDER etype)
 		});
 
 	return S_OK;
+}
+
+void CRenderer::CalcFadeTime()
+{
+	if (m_bRenderbtn[FADEIN] == true)
+	{
+		m_fadeintime -= g_fDeltaTime * 0.5f;
+
+		if (m_fadeintime <= 0.f)
+		{
+			m_fadeintime = 1.f;
+			m_bRenderbtn[FADEIN] = false;
+		}
+	}
+	else if (m_bRenderbtn[FADEOUT] == true)
+	{
+		m_fadeouttime += g_fDeltaTime * 0.5f;
+
+		if (m_fadeouttime >= 1.f)
+		{
+			m_fadeouttime = 0.f;
+			m_bRenderbtn[FADEOUT] = false;
+		}
+	}
 }
 
 

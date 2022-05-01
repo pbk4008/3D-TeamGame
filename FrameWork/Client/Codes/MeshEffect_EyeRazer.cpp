@@ -165,7 +165,7 @@ _int CMeshEffect_EyeRazer::LateTick(_double _dDeltaTime)
 
 	if (m_bEffectOn)
 	{
-		m_fEffectAcc += _dDeltaTime;
+		m_fEffectAcc += (_float)_dDeltaTime;
 	}
 
 	if (0.05f <= m_fEffectAcc)

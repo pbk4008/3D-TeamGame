@@ -94,9 +94,37 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_MAIN2(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT) 0;
+	
+	half4 diffuse = g_DiffuseTexture.Sample(DefaultSampler, In.vUvDepth.xy);
+	half3 normal = g_BiNormalTexture.Sample(DefaultSampler, In.vUvDepth.xy).xyz;
+	half3x3 tbn = { In.vTangent.xyz, In.vBiNormal.xyz, In.vNormal.xyz };
+	
+	normal = Normalmapping(normal, tbn);
+	
+	Out.diffuse = diffuse;
+
+	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
+	Out.normal = half4(normal, 0);
+	
+	half Metalic = 0.8f;
+	half Roughness = 0.2;
+	half Ao = 1.f;
+
+	Out.mra.r = Metalic;
+	Out.mra.g = Roughness;
+	Out.mra.b = Ao;
+	Out.mra.a = 1.f;
+	Out.emission = half4(0, 0, 0, 1);
+
+	return Out;
+}
+
 technique11			DefaultTechnique
 {
-	pass DefaultShader
+	pass DefaultShader // Rock Static
 	{
 		SetRasterizerState(CullMode_Default);
 		SetDepthStencilState(ZDefault, 0);
@@ -115,5 +143,15 @@ technique11			DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MESH();
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0  PS_MAIN();
+	}
+	pass Mian2 // Floor static
+	{
+		SetRasterizerState(CullMode_Wireframe);
+		SetDepthStencilState(ZDefault, 0);
+		SetBlendState(BlendDisable, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+		VertexShader = compile vs_5_0 VS_MESH();
+		GeometryShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN2();
 	}
 }

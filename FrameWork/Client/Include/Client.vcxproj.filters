@@ -1221,6 +1221,27 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가">
       <UniqueIdentifier>{b504f21a-177f-4a8e-a1c5-665b050676a8}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.System\11.VoiceManager">
+      <UniqueIdentifier>{d737128b-16a7-4924-af73-5c4889d9665e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\05.Hud\05.Subtitles">
+      <UniqueIdentifier>{3108a7ab-02af-4407-a76f-e8aae98837c3}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06">
+      <UniqueIdentifier>{da3a57ee-5af9-4fe8-98ff-f494776e42d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-1">
+      <UniqueIdentifier>{f476b6f8-b79c-4910-9d10-6e551241c4eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-2">
+      <UniqueIdentifier>{99309603-08ba-429a-9eb5-f817de281cb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3">
+      <UniqueIdentifier>{3ca64b96-bfed-46e0-a1a1-7a42d1276480}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill">
+      <UniqueIdentifier>{b98ba130-da3b-4b61-9ac1-8c68855bfd06}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2624,6 +2645,33 @@
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Bar_Mark.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\VoiceManager.h">
+      <Filter>03.System\11.VoiceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Subtitles.h">
+      <Filter>02.GameObject\05.UI\05.Hud\05.Subtitles</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Headers\Cinema5_1.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema5_2.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Cinema5_3.h">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerSkill_1.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\2H_HammerSkill_2.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordSkill_2.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\1H_SwordSkill_3.h">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3997,6 +4045,33 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Bar_Mark.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\VoiceManager.cpp">
+      <Filter>03.System\11.VoiceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Subtitles.cpp">
+      <Filter>02.GameObject\05.UI\05.Hud\05.Subtitles</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Codes\Cinema5_1.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema5_3.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Cinema5_2.cpp">
+      <Filter>03.System\07.Scenematic\02.Stage2\01.Shot06\Cinema5-2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerSkill_1.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\2H_HammerSkill_2.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\2H_Hammer\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordSkill_2.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\1H_SwordSkill_3.cpp">
+      <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
