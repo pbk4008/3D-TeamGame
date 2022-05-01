@@ -43,6 +43,25 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		{
 			if (27 <= iCurKeyFrameIndex && 28 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 			{
+				CCameraShake::SHAKEEVENT tShakeEvent;
+				tShakeEvent.fDuration = 0.7f;
+				tShakeEvent.fBlendInTime = 0.2f;
+				tShakeEvent.fBlendOutTime = 0.5f;
+				tShakeEvent.tWaveX.fAmplitude = 0.1f;
+				tShakeEvent.tWaveX.fFrequency = -6.f;
+				tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveY.fAmplitude = 0.1f;
+				tShakeEvent.tWaveY.fFrequency = 6.f;
+				tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+				tShakeEvent.tWaveZ.fFrequency = 1.f;
+				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+				tShakeEvent.fInnerRadius = 10.f;
+				tShakeEvent.fOuterRadius = 20.f;
+				tShakeEvent.fDistanceRate = 10.f;
+
+				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 				//무기앞에생기는이펙트
 				m_bEffectCheck = true;
 				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnWeaponEffect();
@@ -66,32 +85,42 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 	{
 		cout << "LEGACY : " << iCurKeyFrameIndex << endl;
 
-		if (0 < iCurKeyFrameIndex && 20 > iCurKeyFrameIndex)
+		if (10 <= iCurKeyFrameIndex && 60 > iCurKeyFrameIndex)
 		{
-			m_pMonster->Set_IsAttack(true);
-
-			_float fDamage = 6.f;
-			_uint iLevel = 3;
-			m_pMonster->Set_AttackDesc_Damaga(fDamage);
-			m_pMonster->Set_AttackDesc_Level(iLevel);
-		}
-		if (25 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex)
-		{
-			if (37 <= iCurKeyFrameIndex && 38 >= iCurKeyFrameIndex && false == m_bEffectCheck)
-			{
-				//무기앞에생기는이펙트
-				m_bEffectCheck = true;
-				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnWeaponEffect();
-			}
-
 			m_pMonster->Set_IsAttack(true);
 
 			_float fDamage = 8.f;
 			_uint iLevel = 4;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
+
+			if (35 <= iCurKeyFrameIndex && 38 >= iCurKeyFrameIndex && false == m_bEffectCheck)
+			{
+				CCameraShake::SHAKEEVENT tShakeEvent;
+				tShakeEvent.fDuration = 1.f;
+				tShakeEvent.fBlendInTime = 0.2f;
+				tShakeEvent.fBlendOutTime = 0.5f;
+				tShakeEvent.tWaveX.fAmplitude = 0.2f;
+				tShakeEvent.tWaveX.fFrequency = -9.f;
+				tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveY.fAmplitude = 0.2f;
+				tShakeEvent.tWaveY.fFrequency = 9.f;
+				tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+				tShakeEvent.tWaveZ.fFrequency = 0.6f;
+				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+				tShakeEvent.fInnerRadius = 10.f;
+				tShakeEvent.fOuterRadius = 20.f;
+				tShakeEvent.fDistanceRate = 20.f;
+
+				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
+				//무기앞에생기는이펙트
+				m_bEffectCheck = true;
+				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnWeaponEffect();
+			}
 		}
-		else
+		else 
 			m_pMonster->Set_IsAttack(false);
 
 		m_pMonster->Set_AttackDesc_Dir(EAttackDir::Forward);
@@ -104,6 +133,25 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		{
 			if (19 <= iCurKeyFrameIndex && 20 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 			{
+				CCameraShake::SHAKEEVENT tShakeEvent;
+				tShakeEvent.fDuration = 1.f;
+				tShakeEvent.fBlendInTime = 0.2f;
+				tShakeEvent.fBlendOutTime = 0.5f;
+				tShakeEvent.tWaveX.fAmplitude = 0.2f;
+				tShakeEvent.tWaveX.fFrequency = -9.f;
+				tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveY.fAmplitude = 0.2f;
+				tShakeEvent.tWaveY.fFrequency = 9.f;
+				tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+				tShakeEvent.tWaveZ.fFrequency = 0.6f;
+				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+				tShakeEvent.fInnerRadius = 10.f;
+				tShakeEvent.fOuterRadius = 20.f;
+				tShakeEvent.fDistanceRate = 20.f;
+
+				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 				//무기앞에생기는이펙트
 				m_bEffectCheck = true;
 				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnWeaponEffect();
@@ -129,6 +177,25 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		{
 			if (35 <= iCurKeyFrameIndex && 36 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 			{
+				CCameraShake::SHAKEEVENT tShakeEvent;
+				tShakeEvent.fDuration = 1.f;
+				tShakeEvent.fBlendInTime = 0.2f;
+				tShakeEvent.fBlendOutTime = 0.5f;
+				tShakeEvent.tWaveX.fAmplitude = 0.2f;
+				tShakeEvent.tWaveX.fFrequency = -9.f;
+				tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveY.fAmplitude = 0.2f;
+				tShakeEvent.tWaveY.fFrequency = 9.f;
+				tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+				tShakeEvent.tWaveZ.fFrequency = 0.6f;
+				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+				tShakeEvent.fInnerRadius = 10.f;
+				tShakeEvent.fOuterRadius = 20.f;
+				tShakeEvent.fDistanceRate = 20.f;
+
+				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 				//무기앞에생기는이펙트
 				m_bEffectCheck = true;
 				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnWeaponEffect();
@@ -161,10 +228,51 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			if (40 <= iCurKeyFrameIndex && 60 >= iCurKeyFrameIndex)
 			{
+				if (false == m_bSideAttack1 && 60 <= iCurKeyFrameIndex)
+				{
+					m_bSideAttack1 = true;
+
+					CCameraShake::SHAKEEVENT tShakeEvent;
+					tShakeEvent.fDuration = 0.6f;
+					tShakeEvent.fBlendInTime = 0.2f;
+					tShakeEvent.fBlendOutTime = 0.4f;
+					tShakeEvent.tWaveX.fAmplitude = 0.4f;
+					tShakeEvent.tWaveX.fFrequency = 7.f;
+					tShakeEvent.tWaveY.fAmplitude = -0.1f;
+					tShakeEvent.tWaveY.fFrequency = 0.5f;
+					tShakeEvent.tWaveZ.fAdditionalOffset = 0.6f;
+					tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+					tShakeEvent.fInnerRadius = 10.f;
+					tShakeEvent.fOuterRadius = 20.f;
+					tShakeEvent.fDistanceRate = 30.f;
+
+					g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+				}
 				m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
 			}
 			if (80 <= iCurKeyFrameIndex && 120 >= iCurKeyFrameIndex)
 			{
+				if (false == m_bSideAttack2 && 110 <= iCurKeyFrameIndex)
+				{
+					m_bSideAttack2 = true;
+
+					CCameraShake::SHAKEEVENT tShakeEvent;
+					tShakeEvent.fDuration = 0.6f;
+					tShakeEvent.fBlendInTime = 0.2f;
+					tShakeEvent.fBlendOutTime = 0.4f;
+					tShakeEvent.tWaveX.fAmplitude = 0.4f;
+					tShakeEvent.tWaveX.fFrequency = 7.f;
+					tShakeEvent.tWaveY.fAmplitude = -0.1f;
+					tShakeEvent.tWaveY.fFrequency = 0.5f;
+					tShakeEvent.tWaveZ.fAdditionalOffset = 0.6f;
+					tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+					tShakeEvent.fInnerRadius = 10.f;
+					tShakeEvent.fOuterRadius = 20.f;
+					tShakeEvent.fDistanceRate = 30.f;
+
+					g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+				}
+
 				m_pMonster->Set_AttackDesc_Dir(EAttackDir::Left);
 			}
 		}
@@ -188,10 +296,29 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 		if (60 < iCurKeyFrameIndex && 90 > iCurKeyFrameIndex)
 		{
-			if (74 < iCurKeyFrameIndex && 76 > iCurKeyFrameIndex && false == m_bEffectCheck)
+			if (74 < iCurKeyFrameIndex && 76 > iCurKeyFrameIndex && false == m_bEffectCheck2) //변수다시만들어서넣어주기 
 			{
+				CCameraShake::SHAKEEVENT tShakeEvent;
+				tShakeEvent.fDuration = 1.f;
+				tShakeEvent.fBlendInTime = 0.2f;
+				tShakeEvent.fBlendOutTime = 0.5f;
+				tShakeEvent.tWaveX.fAmplitude = 0.2f;
+				tShakeEvent.tWaveX.fFrequency = -9.f;
+				tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveY.fAmplitude = 0.2f;
+				tShakeEvent.tWaveY.fFrequency = 9.f;
+				tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+				tShakeEvent.tWaveZ.fFrequency = 0.6f;
+				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+				tShakeEvent.fInnerRadius = 10.f;
+				tShakeEvent.fOuterRadius = 20.f;
+				tShakeEvent.fDistanceRate = 20.f;
+
+				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 				//무기앞에생기는이펙트
-				m_bEffectCheck = true;
+				m_bEffectCheck2 = true;
 				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnWeaponEffect();
 			}
 
@@ -202,10 +329,29 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
 		}
-		if (110 < iCurKeyFrameIndex && 140 > iCurKeyFrameIndex)
+		else if (110 < iCurKeyFrameIndex && 140 > iCurKeyFrameIndex)
 		{
 			if (123 <= iCurKeyFrameIndex && 124 >= iCurKeyFrameIndex && false == m_bEffectCheck)
 			{
+				CCameraShake::SHAKEEVENT tShakeEvent;
+				tShakeEvent.fDuration = 0.5f;
+				tShakeEvent.fBlendInTime = 0.2f;
+				tShakeEvent.fBlendOutTime = 0.5f;
+				tShakeEvent.tWaveX.fAmplitude = 0.2f;
+				tShakeEvent.tWaveX.fFrequency = -9.f;
+				tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveY.fAmplitude = 0.2f;
+				tShakeEvent.tWaveY.fFrequency = 9.f;
+				tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+				tShakeEvent.tWaveZ.fFrequency = 0.6f;
+				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+				tShakeEvent.fInnerRadius = 10.f;
+				tShakeEvent.fOuterRadius = 20.f;
+				tShakeEvent.fDistanceRate = 20.f;
+
+				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
+
 				//무기앞에생기는이펙트
 				m_bEffectCheck = true;
 				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnWeaponEffect();
@@ -237,6 +383,11 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 			m_rimcheck = false;
 		}
 
+		if (10 < iCurKeyFrameIndex && 15 > iCurKeyFrameIndex && !m_bEnergy)
+		{
+			m_bEnergy = true;
+			m_pMonster->Active_Effect((_uint)EFFECT::ENERGY_MIDBOSS);
+		}
 
 		if (35 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
 		{
@@ -265,6 +416,31 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 						break;
 					}
 				}
+			}
+
+			if (37 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex && !m_bExplosion)
+			{
+				m_bExplosion = true;
+				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnEff_MeshExplosion(true);
+
+				CCameraShake::SHAKEEVENT tShakeEvent;
+				tShakeEvent.fDuration = 0.5f;
+				tShakeEvent.fBlendInTime = 0.2f;
+				tShakeEvent.fBlendOutTime = 0.5f;
+				tShakeEvent.tWaveX.fAmplitude = 0.2f;
+				tShakeEvent.tWaveX.fFrequency = -9.f;
+				tShakeEvent.tWaveX.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveY.fAmplitude = 0.2f;
+				tShakeEvent.tWaveY.fFrequency = 9.f;
+				tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
+				tShakeEvent.tWaveZ.fAmplitude = 0.5f;
+				tShakeEvent.tWaveZ.fFrequency = 0.6f;
+				tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
+				tShakeEvent.fInnerRadius = 10.f;
+				tShakeEvent.fOuterRadius = 20.f;
+				tShakeEvent.fDistanceRate = 20.f;
+
+				g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			}
 		}
 		else
@@ -302,25 +478,19 @@ HRESULT CMidBoss_Attack::EnterState()
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
 
+	m_bEffectCheck = false; //이펙트다시켜야됨 
+	m_bAttackTypeFar = false;
+	m_bEffectCheck2 = false;
+	m_bEnergy = false;
+	m_bExplosion = false;
+	m_bSideAttack1 = false;
+	m_bSideAttack2 = false;
+
 	_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
 	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
-
-
-	CCameraShake::SHAKEEVENT tShakeEvent;
-	tShakeEvent.fDuration = 1.f;
-	tShakeEvent.fBlendInTime = 0.2f;
-	tShakeEvent.fBlendOutTime = 0.8f;
-	tShakeEvent.tWaveY.fAmplitude = 1.f;
-	tShakeEvent.tWaveY.fFrequency = 0.1f;
-	tShakeEvent.tWaveY.fAdditionalOffset = 0.2f;
-	tShakeEvent.tWaveZ.fAmplitude = 1.f;
-	tShakeEvent.tWaveZ.fFrequency = 1.f;
-	tShakeEvent.tWaveZ.fAdditionalOffset = -1.f;
-
-	g_pShakeManager->Shake(tShakeEvent, m_pTransform->Get_State(CTransform::STATE_POSITION));
 
 	if (5.f > fDistToPlayer )
 	{
@@ -355,8 +525,6 @@ HRESULT CMidBoss_Attack::EnterState()
 
 	else if (5.f <= fDistToPlayer)
 	{
-		m_bAttackTypeFar = true;
-
 		_int iRandom = rand() % 3;
 
 		while (m_iPreState_2 == iRandom)
@@ -394,8 +562,12 @@ HRESULT CMidBoss_Attack::ExitState()
 	CBoss_Bastion_Judicator* m_pMonster = (CBoss_Bastion_Judicator*)m_pStateController->Get_GameObject();
 
 	m_bEffectCheck = false; //이펙트다시켜야됨 
-
 	m_bAttackTypeFar = false;
+	m_bEffectCheck2 = false;
+	m_bEnergy = false;
+	m_bExplosion = false;
+	m_bSideAttack1 = false;
+	m_bSideAttack2 = false;
 
 	m_bAttackR1_H = false;
 	m_bAttackR1 = false;
@@ -421,7 +593,7 @@ void CMidBoss_Attack::Play_Sound(void)
 
 	if (CBoss_Bastion_Judicator::M_BossAnimState::ATTACK_R1_H == m_pAnimator->Get_CurrentAnimNode() && false == m_bAttackR1_H)
 	{
-		if (m_iAttackR1_H == iCurKeyFrameIndex)
+		if (34 == iCurKeyFrameIndex)
 		{
 			g_pShakeManager->Shake(CShakeManager::ETemplate::MidBossXZ, Pos);
 

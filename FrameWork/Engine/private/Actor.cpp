@@ -364,6 +364,22 @@ void CActor::LightOnOff(_fvector pos, _fvector color, _float deltaspeed)
 	}
 }
 
+void CActor::LightOnOff(LIGHTDESC Desc, _float deltaspeed)
+{
+	if (m_bLightCheck == true)
+	{
+		m_LightRange += g_fDeltaTime * -deltaspeed;
+
+		m_pActiveLight->Set_Desc(Desc);
+
+		if (m_LightRange <= 0.f)
+		{
+			m_LightRange = m_OrigLightRange;
+			m_pActiveLight->Set_Active(false);
+		}
+	}
+}
+
 void CActor::Set_LightCheck(_bool check)
 {
 	m_bLightCheck = check;

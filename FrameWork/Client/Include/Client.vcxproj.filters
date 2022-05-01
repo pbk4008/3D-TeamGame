@@ -73,9 +73,6 @@
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\00.UI_Ingame_Static">
       <UniqueIdentifier>{25165615-4570-4a4e-bba1-7184efc01ed4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Quest">
-      <UniqueIdentifier>{27923a70-84a2-468f-a230-34f40a40682f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\05.Tutorial">
       <UniqueIdentifier>{15bb2a83-2c91-4dd2-8f5a-44ac8b9947eb}</UniqueIdentifier>
     </Filter>
@@ -1213,6 +1210,18 @@
     <Filter Include="02.GameObject\02.Map\01.Environment\03.Circle_Floor">
       <UniqueIdentifier>{6c43c0c8-7a09-4c56-afaf-c358d946e1e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss">
+      <UniqueIdentifier>{27923a70-84a2-468f-a230-34f40a40682f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red">
+      <UniqueIdentifier>{6f8de8b8-1830-48b3-8494-f0214862afce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\01.ShieldBar_Boss_Blue">
+      <UniqueIdentifier>{589058b2-7982-4cdc-9b61-9c9490a1ce23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가">
+      <UniqueIdentifier>{b504f21a-177f-4a8e-a1c5-665b050676a8}</UniqueIdentifier>
+	</Filter>
     <Filter Include="03.System\11.VoiceManager">
       <UniqueIdentifier>{d737128b-16a7-4924-af73-5c4889d9665e}</UniqueIdentifier>
     </Filter>
@@ -2631,6 +2640,15 @@
     <ClInclude Include="..\Headers\1H_Multishlash.h">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\UI_Boss_HpBar_Red.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Boss_ShieldBar_Blue.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\01.ShieldBar_Boss_Blue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Bar_Mark.h">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\VoiceManager.h">
       <Filter>03.System\11.VoiceManager</Filter>
     </ClInclude>
@@ -4025,6 +4043,15 @@
     <ClCompile Include="..\Codes\1H_Multishlash.cpp">
       <Filter>02.GameObject\03.Character\00.Player\00.Silvermane\State\1H_Sword\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\UI_Boss_HpBar_Red.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Boss_ShieldBar_Blue.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\01.ShieldBar_Boss_Blue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Bar_Mark.cpp">
+      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\04.Boss\00.HpBar_Boss_Red\Bar_Ma가</Filter>
+	</ClCompile>
     <ClCompile Include="..\Codes\VoiceManager.cpp">
       <Filter>03.System\11.VoiceManager</Filter>
     </ClCompile>

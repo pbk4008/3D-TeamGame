@@ -433,6 +433,7 @@ void CCamera_Silvermane::OnOffMonsterUI()
 		case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 		case (_uint)GAMEOBJECT::MONSTER_SPEAR:
 		case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
+		case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 			if (nullptr != pHitObject)
 			{
 				m_pTargetMonster = pHitObject;

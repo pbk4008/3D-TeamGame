@@ -62,8 +62,8 @@ _int CBoss_Attack_S3::Tick(const _double& TimeDelta)
 
 		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND2, XMVectorSet(0.f, -0.5f, 0.f, 0.f));
 		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_HIT_GROUND_SMOKE);
-		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 2.6f + svRight * -2.1f);
-		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 2.6f + svRight * -2.1f);
+		m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 2.0f + svRight * -1.5f);
+		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 2.0f + svRight * -1.5f);
 
 		m_bShakeCheck = true;
 
