@@ -94,7 +94,7 @@ private:
 	_bool m_bFillShield = false;
 
 	_float m_fDisTime = 5.f;
-
+	_bool	m_bfirst = true;
 private:
 	_bool	m_bIsFall = false;
 public:

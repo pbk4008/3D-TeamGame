@@ -36,7 +36,7 @@ _int CBoss_Stun::Tick(const _double& TimeDelta)
 
 	if (CBoss_Solaris::M_BossAnimState::STUN_END == m_pAnimator->Get_CurrentAnimNode())
 	{
-		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(false);
+		//static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(false);
 
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
@@ -73,12 +73,13 @@ HRESULT CBoss_Stun::EnterState()
 
 	cout << "Boss Stun" << endl;
 
-	static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(true);
+	//static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(true);
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::STUN_START);
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_ShieldDissolveOff();
+
 	return S_OK;
 }
 
@@ -87,7 +88,6 @@ HRESULT CBoss_Stun::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
-	static_cast<CBoss_Solaris*>(m_pMonster)->Set_ShieldDissolveOn();
 
 	return S_OK;
 }

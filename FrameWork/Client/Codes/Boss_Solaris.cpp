@@ -150,14 +150,14 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (0.f >= m_fGroggyGauge && 0.3f <= Get_HpRatio() && m_bGroggy == false)
+	if (0.f >= m_fGroggyGauge && 0.3f <= Get_HpRatio())
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
 		m_pStateController->Change_State(L"Stun");
 	}
 	
-	if (0.33f >= Get_HpRatio() && false == m_bFillShield && m_bGroggy == true)
+	if (0.33f >= Get_HpRatio() && false == m_bFillShield)
 	{
 		//일정체력이상닳면 다시 실드채워줌 
 		m_bFillShield = true;
@@ -166,6 +166,12 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 
 	if (STUN_END == m_pAnimator->Get_CurrentAnimNode())
 	{
+		if (m_bfirst)
+		{
+			Set_ShieldDissolveOn();
+			m_bfirst = false;
+		}
+
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
 			m_bGroggy = false;
