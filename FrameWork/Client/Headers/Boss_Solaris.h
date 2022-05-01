@@ -67,6 +67,9 @@ public:
 	void OnEff_MeshEyeRazer(_bool Active);
 	void Set_RazerAngle(_bool Check);
 
+public: void Set_ShieldDissolveOn();
+public: void Set_ShieldDissolveOff();
+
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;

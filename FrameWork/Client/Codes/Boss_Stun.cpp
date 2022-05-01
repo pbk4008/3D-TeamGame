@@ -77,7 +77,8 @@ HRESULT CBoss_Stun::EnterState()
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_HitMotion(false);
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::STUN_START);
-	
+
+	static_cast<CBoss_Solaris*>(m_pMonster)->Set_ShieldDissolveOff();
 	return S_OK;
 }
 
@@ -86,13 +87,13 @@ HRESULT CBoss_Stun::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	static_cast<CBoss_Solaris*>(m_pMonster)->Set_ShieldDissolveOn();
 
 	return S_OK;
 }
 
 void CBoss_Stun::Look_Player(void)
 {
-	
 }
 
 CBoss_Stun* CBoss_Stun::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, void* pArg)

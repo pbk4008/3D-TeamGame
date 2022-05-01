@@ -418,7 +418,7 @@ HRESULT CStage3::Ready_Data_Effect()
 	//Manager에 넣을 Effect;
 #pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 
-	//Player Dash
+   //Player Dash
 	CEffect* pEffect = nullptr;
 	vector<CEffect_DashDust::EF_PAR_DASH_DESC> vecDashEffect;
 
@@ -924,6 +924,8 @@ HRESULT CStage3::Ready_Data_Effect()
 		MSGBOX("Falild to Add_Effect_Energy in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
+
+
 	//EyeRazer 
 	vecHitParticle.clear();
 	g_pGameInstance->LoadFile<CEffect_HitParticle::EF_PAR_HIT_DESC>(vecHitParticle, L"../bin/SaveData/Effect/Effect_Boss_Razer.dat");
