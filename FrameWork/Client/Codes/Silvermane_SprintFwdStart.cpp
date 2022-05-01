@@ -20,6 +20,8 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+	PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
+
 	return _int();
 }
 
@@ -48,6 +50,7 @@ HRESULT CSilvermane_SprintFwdStart::EnterState()
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Sprint_Fwd_Start_Player", false)))
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
+
 
 	//if (m_pSilvermane->IsEquipWeapon())
 	//{

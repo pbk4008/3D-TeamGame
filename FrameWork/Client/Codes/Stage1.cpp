@@ -276,6 +276,7 @@ _int CStage1::Tick(_double TimeDelta)
 		else
 		{
 			SHOW_GUIDE();
+			PLAY_SOUND(L"UI_InvenOpen", CHANNEL::EFFECT);
 			g_pInvenUIManager->OpenModal();
 			g_pMainApp->Set_DeltaTimeZero(true);
 		}
@@ -1336,6 +1337,8 @@ void CStage1::Portal_Spot2()
 	else if (m_iCountMonster <= 0 && m_iPortalCount == 6)
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
+		STOP_SOUND(CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.0f);
 		m_pTriggerSystem->Check_Clear();
 	}
 }
@@ -1391,6 +1394,8 @@ void CStage1::Portal_Spot4()
 	{
 		CLEAR_QUEST(L"T_HUD_KillAllMonster");
 		m_pTriggerSystem->Check_Clear();
+		STOP_SOUND(CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.0f);
 	}
 }
 
@@ -1475,6 +1480,8 @@ void CStage1::Open_Wall()
 			advance(iter, 0);
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
+			PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+			VOLUME_CHANGE(CHANNEL::BGM, 0.6f);
 		}
 		if (m_iCountMonster == 0)
 		{
@@ -1490,6 +1497,8 @@ void CStage1::Open_Wall()
 			advance(iter, 2);
 			if ((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
+			PLAY_SOUND(L"Monster_Battle_2", CHANNEL::BATTLE);
+			VOLUME_CHANGE(CHANNEL::BGM, 0.6f);
 		}
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)

@@ -21,6 +21,7 @@ _int CSilvermane_SprintFwd::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	//m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 2.f);
+	PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
 
 	return _int();
 }
@@ -46,6 +47,7 @@ HRESULT CSilvermane_SprintFwd::EnterState()
 {
 	if (FAILED(__super::EnterState()))
 		return E_FAIL;
+
 
 	if (FAILED(m_pAnimationController->SetUp_NextAnimation("SK_Silvermane.ao|A_Sprint_Fwd_Player", true)))
 		return E_FAIL;

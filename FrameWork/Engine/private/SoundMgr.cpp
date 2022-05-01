@@ -17,8 +17,10 @@ HRESULT CSoundMgr::Init_SoundManager()
 		return E_FAIL;
 
 	if (FAILED(LoadSoundFile()))
+	{
+		MSGBOX(L"사운드 파일 로드 실패 경로와 파일을 확인하세용");
 		return E_FAIL;
-
+	}
 	return S_OK;
 }
 
@@ -46,6 +48,7 @@ void CSoundMgr::Play_Shot(const wstring& pSoundKey, CHANNELID eID)
 	{
 		FMOD_System_PlaySound(m_pSystem, iter->second, nullptr, FALSE, &m_pChannelArr[eID]);
 	}
+
 	FMOD_System_Update(m_pSystem);
 }
 
@@ -131,6 +134,9 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/BM_InterfaceThemeAmbient_112_66bars_v4.ogg", FMOD_LOOP_NORMAL, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Logo_BGM", pSound); else return E_FAIL;
+
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/BM_DynamicFightMusic081619_Loop_v2_body.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage1_Boss_BGM", pSound); else return E_FAIL;
 
@@ -189,6 +195,15 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_UI_Hover_Major.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Drop_Item_2", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_Loot_Chest_Unlock_Complete_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Unlock_DropBox", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_Loot_Legendary_Pickup_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Item_PickUp", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/GF_Anvil_Charged_Loop_v1.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Opeing_DropBox", pSound); else return E_FAIL;
+
 	/* for. Player */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Heavy_Armour_Plate_Gak_Step_10.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_1", pSound); else return E_FAIL;
@@ -202,6 +217,24 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_LowHealth_01.ogg", FMOD_LOOP_NORMAL, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_LowHealth", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Phalanxar_Consume_Heal_Chug_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Heal", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Archon_Friendly_Heal_Loop_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Heal_Start", pSound); else return E_FAIL;
+	
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Weapon_Swap_Hammer_04.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Swap_Hammer", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Weapon_Swap_Longsword_03.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Swap_Longsword", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_BrokenStone_Scuff_04.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Walk", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Foley_GapJump_Land_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_GapJump", pSound); else return E_FAIL;
+
 	/* for. Shield*/
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_Player_Weapon_Shield_Equip_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_On", pSound); else return E_FAIL;
@@ -209,6 +242,15 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_Player_Weapon_Shield_Stow_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Off", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_UI_HUD_Shield_Recharge_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Recharge", pSound); else  return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_Player_Shield_Catch_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Catch", pSound); else  return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_Player_Shield_Charge_Start_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Charge", pSound); else  return E_FAIL;
+	
 	/* for.Monster */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Monster/A_Attack_Liquid_Hit_Generic_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Monster_Hit", pSound); else return E_FAIL;
@@ -369,6 +411,12 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/JumpNode/A_Effect_JumpNode_Close_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"JumpNode_Close", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/JumpNode/A_Player_JumpNode_Flying_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"JumpNode_Flying", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/JumpNode/A_Player_JumpNode_Flying_02.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"JumpNode_Flying_2", pSound); else return E_FAIL;
+
 	/*for. Voice Orin */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Orin/VO_SM1a1_003b_Orin_ItsSluggish.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"ItsSluggish", pSound); else return E_FAIL;
@@ -447,6 +495,29 @@ HRESULT CSoundMgr::LoadSoundFile()
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Voice/Sanctum/VO_SM1a2_007c_SeventhSanctum_YouWontLike.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"YouWontLike", pSound); else return E_FAIL;
+
+	/* for. UI */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/UI/A_UI_tab_over.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"UI_tab_over", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/UI/A_Loot_Chest_Open_Locked_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"UI_InvenOpen", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/UI/A_UI_transition_left_in.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"UI_Equip", pSound); else return E_FAIL;
+	
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/UI/A_Show_GuideImg.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"UI_GuideImg", pSound); else return E_FAIL;
+
+	/* for. Monster Battle */
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/MonsterBattle/BM_CD_SunforgeDrums02_240_v4_body_40bars.ogg", FMOD_LOOP_NORMAL, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Monster_Battle", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/MonsterBattle/BM_CD_CombatDrums03_136_v4_body_40bars.ogg", FMOD_LOOP_NORMAL, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Monster_Battle_2", pSound); else return E_FAIL;
+
+
+
 	FMOD_System_Update(m_pSystem);
 
 	return S_OK;

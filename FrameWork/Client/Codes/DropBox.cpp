@@ -269,6 +269,8 @@ HRESULT CDropBox::Set_Animation_FSM()
 void CDropBox::Open(void)
 {
 	m_dropList = GetDropList();
+	STOP_SOUND(CHANNEL::EFFECT);
+	PLAY_SOUND(L"Unlock_DropBox", CHANNEL::EFFECT);
 }
 
 std::vector<CItemData> CDropBox::GetDropList(void)
