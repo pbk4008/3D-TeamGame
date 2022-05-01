@@ -857,7 +857,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	cout << fDistToPlayer << endl;
+	//cout << fDistToPlayer << endl;
 	if (0.66f < Get_HpRatio())
 	{
 		//레이저없음
