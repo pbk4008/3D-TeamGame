@@ -22,6 +22,7 @@ _int CSilvermane_SprintFwd::Tick(const _double& _dDeltaTime)
 
 	//m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 2.f);
 	PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
+	VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
 
 	return _int();
 }
@@ -61,6 +62,7 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 	if (FAILED(__super::ExitState()))
 		return E_FAIL;
 
+	VOLUME_CHANGE(CHANNEL::PLAYER1, 1.f);
 	m_motiontrailidx = 0;
 
 	return S_OK;

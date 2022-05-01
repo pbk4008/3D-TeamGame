@@ -186,11 +186,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -222,7 +222,7 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -1486,7 +1486,7 @@ void CStage1::Open_Wall()
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
 			PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
-			VOLUME_CHANGE(CHANNEL::BGM, 0.6f);
+			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 		}
 		if (m_iCountMonster == 0)
 		{
@@ -1503,7 +1503,7 @@ void CStage1::Open_Wall()
 			if ((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
 			PLAY_SOUND(L"Monster_Battle_2", CHANNEL::BATTLE);
-			VOLUME_CHANGE(CHANNEL::BGM, 0.6f);
+			VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 		}
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)

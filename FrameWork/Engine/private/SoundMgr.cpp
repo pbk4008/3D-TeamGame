@@ -131,8 +131,8 @@ HRESULT CSoundMgr::LoadSoundFile()
 		"../bin/Resources/Sound/Bgm/BM_ZU_AveyronPeak_78_v3_body_38bars.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage1_BGM", pSound); else return E_FAIL;
 
-	//eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
-	//if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/A_Amb_SunforgeTemple_Bed.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Stage2_BGM", pSound); else return E_FAIL;
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Bgm/BM_InterfaceThemeAmbient_112_66bars_v4.ogg", FMOD_LOOP_NORMAL, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Logo_BGM", pSound); else return E_FAIL;
@@ -235,6 +235,9 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Foley_GapJump_Land_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_GapJump", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/Player_Knockback_A_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Knockback", pSound); else return E_FAIL;
+
 	/* for. Shield*/
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_Player_Weapon_Shield_Equip_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_On", pSound); else return E_FAIL;
@@ -251,6 +254,9 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_Player_Shield_Charge_Start_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Charge", pSound); else  return E_FAIL;
 	
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/Shield/A_Weapon_Shield_Block_Longsword_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Shield_Block", pSound); else  return E_FAIL;
+
 	/* for.Monster */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Monster/A_Attack_Liquid_Hit_Generic_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Monster_Hit", pSound); else return E_FAIL;

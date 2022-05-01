@@ -271,7 +271,6 @@ public:
 	virtual void Free() override;
 };
 
-
 #define PLAY_SOUND(key, channel)					g_pGameInstance->Play_Shot(key, channel);
 #define STOP_SOUND(channel)						    g_pGameInstance->StopSound(channel);
 #define BLEND_SOUND(Key1, Key2, channel1, channel2) g_pGameInstance->g_pGameInstance->BlendSound(Key1, Key2, channel1, channel2);
