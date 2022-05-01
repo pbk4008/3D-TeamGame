@@ -1248,7 +1248,7 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD">
       <UniqueIdentifier>{140774dc-f4a9-4523-bf9c-55894a22d9f5}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill">
       <UniqueIdentifier>{7a178c9b-7704-4488-8efd-15c4bc74b6dc}</UniqueIdentifier>
     </Filter>
@@ -2691,15 +2691,13 @@
     <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge_Right.h">
-	</ClInclude>
     <ClInclude Include="..\Headers\UI_MapInfo.h">
       <Filter>02.GameObject\05.UI\05.Hud\06.MapInfo</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_LevelHUD.h">
       <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD</Filter>
-	</ClInclude>
-    <ClInclude Include="..\Headers\UI_Skill_Meter.h">
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge_Right.h">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClInclude>
   </ItemGroup>
@@ -4108,15 +4106,13 @@
     <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge_Right.cpp">
-	</ClCompile>
     <ClCompile Include="..\Codes\UI_MapInfo.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\06.MapInfo</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_LevelHUD.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD</Filter>
-	</ClCompile>
-    <ClCompile Include="..\Codes\UI_Skill_Meter.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge_Right.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClCompile>
   </ItemGroup>
