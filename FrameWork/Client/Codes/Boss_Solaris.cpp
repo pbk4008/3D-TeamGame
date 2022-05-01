@@ -950,7 +950,7 @@ void CBoss_Solaris::Active_Light()
 
 void CBoss_Solaris::Setting_Light()
 {
-	CActor::LightOnOff(m_pActiveLight->Get_LightDesc(), m_fDisTime);
+	CActor::LightOnOff(*m_pActiveLight->Get_LightDesc(), m_fDisTime);
 }
 
 void CBoss_Solaris::Set_LightDisTime(_float DisTime)

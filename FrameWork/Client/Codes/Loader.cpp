@@ -194,8 +194,8 @@ HRESULT CLoader::LoadForScene()
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	//if (FAILED(Load_Stage1FBXLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1FBXLoad()))
+		return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -216,14 +216,14 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 #pragma region 이펙트들
-	//if (FAILED(Load_Stage1EffectLoad()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1EffectLoad()))
+		return E_FAIL;
 	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
 	if (FAILED(Load_MeshEffects())) //매쉬
 		return E_FAIL;
-	//if (FAILED(Load_StaticEffects())) // static effect
-	//	return E_FAIL;
+	if (FAILED(Load_StaticEffects())) // static effect
+		return E_FAIL;
 #pragma endregion
 
 	if (FAILED(Load_Stage1JumpTrigger()))
@@ -232,8 +232,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	//if (FAILED(Load_Stage1TriggerLod()))
-	//	return E_FAIL;
+	if (FAILED(Load_Stage1TriggerLod()))
+		return E_FAIL;
 
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
@@ -2297,9 +2297,9 @@ HRESULT CLoader::Load_MeshEffects()
 		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
 		return E_FAIL;
 
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_lowPoly_dist.fbx",
-		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Effect/FXVarietyPack/", "ky_cylinder_lowPoly_dist.fbx",
+	//	L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 
 	return S_OK;
 }

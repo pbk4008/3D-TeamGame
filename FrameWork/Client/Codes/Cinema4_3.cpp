@@ -38,7 +38,7 @@ HRESULT CCinema4_3::NativeContruct(_uint iSceneID)
 	pSilvermaneTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(48.f, -3, 150.f, 1.f));
 	pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(270.f));
 
-	m_pCam->Set_Fov(XMConvertToRadians(24.58));
+	m_pCam->Set_Fov(XMConvertToRadians(24.58f));
 	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(270.f)) * XMMatrixTranslation(48.f, -3.f, 150.f);
 	m_pCam->Set_CameraMatrix(matPivot);;
 
@@ -120,7 +120,6 @@ HRESULT CCinema4_3::Ready_Components()
 	tDesc.fAspect = (_float)g_iWinCx / g_iWinCy;
 
 	CCinemaCam::CINEMADESC tCinemaDesc;
-	ZeroMemory(&tCinemaDesc, sizeof(tCinemaDesc));
 
 	tCinemaDesc.tCameraDesc = tDesc;
 	tCinemaDesc.iShotTag = (_uint)CINEMA_INDEX::CINEMA4_3;

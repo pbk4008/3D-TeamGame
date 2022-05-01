@@ -149,7 +149,6 @@ _int CMeshEffect_EyeRazer::LateTick(_double _dDeltaTime)
 	pEffect2->Get_Transform()->Set_State(CTransform::STATE_POSITION,
 		m_pTransform->Get_State(CTransform::STATE_POSITION) + (m_pTransform->Get_Scale(CTransform::STATE_LOOK) * svLook * -0.3f));
 
-
 	if (false == m_bEffectOn && 0.f <= m_fEffectAcc)
 	{
 		//ÀÌÆåÆ®¿Â
