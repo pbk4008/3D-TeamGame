@@ -277,9 +277,6 @@
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\02.Run">
       <UniqueIdentifier>{7464defb-76ef-40ae-9e49-60563ce32ef8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack">
-      <UniqueIdentifier>{8891ce53-fa8d-4839-acaf-b37030d1d847}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch">
       <UniqueIdentifier>{598793a3-920b-4585-a942-1ffe7b1a718a}</UniqueIdentifier>
     </Filter>
@@ -1248,12 +1245,15 @@
     </Filter>
     <Filter Include="02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD">
       <UniqueIdentifier>{140774dc-f4a9-4523-bf9c-55894a22d9f5}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill">
       <UniqueIdentifier>{7a178c9b-7704-4488-8efd-15c4bc74b6dc}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill\00.Back">
       <UniqueIdentifier>{963b881a-041a-4e37-9aab-cdbd0ac86e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch\03.Attack">
+      <UniqueIdentifier>{8891ce53-fa8d-4839-acaf-b37030d1d847}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1810,7 +1810,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Aberrant_Attack.h">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch\03.Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Default\Client_Struct.h">
       <Filter>98.Headers</Filter>
@@ -2692,15 +2692,12 @@
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_Skill_Meter_Gauge_Right.h">
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Headers\UI_MapInfo.h">
       <Filter>02.GameObject\05.UI\05.Hud\06.MapInfo</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\UI_LevelHUD.h">
       <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD</Filter>
-	</ClInclude>
-    <ClInclude Include="..\Headers\UI_Skill_Meter.h">
-      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3233,7 +3230,7 @@
       <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\01.Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Aberrant_Attack.cpp">
-      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\03.Attack</Filter>
+      <Filter>02.GameObject\03.Character\01.Monster\EarthAberrant\State\04.Flinch\03.Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bastion_Sword_Hit.cpp">
       <Filter>02.GameObject\03.Character\01.Monster\Bastion_Sword\00.State\03.Hit</Filter>
@@ -4109,15 +4106,12 @@
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge_Right.cpp">
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Codes\UI_MapInfo.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\06.MapInfo</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\UI_LevelHUD.cpp">
       <Filter>02.GameObject\05.UI\05.Hud\01.LevelUp\03.LevelUp_HUD</Filter>
-	</ClCompile>
-    <ClCompile Include="..\Codes\UI_Skill_Meter.cpp">
-      <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

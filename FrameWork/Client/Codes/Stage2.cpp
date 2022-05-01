@@ -26,6 +26,7 @@
 #include "DropManager.h"
 #include "Potal.h"
 #include <Boss_Bastion_Judicator.h>
+#include "Pot.h"
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -91,6 +92,9 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
@@ -688,6 +692,29 @@ HRESULT CStage2::Ready_GameManager(void)
 	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE2)))
 		return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CStage2::Ready_Pot()
+{
+	vector<ENVIRONMENTLOADDATA> vecEnvironmentData;
+	g_pGameInstance->LoadFile<ENVIRONMENTLOADDATA>(vecEnvironmentData, L"../bin/SaveData/Stage2_Pot.dat");
+
+	for (auto& pData : vecEnvironmentData)
+	{
+		CPot::POTDESC tDesc;
+		ZeroMemory(&tDesc, sizeof(tDesc));
+		if (!lstrcmp(pData.FileName, L"S_Moon_Urn_1_03.fbx"))
+			tDesc.iType = 0;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_01.fbx"))
+			tDesc.iType = 1;
+		if (!lstrcmp(pData.FileName, L"S_Sun_Urns_Set02.fbx"))
+			tDesc.iType = 2;
+
+		tDesc.matWorld = pData.WorldMat;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_Pot", L"Proto_GameObject_Pot", &tDesc)))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 
@@ -1504,7 +1531,7 @@ void CStage2::Portal_Spot1()
 		Open_Potal(XMVectorSet(57.f, 0.f, 4.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster == 3 && m_iPortalCount == 2)
+	else if (m_iCountMonster <= 3 && m_iPortalCount == 2)
 	{
 		m_iPortalCount = 4;
 		Open_Potal(XMVectorSet(58.f, 7.f, 57.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
@@ -1513,7 +1540,7 @@ void CStage2::Portal_Spot1()
 		Open_Potal(XMVectorSet(46.f, 7.f, 48.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 4)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 4)
 		m_pTriggerSystem->Check_Clear();
 }
 
@@ -1536,7 +1563,7 @@ void CStage2::Portal_Spot2()
 		Open_Potal(XMVectorSet(37.f, 14.f, 230.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster <=2  && m_iPortalCount == 6)
+	else if (m_iCountMonster <= 2  && m_iPortalCount == 6)
 	{
 		m_iPortalCount = 7;
 		Open_Potal(XMVectorSet(42.f, 13.f, 240.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);

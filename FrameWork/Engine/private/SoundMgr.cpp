@@ -271,6 +271,12 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Monster/Healer/A_Vox_Hit_NyakCaster_02.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Healer_Death", pSound); else return E_FAIL;
 
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Monster/Healer/A_Blind_Attack_Cast_02.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Healer_Attack", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Monster/Healer/A_CrimsonCaster_Protect_Aura_Activate_02.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Healer_Reinforce", pSound); else return E_FAIL;
+
 	/* H1_Sword */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Weapon/H1_Sword/A_Player_Weapon_Longsword_Slash_Leaping_Charge_04.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"H1_Attack_1", pSound); else return E_FAIL;
