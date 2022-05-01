@@ -53,64 +53,127 @@ _int CMeshEffect_Boss_Explosion::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProcess)
 		return iProcess;
 
-	m_fAccTime += (_float)_dDeltaTime;
-
-
-	m_fAlpha = 1.f;
-
-
-	m_isReverse = false;
-	m_vTiling.x = 2.f;
-	m_vTiling.y = 2.f;
-	
-	m_isCustomColor = true;
-	m_vColor = { 1.f, 0.3f, 0.1f };
-
-	if (false == m_bBeSmall)
+	if ((_uint)SCENEID::SCENE_STAGE3 == m_iSceneID)
 	{
-		m_vScale.x += 250.f * (_float)_dDeltaTime;
-		m_vScale.y += 250.f * (_float)_dDeltaTime;
-		m_vScale.z += 250.f * (_float)_dDeltaTime;
+		m_fAccTime += (_float)_dDeltaTime;
 
-		m_fAlpha = 3.0f;
+		m_fAlpha = 1.f;
+
+
+		m_isReverse = false;
+		m_vTiling.x = 2.f;
+		m_vTiling.y = 2.f;
+
+		m_isCustomColor = true;
+		m_vColor = { 1.f, 0.3f, 0.1f };
+
+		if (false == m_bBeSmall)
+		{
+			m_vScale.x += 250.f * (_float)_dDeltaTime;
+			m_vScale.y += 250.f * (_float)_dDeltaTime;
+			m_vScale.z += 250.f * (_float)_dDeltaTime;
+
+			m_fAlpha = 3.0f;
+		}
+
+		if (100.f < m_vScale.x)
+		{
+			m_bBeSmall = true;
+		}
+
+		if (m_bBeSmall)
+		{
+			m_fAlpha = 1.0f;
+
+			m_vScale.x -= 200.f * (_float)_dDeltaTime;
+			m_vScale.y -= 200.f * (_float)_dDeltaTime;
+			m_vScale.z -= 200.f * (_float)_dDeltaTime;
+		}
+
+		if (5.f >= m_vScale.x)
+		{
+			m_vScale = { 5.f, 5.f, 5.f };
+			m_bBeSmall = false;
+			setActive(false);
+		}
+
+		m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
+
+
+		CTransform* pBossTransform = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Boss")->front()->Get_Transform();
+
+		_vector svPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
+		_vector svRight = XMVector3Normalize(pBossTransform->Get_State(CTransform::STATE_RIGHT));
+		_vector svLook = XMVector3Normalize(pBossTransform->Get_State(CTransform::STATE_LOOK));
+
+		if (pBossTransform)
+		{
+			_vector BossPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
+			_vector NewPos = { XMVectorGetX(BossPos), XMVectorGetY(BossPos) + 3.f, XMVectorGetZ(BossPos), 1.f };
+			m_pTransform->Set_State(CTransform::STATE_POSITION, NewPos + svRight * -0.4f);
+		}
+
 	}
-
-	if (100.f < m_vScale.x)
+	else if ((_uint)SCENEID::SCENE_STAGE3 != m_iSceneID)
 	{
-		m_bBeSmall = true;
+		m_fAccTime += (_float)_dDeltaTime;
+
+		m_fAlpha = 1.f;
+
+
+		m_isReverse = false;
+		m_vTiling.x = 2.f;
+		m_vTiling.y = 2.f;
+
+		m_isCustomColor = true;
+		m_vColor = { 1.f, 0.3f, 0.1f };
+
+		if (false == m_bBeSmall)
+		{
+			m_vScale.x += 250.f * (_float)_dDeltaTime;
+			m_vScale.y += 250.f * (_float)_dDeltaTime;
+			m_vScale.z += 250.f * (_float)_dDeltaTime;
+
+			m_fAlpha = 3.0f;
+		}
+
+		if (60.f < m_vScale.x)
+		{
+			m_bBeSmall = true;
+		}
+
+		if (m_bBeSmall)
+		{
+			m_fAlpha = 1.0f;
+
+			m_vScale.x -= 150.f * (_float)_dDeltaTime;
+			m_vScale.y -= 150.f * (_float)_dDeltaTime;
+			m_vScale.z -= 150.f * (_float)_dDeltaTime;
+		}
+
+		if (5.f >= m_vScale.x)
+		{
+			m_vScale = { 5.f, 5.f, 5.f };
+			m_bBeSmall = false;
+			setActive(false);
+		}
+
+		m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
+
+
+		CTransform* pBossTransform = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Boss")->front()->Get_Transform();
+
+		_vector svPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
+		_vector svRight = XMVector3Normalize(pBossTransform->Get_State(CTransform::STATE_RIGHT));
+		_vector svLook = XMVector3Normalize(pBossTransform->Get_State(CTransform::STATE_LOOK));
+
+		if (pBossTransform)
+		{
+			_vector BossPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
+			_vector NewPos = { XMVectorGetX(BossPos), XMVectorGetY(BossPos) + 1.5f, XMVectorGetZ(BossPos), 1.f };
+			m_pTransform->Set_State(CTransform::STATE_POSITION, NewPos + svRight * -0.2f);
+		}
 	}
-
-	if (m_bBeSmall)
-	{
-		m_fAlpha = 1.0f;
-
-		m_vScale.x -= 200.f * (_float)_dDeltaTime;
-		m_vScale.y -= 200.f * (_float)_dDeltaTime;
-		m_vScale.z -= 200.f * (_float)_dDeltaTime;
-	}
-
-	if (5.f >= m_vScale.x)
-	{
-		m_vScale = { 5.f, 5.f, 5.f };
-		m_bBeSmall = false;
-		setActive(false);
-	}
-
-	m_pTransform->Scaling(_vector{ m_vScale.x, m_vScale.y, m_vScale.z, 0.f });
-	
-	CTransform* pBossTransform = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_Boss")->front()->Get_Transform();
-
-	_vector svPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
-	_vector svRight = XMVector3Normalize(pBossTransform->Get_State(CTransform::STATE_RIGHT));
-	_vector svLook = XMVector3Normalize(pBossTransform->Get_State(CTransform::STATE_LOOK));
-
-	if (pBossTransform)
-	{
-		_vector BossPos = pBossTransform->Get_State(CTransform::STATE_POSITION);
-		_vector NewPos = { XMVectorGetX(BossPos), XMVectorGetY(BossPos) + 3.f, XMVectorGetZ(BossPos), 1.f };
-		m_pTransform->Set_State(CTransform::STATE_POSITION, NewPos + svRight * -0.4f);
-	}
-
 
 	return _int();
 }

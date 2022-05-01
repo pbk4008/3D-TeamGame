@@ -622,6 +622,7 @@ _int CMonster_Bastion_Shooter::Change_State()
 
 	if (m_bDead)
 	{
+		Set_IsAttack(false);
 		if (tmpState == L"Death")
 		{
 			if (m_pAnimator->Get_CurrentAnimNode() == (_uint)ANIM_TYPE::DEATH

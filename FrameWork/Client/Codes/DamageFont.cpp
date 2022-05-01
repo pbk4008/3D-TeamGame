@@ -35,7 +35,7 @@ HRESULT CDamageFont::NativeConstruct(_uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_vScale = { 0.2f, 0.2f };
+	m_vScale = { 0.14f, 0.14f };
 	return S_OK;
 }
 
@@ -48,11 +48,11 @@ _int CDamageFont::Tick(_double _dDeltaTime)
 	m_fAccTime += (_float)_dDeltaTime;
 
 	m_vScale.x -= (_float)_dDeltaTime * 0.4f;
-	if (0.06f > m_vScale.x)
-		m_vScale.x = 0.06f;
+	if (0.04f > m_vScale.x)
+		m_vScale.x = 0.04f;
 	m_vScale.y -= (_float)_dDeltaTime * 0.4f;
-	if (0.06f > m_vScale.y)
-		m_vScale.y = 0.06f;
+	if (0.04f > m_vScale.y)
+		m_vScale.y = 0.04f;
 
 	if (0.5f < m_fAccTime)
 	{

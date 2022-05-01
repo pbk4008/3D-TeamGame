@@ -14,6 +14,7 @@
 #include "Potal.h"
 #include "Loot_Shield.h"
 #include "Pot.h"
+#include "Circle_Floor.h"
 
 //Monster
 #include "Monster_Crawler.h"
@@ -60,7 +61,10 @@
 #include "UI_Ingame.h"
 #include "UI_Player_HpBar.h"
 #include "UI_Player_HpBar_Red.h"
+#include "UI_Boss_HpBar_Red.h"
+#include "UI_Boss_ShieldBar_Blue.h"
 #include "UI_HpHeal_Num.h"
+#include "UI_Bar_Mark.h"
 #include "UI_Monster_Panel.h"
 #include "UI_Monster_Back.h"
 #include "UI_Monster_Level.h"
@@ -183,13 +187,15 @@ HRESULT CLoader::LoadForScene()
 	if (FAILED(hr))
 		return E_FAIL;
 
+	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+
 	return S_OK;
 }
 
 HRESULT CLoader::SetUp_Stage1_Object()
 {
-	if (FAILED(Load_Stage1FBXLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1FBXLoad()))
+	//	return E_FAIL;
 
 	if (FAILED(Load_Stage1Navi_SkyLoad()))
 		return E_FAIL;
@@ -210,14 +216,14 @@ HRESULT CLoader::SetUp_Stage1_Object()
 		return E_FAIL;
 
 #pragma region 이펙트들
-	if (FAILED(Load_Stage1EffectLoad()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1EffectLoad()))
+	//	return E_FAIL;
 	if (FAILED(Load_TrailEffects())) //소드
 		return E_FAIL;
 	if (FAILED(Load_MeshEffects())) //매쉬
 		return E_FAIL;
-	if (FAILED(Load_StaticEffects())) // static effect
-		return E_FAIL;
+	//if (FAILED(Load_StaticEffects())) // static effect
+	//	return E_FAIL;
 #pragma endregion
 
 	if (FAILED(Load_Stage1JumpTrigger()))
@@ -226,8 +232,8 @@ HRESULT CLoader::SetUp_Stage1_Object()
 	if (FAILED(Load_Stage1_TreasureChest_Load()))
 		return E_FAIL;
 
-	if (FAILED(Load_Stage1TriggerLod()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage1TriggerLod()))
+	//	return E_FAIL;
 
 	//if (FAILED(Load_Stage1Meteor()))
 	//	return E_FAIL;
@@ -308,6 +314,15 @@ HRESULT CLoader::Load_Stage1FBXLoad()
 	}*/
 	
 	RELEASE_INSTANCE(CMeshLoader);
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"PavementDecor_01_Lod0.fbx",
+		CModel::Create(m_pDevice, m_pDeviceContext, 
+			L"../bin/FBX/Floor/PavementDecor_01_Lod0.fbx", CModel::TYPE_STATIC,true))))
+		return E_FAIL;
+
+	if(FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Circle_Floor",CCircle_Floor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -848,10 +863,17 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 		L"../bin/FBX/Cinema/Scree.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
+	//Floor_Crack
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE1, L"Model_Cinema_Floor", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/Floor_Crack.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
 	////Silvermane
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
 		L"../bin/FBX/Cinema/Silvermane_Cinema.fbx", CModel::TYPE_ANIM, true))))
 		return E_FAIL;
+
+
 
 	//PhoenixWeapon
 	_matrix matPivot = XMMatrixIdentity();
@@ -866,6 +888,8 @@ HRESULT CLoader::Load_Stage1_Cinema_Object()
 		"../bin/Resources/Mesh/GrayHwak/", "GrayHwakWeapon.fbx",
 		shaderPath, matPivot, CModel::TYPE::TYPE_STATIC, true))))
 		return E_FAIL;
+
+
 
 	//Camera1-1
 	matPivot = XMMatrixIdentity();
@@ -1078,6 +1102,7 @@ HRESULT CLoader::Load_Stage3_Object()
 	if(FAILED(Load_Stage3_BossLoad()))
 		return E_FAIL;
 
+
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
 
@@ -1109,7 +1134,35 @@ HRESULT CLoader::Load_Stage3_Object()
 		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 
 
+	//Boss_HpBar_Red
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_HpBar_Red"), CUI_Boss_HpBar_Red::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_HpBar_Red", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Red.dds")))
+	{
+		return E_FAIL;
+	}
 
+	//Boss_ShieldBar_Blue
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_ShieldBar_Blue"), CUI_Boss_ShieldBar_Blue::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_ShieldBar_Blue", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Blue.dds")))
+	{
+		return E_FAIL;
+	}
+
+	//Boss_Bar_Mark
+	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Bar_Mark"), CUI_Bar_Mark::Create(m_pDevice, m_pDeviceContext))))
+	{
+		return E_FAIL;
+	}
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Bar_Mark", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_BossHealth_Chevron.dds")))
+	{
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -1167,7 +1220,6 @@ HRESULT CLoader::Load_Stage3_Cinema_Object()
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
-
 	//5-1
 	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Cam5_1", CModel::Create(m_pDevice, m_pDeviceContext,
 		"../bin/FBX/Cinema/Camera/", "Shot_05_01_bone.fbx",
@@ -1186,6 +1238,22 @@ HRESULT CLoader::Load_Stage3_Cinema_Object()
 		L"../../Reference/ShaderFile/Shader_AnimMesh.hlsl", matPivot, CModel::TYPE_ANIM, true))))
 		return E_FAIL;
 
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STAGE3, L"Model_Cinema_Solaris", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/Solrais_Cinema.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	//지울것!!
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Silvermane", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Cinema/Silvermane_Cinema.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaCamera", CCinemaCam::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaActor", CCinemaActor::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_CinemaWeapon", CCinemaWeapon::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1709,6 +1777,30 @@ HRESULT CLoader::Ready_Test_JS()
 	//{
 	//	return E_FAIL;
 	//}	
+
+
+	//Boss Bastion_Tier4
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Boss_Bastion_Tier4", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Tier4.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Boss_Bastion", CBoss_Bastion_Judicator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	//weapon
+	//ShieldBreaker_BossWeapon
+	matPivot = XMMatrixIdentity();
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_ShieldBreaker", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/ShieldBreaker/", "ShieldBreaker.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region 컴포넌트

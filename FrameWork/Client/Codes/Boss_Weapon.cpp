@@ -50,7 +50,7 @@ HRESULT CBoss_Weapon::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	CTrailEffect::DESC tTrailDesc;
 	tTrailDesc.pOwnerTransform = m_pTransform;
-	tTrailDesc.fLength = 2.f;
+	tTrailDesc.fLength = 1.f;
 	XMStoreFloat4x4(&tTrailDesc.matPivot, XMMatrixTranslation(0.f, 0.f, 5.f));
 	tTrailDesc.wstrTextureTag = L"TrailBase";
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_Effect", L"Proto_GameObject_TrailEffect_Distortion", &tTrailDesc, (CGameObject**)&m_pTrailEffect_Distortion)))
@@ -64,11 +64,6 @@ _int CBoss_Weapon::Tick(_double TimeDelta)
 {
 	if (0 > __super::Tick(TimeDelta))
 		return -1;
-
-
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(180.f)) * XMMatrixRotationZ(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 1.6f, 0.0f);
-	m_pCollider->setPivotMatrix(matPivot);
-
 
 	Attach_FixedBone(TimeDelta);
 	Attach_Owner(TimeDelta);
@@ -164,12 +159,12 @@ HRESULT CBoss_Weapon::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 4.f;
-	tCapsuleColliderDesc.fRadius = 0.8f;
+	tCapsuleColliderDesc.fHeight = 8.f;
+	tCapsuleColliderDesc.fRadius = 1.f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
-	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(180.f)) * XMMatrixRotationZ(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 2.f, 0.0f);
+	_matrix matPivot = XMMatrixRotationY(XMConvertToRadians(180.f)) * XMMatrixRotationZ(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, 1.2f, 0.0f);
 	m_pCollider->setPivotMatrix(matPivot);
 	m_pCollider->setShapeLayer((_uint)ELayer::MonsterWeapon);
 

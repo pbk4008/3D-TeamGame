@@ -98,8 +98,11 @@ HRESULT CCinemaActor::Ready_Model(_uint iModel)
 	case (_uint)CINEMA_ACTOR::ACTOR_SCREE:
 		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Scree", L"Model", (CComponent**)&m_pModel);
 		break;
+	case (_uint)CINEMA_ACTOR::ACTOR_FLOOR:
+		hr = CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Floor", L"Model", (CComponent**)&m_pModel);
+		break;
 	case (_uint)CINEMA_ACTOR::ACTOR_BOSS:
-		//hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Scree", L"Model", (CComponent**)&m_pModel);
+		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_Solaris", L"Model", (CComponent**)&m_pModel);
 		break;
 	}
 
@@ -192,6 +195,35 @@ HRESULT CCinemaActor::Render_Acoter()
 			if (FAILED(m_pModel->Render(i, 1)))	MSGBOX("Failed To Rendering Actor");
 		}
 	}
+	else if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_FLOOR)
+	{
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); i++)
+		{
+			SCB desc;
+			ZeroMemory(&desc, sizeof(SCB));
+
+			CActor::BindConstantBuffer(CameraTag, &desc);
+			if (FAILED(m_pModel->Render(i, 2))) MSGBOX("Fialed To Rendering Silvermane");
+		}
+	}
+	else if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_BOSS)
+	{
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); i++)
+		{
+			SCB desc;
+			ZeroMemory(&desc, sizeof(SCB));
+
+			CActor::BindConstantBuffer(CameraTag, &desc);
+			if (i == 3)
+			{
+				if (FAILED(m_pModel->Render(i, 2))) MSGBOX("Fialed To Rendering Silvermane");
+			}
+			else
+			{
+				if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Fialed To Rendering Silvermane");
+			}
+		}
+	}
 	else
 	{
 		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); i++)
@@ -226,8 +258,10 @@ void CCinemaActor::AnimSpeed(_float fSpeed)
 
 void CCinemaActor::Actor_AnimReset()
 {
-	if(m_pController)
+	if (m_pController)
+	{
 		m_pController->Reset_Animation();
+	}
 }
 
 void CCinemaActor::Acotr_AnimFrameSet(_double iFrame)

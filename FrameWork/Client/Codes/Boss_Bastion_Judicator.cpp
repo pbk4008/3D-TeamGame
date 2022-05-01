@@ -16,6 +16,9 @@
 #include "MidBoss_Stun.h"
 #include "DamageFont.h"
 
+#include "MeshEffect_Boss_Explosion.h"
+
+
 CBoss_Bastion_Judicator::CBoss_Bastion_Judicator(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CActor(pDevice, pDeviceContext)
 {
@@ -70,6 +73,14 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	if (FAILED(Set_PanelBar()))
 		return E_FAIL;
 
+	//boss Explosion
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer(m_iSceneID, L"Layer_MeshEffect_Boss_Explosion", L"Proto_GameObject_MeshEffect_Boss_Explosion",
+		nullptr, (CGameObject**)&m_pEff_Explosion)))
+	{
+		MSGBOX("Failed to Creating MeshEffect_Boss_Explosion in CStage1::Ready_Effect()");
+		return E_FAIL;
+	}
+	m_pEff_Explosion->setActive(false);
 
 	//TODO : 아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
 	m_fMaxHp = 20.f;
@@ -84,8 +95,11 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_tAttackDesc.iLevel = 2;
 
 	m_pWeapon->setActive(false);
-	m_pPanel->setActive(false);
 	setActive(false);
+	
+	m_pPanel->setActive(false);
+	m_bUIShow = false;
+
 
 	return S_OK;
 }
@@ -97,9 +111,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		return -1;
 	}
 
-	_matrix matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.013f, 0.013f, 0.013f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	m_pModel->Set_PivotMatrix(matPivot);
+
 
 	if (0 >= m_fCurrentHp)
 	{
@@ -135,11 +147,21 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		m_bUIShow = true;
 	}
 
+
 	if (true == m_bUIShow)
 	{
+		m_pPanel->setActive(true);
 		m_pPanel->Set_Show(true);
-	}
 
+		m_fUIShowTimeAcc += TimeDelta;
+	}
+	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
+	{
+		m_pPanel->Set_Show(false);
+		m_bUIShow = false;
+		m_fUIShowTimeAcc = 0.f;
+	}
+	
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
@@ -151,6 +173,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	
 	if (true == m_bGroggy || true == m_bDead )
 	{
+		Set_IsAttack(false);
 		m_fGroggyGauge = 0.f;
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
@@ -352,7 +375,7 @@ HRESULT CBoss_Bastion_Judicator::SetUp_Components()
 		return E_FAIL;
 	}
 	_matrix matPivot = XMMatrixIdentity();
-	matPivot = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	matPivot = XMMatrixScaling(0.014f, 0.014f, 0.014f) * XMMatrixRotationY(XMConvertToRadians(180.f));
 	m_pModel->Set_PivotMatrix(matPivot);
 
 	CAnimator::ANIMATORDESC tDesc;
@@ -722,6 +745,10 @@ void CBoss_Bastion_Judicator::OnWeaponEffect()
 	m_pWeapon->Set_HitGround(true);
 }
 
+void CBoss_Bastion_Judicator::OnEff_MeshExplosion(_bool Active)
+{
+	m_pEff_Explosion->setActive(Active);
+}
 
 CBoss_Bastion_Judicator* CBoss_Bastion_Judicator::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 {

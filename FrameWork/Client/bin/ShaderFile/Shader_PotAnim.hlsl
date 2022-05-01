@@ -199,11 +199,11 @@ PS_OUT PS_MAIN2(PS_IN In)
 	Out.depth = half4(In.vUvDepth.z / In.vUvDepth.w, In.vUvDepth.w / 300.f, 0.f, 0.f);
 	Out.normal = half4(normal, 0);
 	
-	half Metalic = 0.8f;
-	half Roughness = 0.2;
+	half Metalic = 0.4f;
+	half Roughness = 0.65;
 	half Ao = 1.f;
 
-	Out.mra.r = Metalic + 0.4f;
+	Out.mra.r = Metalic;
 	Out.mra.g = Roughness;
 	Out.mra.b = Ao;
 	Out.mra.a = 1.f;

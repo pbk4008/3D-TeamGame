@@ -65,6 +65,8 @@ public:
 	void Set_AttackDesc_Damaga(_float fDamage) { m_tAttackDesc.fDamage = fDamage; }
 	void Set_AttackDesc_Level(_uint iLevel) { m_tAttackDesc.iLevel = iLevel; }
 	void Set_AttackDesc_Dir(const EAttackDir _eDir) { m_tAttackDesc.eDir = _eDir; }
+	void Mul_AttackDesc_Damage(const _float _fValue);
+	void Div_AttackDesc_Damage(const _float _fValue);
 
 	void Set_NoDamage(_bool bCheck) { m_isNoDamage = bCheck; }
 
@@ -80,6 +82,7 @@ public:
 	HRESULT DissolveOn(_float dissolveSpeed = 1.f);
 
 	void	LightOnOff(_fvector pos, _fvector color, _float deltaspeed = 1.f);
+	void	LightOnOff(LIGHTDESC Desc, _float deltaspeed = 1.f);
 	void	Set_LightCheck(_bool check);
 	void	Set_LightOrigRange(_float range);
 	void	Set_LightAmbientSpecular(_float4 ambient, _float4 specular);

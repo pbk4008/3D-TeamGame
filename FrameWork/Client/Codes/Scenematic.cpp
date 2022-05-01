@@ -84,7 +84,7 @@ HRESULT CScenematic::Set_UpComponents(CComponent* pComponent)
 
 HRESULT CScenematic::Ready_Actor(CCinemaActor** pOut, _uint iActorTag)
 {
-	*pOut = g_pGameInstance->Clone_GameObject<CCinemaActor>((_uint)SCENEID::SCENE_STAGE1, L"Proto_GameObject_CinemaActor", &iActorTag);
+	*pOut = g_pGameInstance->Clone_GameObject<CCinemaActor>(m_iSceneID, L"Proto_GameObject_CinemaActor", &iActorTag);
 	if (*pOut == nullptr)
 	{
 		MSGBOX("Ready Actor Fail");

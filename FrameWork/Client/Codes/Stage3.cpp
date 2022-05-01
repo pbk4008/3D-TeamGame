@@ -26,6 +26,8 @@
 #include "UI_Fill_CKey.h"
 #include "UI_HpHeal_Num.h"
 #include "UI_Shield_Meter.h"
+#include "UI_Boss_HpBar_Red.h"
+#include "UI_Boss_ShieldBar_Blue.h"
 
 #include "Effect_FloatingUp.h"
 #include "Effect_Dead_Spray.h"
@@ -39,6 +41,9 @@
 #include "Cinema4_4.h"
 #include "Cinema4_5.h"
 #include "Cinema4_6.h"
+#include "Cinema5_1.h"
+#include "Cinema5_2.h"
+#include "Cinema5_3.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -71,7 +76,13 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
+	if (FAILED(Ready_Cinema()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Data_Effect()))
+		return E_FAIL;
+
+	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
@@ -106,8 +117,17 @@ _int CStage3::Tick(_double TimeDelta)
 		}
 	}
 	if (m_pCinematicManager)
-		m_pCinematicManager->Tick(TimeDelta);
+	{
+		if (g_pGameInstance->getkeyDown(DIK_END))
+			m_pCinematicManager->Active_Scenema(8);
 
+		m_pCinematicManager->Tick(TimeDelta);
+	}
+
+	if (g_pVoiceManager)
+	{
+		g_pVoiceManager->Tick(TimeDelta);
+	}
 
 	CTransform* pParticle =  g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_Stage3_Env_Respawn")->front()->Get_Transform();
 	
@@ -120,6 +140,11 @@ _int CStage3::LateTick(_double TimeDelta)
 {
 	if (m_pCinematicManager)
 		m_pCinematicManager->LateTick(TimeDelta);
+
+	if (g_pVoiceManager)
+	{
+		g_pVoiceManager->Late_Tick(TimeDelta);
+	}
 
 	return _int();
 }
@@ -286,6 +311,29 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
+	//Boss HpBar Red
+	CUI_Boss_HpBar_Red::UIDESC Desc2;
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.46f;
+	Desc2.fPos = { 625.f, 40.f, 0.08f };
+	Desc2.fSize = { 356.f , 14.f };
+	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
+		return E_FAIL;
+
+	//Boss ShieldBar Blue
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.46f;
+	Desc2.fPos = { 640.f, 55.f, 0.08f };
+	Desc2.fSize = { 356.f , 14.f };
+	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -307,6 +355,21 @@ HRESULT CStage3::Ready_Data_UI(const _tchar* pDataFilePath)
 		}
 	}
 
+	//º¸½º ui
+	vecUI.clear();
+	g_pGameInstance->LoadFile<CUI::UIDESC>(vecUI, L"../bin/SaveData/UI/UI_Boss.dat");
+
+	for (int i = 0; i < vecUI.size(); ++i)
+	{
+		wstring Tag = vecUI[i].TextureTag;
+		wstring FullName = L"Proto_GameObject_UI_" + Tag;
+
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI", FullName, &vecUI[i])))
+		{
+			MSGBOX("Failed to Creating in CStage1::Ready_UI()");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 
@@ -582,6 +645,21 @@ HRESULT CStage3::Ready_Cinema()
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_5::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
 		return E_FAIL;
 	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema4_6::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_1::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_2::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+	if (FAILED(m_pCinematicManager->Add_Scenema(CCinema5_3::Create(m_pDevice, m_pDeviceContext, (_uint)SCENEID::SCENE_STAGE3))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CStage3::Ready_GameManager(void)
+{
+	g_pVoiceManager = CVoiceManager::GetInstance();
+	if (FAILED(g_pVoiceManager->NativeConstruct(SCENEID::SCENE_STAGE3)))
 		return E_FAIL;
 
 	return S_OK;

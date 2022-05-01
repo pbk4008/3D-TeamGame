@@ -220,8 +220,8 @@ HRESULT CShieldBreaker::Ready_Components()
 
 	CCapsuleCollider::DESC tCapsuleColliderDesc;
 	tCapsuleColliderDesc.tColliderDesc = tColliderDesc;
-	tCapsuleColliderDesc.fHeight = 2.f;
-	tCapsuleColliderDesc.fRadius = 0.5f;
+	tCapsuleColliderDesc.fHeight = 3.f;
+	tCapsuleColliderDesc.fRadius = 0.8f;
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_CapsuleCollider", L"Collider", (CComponent**)&m_pCollider, &tCapsuleColliderDesc)))
 		return E_FAIL;
 
@@ -269,6 +269,8 @@ void CShieldBreaker::OnHitGroundEffect()
 
 	m_pOwner->Active_Effect((_uint)EFFECT::HIT_GROUND, svLook * 2.6f);
 	m_pOwner->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, svLook * 2.6f);
+
+	NewPos = XMVectorSetY(NewPos, XMVectorGetY(NewPos) - 0.8f);
 	m_pOwner->Active_Effect((_uint)EFFECT::HAMMER_DUST, NewPos);
 }
 

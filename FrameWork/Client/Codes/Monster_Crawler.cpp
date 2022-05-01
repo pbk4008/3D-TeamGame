@@ -133,6 +133,7 @@ _int CMonster_Crawler::Tick(_double _dDeltaTime)
 	{
 		if (m_pAnimatorCom->Get_CurrentAnimation())
 		{
+			Set_IsAttack(false);
 			if (L"Death" == m_pStateController->Get_CurStateTag())
 			{
 				if (m_pAnimatorCom->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
@@ -263,7 +264,7 @@ void CMonster_Crawler::Hit(const ATTACKDESC& _tAttackDesc)
 	if (m_bDead || 0.f >= m_fCurrentHp)
 		return;
 
-	//m_pPanel->Set_Show(true);
+	m_pPanel->Set_Show(true);
 
 	if (false == m_bFirstHit)
 	{

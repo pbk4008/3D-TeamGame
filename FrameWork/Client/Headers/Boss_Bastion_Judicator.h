@@ -51,12 +51,14 @@ public:
 public:
 	void Set_IsAttack(const _bool _isAttack);
 	void OnWeaponEffect();
+	void OnEff_MeshExplosion(_bool Active);
 
 private:
 	CAnimator* m_pAnimator = nullptr;
 	CStateController* m_pStateController = nullptr;
 	CCharacterController* m_pCharacterController = nullptr;
-	
+	class CMeshEffect_Boss_Explosion* m_pEff_Explosion = nullptr;
+
 
 	class CUI_Monster_Panel* m_pPanel = nullptr;
 	class CShieldBreaker* m_pWeapon = nullptr;

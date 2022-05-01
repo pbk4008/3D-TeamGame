@@ -76,7 +76,8 @@ _int CBoss_Attack_R2::Tick(const _double& TimeDelta)
 		_vector svRight = XMVector3Normalize(m_pTransform->Get_State(CTransform::STATE_RIGHT));
 
 		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_HIT_GROUND_SMOKE);
-		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP);
+		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP , XMVectorSet(-1.f, 1.f, 0.f, 0.f));
+		m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_UP, XMVectorSet(1.f, 1.f, 0.f, 0.f));
 		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND, XMVectorSet(0.f, 0.f, 0.f, 0.f));
 		m_pMonster->Active_Effect((_uint)EFFECT::BOSS_ATTACK_GROUND2, XMVectorSet(0.f, -1.f, 0.f, 0.f));
 		static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshExplosion(true);

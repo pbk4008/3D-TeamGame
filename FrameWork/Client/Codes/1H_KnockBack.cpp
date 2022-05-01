@@ -106,7 +106,7 @@ HRESULT C1H_KnockBack::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 	m_pAnimationController->Mul_MoveSpeed(0.5f);
 
-	m_iCutIndex = 70;
+	m_iCutIndex = 40;
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	return S_OK;

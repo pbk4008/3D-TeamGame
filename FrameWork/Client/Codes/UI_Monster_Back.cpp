@@ -118,7 +118,7 @@ _int CUI_Monster_Back::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 	{
-		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_ALPHANB, this);
+		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
 	return _int();
 }

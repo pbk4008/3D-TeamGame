@@ -754,6 +754,14 @@ void CGameInstance::BlendSound(const std::wstring& pStartSoundKey, const std::ws
 	m_pSoundManager->BlendSound(pStartSoundKey, pEndSoundKey, eStartID, eEndID, fBlendTiming);
 }
 
+_bool CGameInstance::IsPlaying(CSoundMgr::CHANNELID eID)
+{
+	if (!m_pSoundManager)
+		return false;
+
+	return m_pSoundManager->IsPlaying(eID);
+}
+
 void CGameInstance::Release_Engine()
 {
 	RELEASE_INSTANCE(CGameInstance);

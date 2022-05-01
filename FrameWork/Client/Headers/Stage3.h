@@ -26,6 +26,7 @@ private:
 	HRESULT Ready_Light();
 	HRESULT Ready_Data_Effect();
 	HRESULT Ready_Cinema();
+	HRESULT Ready_GameManager(void);
 
 	//HRESULT Ready_Data_Effect(const _tchar* pDataFilePath);
 	//HRESULT Ready_Data_UI(const _tchar* pDataFilePath);

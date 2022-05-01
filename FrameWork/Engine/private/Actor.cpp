@@ -293,6 +293,16 @@ void CActor::Set_AttackDesc(const ATTACKDESC& _tAttackDesc)
 	m_tAttackDesc = _tAttackDesc;
 }
 
+void CActor::Mul_AttackDesc_Damage(const _float _fValue)
+{
+	m_tAttackDesc.fDamage *= _fValue;
+}
+
+void CActor::Div_AttackDesc_Damage(const _float _fValue)
+{
+	m_tAttackDesc.fDamage /= _fValue;
+}
+
 void CActor::Set_FootPosition(const _float3& _vPos)
 {
 }
@@ -345,6 +355,22 @@ void CActor::LightOnOff(_fvector pos, _fvector color, _float deltaspeed)
 		m_pActiveLight->Set_Range(m_LightRange);
 		m_pActiveLight->Set_Pos(pos);
 		m_pActiveLight->Set_Color(color);
+
+		if (m_LightRange <= 0.f)
+		{
+			m_LightRange = m_OrigLightRange;
+			m_pActiveLight->Set_Active(false);
+		}
+	}
+}
+
+void CActor::LightOnOff(LIGHTDESC Desc, _float deltaspeed)
+{
+	if (m_bLightCheck == true)
+	{
+		m_LightRange += g_fDeltaTime * -deltaspeed;
+
+		m_pActiveLight->Set_Desc(Desc);
 
 		if (m_LightRange <= 0.f)
 		{

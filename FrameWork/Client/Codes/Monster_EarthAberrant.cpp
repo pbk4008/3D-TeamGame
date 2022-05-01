@@ -159,6 +159,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	}
 	else
 	{
+		Set_IsAttack(false);
 		wstring stateTag = m_pStateController->Get_CurStateTag();
 		if (L"Death" == stateTag)
 		{

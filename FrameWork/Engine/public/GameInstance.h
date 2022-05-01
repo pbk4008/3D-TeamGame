@@ -200,7 +200,7 @@ public: /* For.SoundMgr */
 		CSoundMgr::CHANNELID eStartID,
 		CSoundMgr::CHANNELID  eEndID,
 		_float fBlendTiming = 0.0f);
-
+	_bool IsPlaying(CSoundMgr::CHANNELID eID);
 
 public:/* For. Resource Manager*/
 	HRESULT NativeConstruct(_bool bAllLoad, const std::wstring& EngineResourcePath, const std::wstring& ClientResourcePath);
