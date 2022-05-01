@@ -79,6 +79,7 @@ _int CCinema2_3::Tick(_double dDeltaTime)
 	m_pCam->Tick(dDeltaTime);
 	m_pMidWeapon->Tick(dDeltaTime);
 
+
 	return _int();
 }
 

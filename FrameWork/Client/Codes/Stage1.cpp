@@ -32,6 +32,9 @@
 #include "UI_Indicator.h"
 #include "UI_Fill_Space.h"
 #include "UI_Blank_Space.h"
+#include "UI_Skill_Meter_Back.h"
+#include "UI_Skill_Meter_Gauge.h"
+#include "UI_Skill_Meter_Gauge_Right.h"
 
 #include "JumpNode.h"
 #include "JumpBox.h"
@@ -183,11 +186,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -219,7 +222,7 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -229,13 +232,13 @@ HRESULT CStage1::NativeConstruct()
 
 _int CStage1::Tick(_double TimeDelta)
 {	
-	cout << "Mon : " << m_iCountMonster << endl;
 	//_float3 fPos = { 0.f,5.f,20.f };
 
 	//m_pPot->Tick(TimeDelta);
 	/*_vector vTmp = g_pObserver->Get_PlayerPos();
 	cout << XMVectorGetX(vTmp) << ", " << XMVectorGetY(vTmp) << ", " << XMVectorGetZ(vTmp) << endl;*/
 	
+
 	if (g_pGameInstance->getkeyDown(DIK_F8))
 	{
 		g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
@@ -325,19 +328,6 @@ _int CStage1::Tick(_double TimeDelta)
 				{
 					m_bBossClear = true;
 					m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
-				}
-				else
-				{
-					if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA3_5))
-					{
-						m_pScenemaManager->ResetCinema();
-						g_pInvenUIManager->SetRender(true);
-						g_pQuestManager->SetRender(true);
-						if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2))))
-							return -1;
-		
-						return 0;
-					}
 				}
 			}
 		}
@@ -442,20 +432,9 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
 		m_pScenemaManager->Tick(TimeDelta);
-
-		if (m_pScenemaManager->Get_EventCinema((_uint)CINEMA_INDEX::CINEMA2_4))
-		{
-			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
-			if (nullptr != pBoss)
-			{
-				pBoss->setActive(true);
-				m_pScenemaManager->ResetCinema();
-				SHOW_MAPINFO(TRUE, 1); /* 중간보스 HUD */
-			}
-		}
 	}
 
 	/*for Meteor*/
@@ -481,8 +460,12 @@ _int CStage1::Tick(_double TimeDelta)
 _int CStage1::LateTick(_double TimeDelta)
 {
 
-	if(m_pScenemaManager)
-		m_pScenemaManager->LateTick(TimeDelta);
+	if (m_pScenemaManager)
+	{
+		_uint iProgress = m_pScenemaManager->LateTick(TimeDelta);
+		if (iProgress == 1)
+			return 0;
+	}
 
 	if(g_pQuestManager)
 		g_pQuestManager->Late_Tick(TimeDelta);
@@ -646,6 +629,7 @@ HRESULT CStage1::Ready_Player(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Camera", L"Proto_GameObject_Camera_Silvermane")))
 		return E_FAIL;
 
+
 	////Test
 	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_Test", L"Proto_GameObject_TestObject")))
 	//	return E_FAIL;
@@ -745,32 +729,50 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
 		return E_FAIL;
 
-	////Tuto Base
-	//CUI_Tuto_Base::UIACTIVEDESC Desc1;
-	//ZeroMemory(&Desc1, sizeof(CUI_Tuto_Base::UIACTIVEDESC));
-	//_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Tuto_Base");
-	//Desc1.UIDesc.bMinus = false;
-	//Desc1.UIDesc.fAngle = 0.f;
-	//Desc1.UIDesc.fPos = { 1150.f, 360.f, 0.2f };
-	//Desc1.UIDesc.fSize = { 333.f , 105.f };
-	//Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
+	//Player Skill_Meter_Back
+	CUI_Skill_Meter_Back::UIDESC DescBack;
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1002.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Base", &Desc1)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
 
-	////Tuto Font
-	//CUI_Tuto_Font::UIACTIVEDESC Desc2;
-	//ZeroMemory(&Desc2, sizeof(CUI_Tuto_Font::UIACTIVEDESC));
-	//_tcscpy_s(Desc2.UIDesc.TextureTag, L"Texture_Tuto_Font");
-	//Desc2.UIDesc.bMinus = false;
-	//Desc2.UIDesc.fAngle = 0.f;
-	//Desc2.UIDesc.fPos = { 1130.f, 360.f, 0.1f };
-	//Desc2.UIDesc.fSize = { 73.f , 73.f };
-	//Desc2.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
-	//Desc2.iTextureNum = 0;
+	//Player Skill_Meter_Back2
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1096.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Tuto_Font", &Desc2)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1000.f, 555.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1095.f, 556.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+		return E_FAIL;
 
 	//Blank_Ckey
 	CUI_Blank_CKey::UIACTIVEDESC Desc3;
@@ -1186,6 +1188,9 @@ HRESULT CStage1::Ready_Obstacle()
 		MSGBOX(L"스테이지1 캡슐 장애물 설치 실패");
 		return E_FAIL;
 	}
+
+
+
 	tObstacleDesc.vPosition = { -175.753589f, 28.702583f, 308.261066f};
 	tObstacleDesc.fHeight = 2.f;
 	tObstacleDesc.fRadius = 1.7f;
@@ -1418,7 +1423,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-176.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-181.f, 29.f, 307.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
 		Open_Potal(XMVectorSet(-175.f, 29.f, 314.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
-		Open_Potal(XMVectorSet(-178.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-175.f, 30.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		Open_Potal(XMVectorSet(-173.f, 30.f, 323.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 6;
 	}

@@ -113,7 +113,7 @@ _int CPolearm::LateTick(_double _dDeltaTime)
 		{
 			m_pTrailEffect_Distortion->Clear_Points();
 			m_pTrailEffect_Distortion->Set_IsRender(false);
-			m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
+			//m_pRenderer->SetRenderButton(CRenderer::DISTORTION, false);
 		}
 	}
 
@@ -266,7 +266,9 @@ CGameObject* CPolearm::Clone(const _uint _iSceneID, void* _pArg)
 void CPolearm::Free()
 {
 	__super::Free();
-	m_pTrailEffect_Distortion->Set_Remove(true);
+
+	if (m_pTrailEffect_Distortion)
+		m_pTrailEffect_Distortion->Set_Remove(true);
 
 	Safe_Release(m_pCollider);
 	Safe_Release(m_pTrailEffect_Distortion);

@@ -15,6 +15,9 @@
 #include "UI_Fill_CKey.h"
 #include "UI_HpHeal_Num.h"
 #include "UI_Shield_Meter.h"
+#include "UI_Skill_Meter_Back.h"
+#include "UI_Skill_Meter_Gauge.h"
+#include "UI_Skill_Meter_Gauge_Right.h"
 
 //Effect
 #include "Effect_Env_Fire.h"
@@ -98,6 +101,7 @@ HRESULT CStage2::NativeConstruct()
 
 _int CStage2::Tick(_double TimeDelta)
 {
+	cout << "monster count : " << m_iCountMonster << endl;
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -218,6 +222,9 @@ _int CStage2::Tick(_double TimeDelta)
 			{
 				if (m_iCountMonster == 0 && pBoss->Get_Dead())
 				{
+					g_pQuestManager->SetRender(false);
+					g_pInvenUIManager->SetRender(false);
+					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
 					if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
 						return -1;
 
@@ -495,6 +502,51 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Back
+	CUI_Skill_Meter_Back::UIDESC DescBack;
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1002.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Back2
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1096.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1000.f, 555.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1095.f, 556.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Blank_Ckey
@@ -1493,7 +1545,7 @@ void CStage2::Portal_Spot2()
 		Open_Potal(XMVectorSet(44.f, 13.f, 232.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		m_iCountMonster += 4;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 7)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 7)
 		m_pTriggerSystem->Check_Clear();
 }
 
@@ -1531,7 +1583,7 @@ void CStage2::Portal_Spot3()
 		Open_Potal(XMVectorSet(28.f, 11.f, 281.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster == 0 && m_iPortalCount == 11)
+	else if (m_iCountMonster <= 0 && m_iPortalCount == 11)
 		m_pTriggerSystem->Check_Clear();
 }
 

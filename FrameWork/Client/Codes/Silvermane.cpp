@@ -1844,7 +1844,7 @@ RIM CSilvermane::ColorChange_RimCheck(RIM& rimdesc)
 	return rimdesc;
 }
 
-HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwcheck)
+HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwcheck, _float colorindx)
 {
 	if (idex <= 19)
 	{
@@ -1872,6 +1872,12 @@ HRESULT CSilvermane::Create_MotionTrail(_int idex, _bool runcheck, _bool throwch
 			//	uvdvid = idex * 0.1f;
 			//else
 			//	uvdvid = (idex - 10) * 0.1f;
+		}
+
+		if (colorindx != 0.f)
+		{
+			// color idx = 1.f ~ 0.0f
+			uvdvid = colorindx;
 		}
 
 		static_cast<CMotionTrail*>(m_vecMotionTrail[idex])->Set_Info(smatWorld

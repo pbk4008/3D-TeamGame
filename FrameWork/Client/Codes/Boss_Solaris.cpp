@@ -93,8 +93,8 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 
 	m_tAttackDesc.iLevel = 3;
 
-	m_pWeapon->setActive(true);
-	setActive(true);
+	m_pWeapon->setActive(false);
+	setActive(false);
 
 	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
 	m_pCharacterController->Update_OwnerTransform();
@@ -120,7 +120,7 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	m_bLightCheck = true;
 	m_pActiveLight->Set_Active(true);
 
-	//m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
 	//cout << m_fCurrentHp << endl;
 
 	if (0 >= m_fCurrentHp)
@@ -150,22 +150,37 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	if (0.f >= m_fGroggyGauge && 0.3f <= Get_HpRatio())
+	if (0.f >= m_fGroggyGauge && false == m_bFirstGroggy)
 	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		//그로기게이지가 0이 되고 첫번째 그로기 상태도 오지않았을때는 그로기상태로 만들어줌
+		m_bFirstGroggy = true;
 		m_bGroggy = true;
 		m_pStateController->Change_State(L"Stun");
 	}
-	
-	if (0.33f >= Get_HpRatio() && false == m_bFillShield)
+
+	if (0.33 >= Get_HpRatio() && m_bFirstGroggy && !m_bSecondGroggy && !m_bFillShield)
 	{
-		//일정체력이상닳면 다시 실드채워줌 
-		m_bFillShield = true;
+		//두번째그로기가 안온상태로 첫번재 그로기만 당하고 피가 30%정도 남았을때 다시 실드채워줌
 		m_fGroggyGauge = m_fMaxGroggyGauge;
+		m_bFillShield = true;
+	}
+	
+	if (0.f >= m_fGroggyGauge && m_bFillShield && m_bFirstGroggy && !m_bSecondGroggy)
+	{
+		//실드가 채워졌던 상태에서 첫번째그로기는 걸렸었고 두번째그로기는 안걸린상태로 실드도 채워졌었고 그상태에서 실드가 다 닳았을때 그로기걸어줌
+		m_bSecondGroggy = true;
+		m_bGroggy = true;
+		m_pStateController->Change_State(L"Stun");
 	}
 
 	if (STUN_END == m_pAnimator->Get_CurrentAnimNode())
 	{
+		if (m_bfirst)
+		{
+			Set_ShieldDissolveOn();
+			m_bfirst = false;
+		}
+
 		if (m_pAnimator->Get_AnimController()->Is_Finished())
 		{
 			m_bGroggy = false;
@@ -278,7 +293,7 @@ void CBoss_Solaris::setActive(_bool bActive)
 
 	if (bActive)
 	{
-		if (!m_pCharacterController)
+		if (!m_pCharacterController);
 		{
 			/* for.Character Controller */
 			CCharacterController::DESC tCharacterControllerDesc;
@@ -842,7 +857,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-	cout << fDistToPlayer << endl;
+	//cout << fDistToPlayer << endl;
 	if (0.66f < Get_HpRatio())
 	{
 		//레이저없음
@@ -939,7 +954,7 @@ void CBoss_Solaris::Set_Random_AttackAnim()
 			m_iPreAnim = iRandom;
 		}
 	}
-
+	m_pStateController->Change_State(L"Back_Flip");
 }
 
 void CBoss_Solaris::Active_Light()
@@ -983,6 +998,16 @@ void CBoss_Solaris::OnEff_MeshEyeRazer(_bool Active)
 void CBoss_Solaris::Set_RazerAngle(_bool Check)
 {
 	m_pEff_EyeRazer->Set_RazerRotate(Check);
+}
+
+void CBoss_Solaris::Set_ShieldDissolveOn()
+{
+	m_pEff_Shield->Set_DissolveON(true);
+}
+
+void CBoss_Solaris::Set_ShieldDissolveOff()
+{
+	m_pEff_Shield->Set_DissolveOFF(true);
 }
 
 CBoss_Solaris* CBoss_Solaris::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

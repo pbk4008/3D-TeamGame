@@ -25,9 +25,11 @@ public:
 		Spear_Hit, Spear_Death, Spear_Attack_1, Spear_Attack_2,
 		Bronz_Hit, Bronz_Death,
 		MidBoss, MidBoss_Hit, MidBoss_Death, MidBoss_Attack_1, MidBoss_Attack_2, MidBoss_Attack_3,
+		Boss, Boss_Attack1, Boss_Attack2, Boss_Skill1, Boss_Skill2, Boss_Razer,
 		Jump_Node,
 		Item_Drop, Item_Drop_2,
 		Orin, Ravenna, Soras, Sanctum,
+		Cinema,
 		MAXCHANNEL};
 private:
 	NO_COPY(CSoundMgr);
@@ -66,6 +68,9 @@ private:
 	// 사운드 ,채널 객체 및 장치를 관리하는 객체 
 	FMOD_SYSTEM* m_pSystem; 
 	FMOD_CHANNELGROUP* m_pGroup;
+
+
+
 };
 END
 #endif

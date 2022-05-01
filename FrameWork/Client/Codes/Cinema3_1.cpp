@@ -63,6 +63,14 @@ _int CCinema3_1::Tick(_double dDeltaTime)
 	m_pCam->Tick(dDeltaTime);
 	m_pMidWeapon->Tick(dDeltaTime);
 
+	cout << m_pCam->Get_CamFrame() << endl;
+	if (m_pCam->Get_CamFrame() > 280.f && !m_bFirst)
+	{
+		m_bFirst = true;
+		g_pGameInstance->Play_Shot(L"Auuugh", CHANNEL::Cinema);
+	}
+
+
 	return _int();
 }
 
@@ -92,6 +100,8 @@ void CCinema3_1::Set_Active(_bool bCheck)
 	m_pSilvermane->Actor_AnimReset();
 	m_pCam->Reset_Camera();
 	m_pMidBoss->AnimSpeed(1.25);
+
+	m_bFirst = false;
 
 	list<CGameObject*>* objList = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Floor");
 

@@ -2,6 +2,8 @@
 #include "Cinema5_3.h"
 #include "CinemaCam.h"
 #include "CinemaActor.h"
+#include "Loading.h"
+
 #include "ScenematicManager.h"
 
 CCinema5_3::CCinema5_3()
@@ -77,6 +79,15 @@ _int CCinema5_3::LateTick(_double dDeltaTime)
 	{
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
+
+		g_pQuestManager->SetRender(false);
+		g_pInvenUIManager->SetRender(false);
+
+		g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
+		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_LOGO))))
+			return -1;
+
+		return 1;
 	}
 	m_pBoss->LateTick(dDeltaTime);
 	m_pSilvermane->LateTick(dDeltaTime);

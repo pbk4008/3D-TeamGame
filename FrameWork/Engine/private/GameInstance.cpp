@@ -8,6 +8,9 @@ _double g_dDeltaTime;
 _float g_fImmutableTime;
 _double g_dImmutableTime;
 
+
+
+
 CGameInstance::CGameInstance()
 	: m_pGraphic_Device(CGraphic_Device::GetInstance())
 	, m_pLevel_Manager(CLevel_Manager::GetInstance())
@@ -127,6 +130,7 @@ _int CGameInstance::Tick_Engine(_double TimeDelta)
 	iProgress = m_pObject_Manager->LateTick(TimeDelta);
 	if (0 > iProgress)
 		return -1;
+
 	iProgress = m_pLevel_Manager->LateTick(TimeDelta);
 
 	if (0 > iProgress)

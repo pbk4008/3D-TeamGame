@@ -59,12 +59,19 @@ _int CCinema2_4::Tick(_double dDeltaTime)
 	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-172.7f, 52.2f, 410.8f, 1.f));;
 	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(230.f));
 
-
 	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
 
 	m_pMidBoss->Tick(dDeltaTime);
 	m_pCam->Tick(dDeltaTime);
 	m_pMidWeapon->Tick(dDeltaTime);
+
+	if (!g_pGameInstance->IsPlaying(CHANNEL::Cinema))
+	{
+		list<CGameObject*>* pList = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_SubTitle");
+		for (auto& pSubTitle : *pList)
+			pSubTitle->setActive(false);
+		g_pGameInstance->StopSound(CHANNEL::Cinema);
+	}
 
 	return _int();
 }
