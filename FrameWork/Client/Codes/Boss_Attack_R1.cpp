@@ -161,6 +161,8 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			m_bShakeCheckLeft = true;
 			m_pMonster->Set_AttackDesc_Dir(EAttackDir::Left);
 
+			STOP_SOUND(CHANNEL::Boss_Attack1);
+			PLAY_SOUND(L"BeamMassacre_End_01", CHANNEL::Boss_Attack1);
 		}
 
 		if (117 < iCurKeyFrameIndex && 119 > iCurKeyFrameIndex && false == m_bShakeCheckRight)
@@ -199,6 +201,8 @@ _int CBoss_Attack_R1::Tick(const _double& TimeDelta)
 			m_pMonster->Set_AttackDesc_Dir(EAttackDir::Right);
 
 			m_bShakeCheckRight = true;
+			STOP_SOUND(CHANNEL::Boss_Attack1);
+			PLAY_SOUND(L"BeamMassacre_End_01", CHANNEL::Boss_Attack1);
 		}
 
 

@@ -71,6 +71,9 @@ _int CBoss_Attack_Agg::Tick(const _double& TimeDelta)
 			m_pMonster->Active_Effect_Target((_uint)EFFECT::BOSS_SIDE_ATTACK, mat);
 			m_pMonster->Active_Effect((_uint)EFFECT::EXPLOSION_ROCK_RIGHT, XMVectorSet(0.f, 2.f, 0.f, 0.f));
 			m_bShakeCheck = true;
+
+			STOP_SOUND(CHANNEL::Boss_Attack1);
+			PLAY_SOUND(L"BeamMassacre_End_01", CHANNEL::Boss_Attack1);
 		}
 		m_pMonster->Set_IsAttack(true);
 

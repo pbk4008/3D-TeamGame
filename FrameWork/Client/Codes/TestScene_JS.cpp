@@ -26,6 +26,8 @@
 #include "UI_HpHeal_Num.h"
 #include "UI_Shield_Meter.h"
 #include "UI_Player_HpBar.h"
+#include "UI_Skill_Meter_Back.h"
+#include "UI_Skill_Meter_Gauge.h"
 #include "UI_Fill_CKey.h"
 #include "Effect_FloatingUp.h"
 #include "Effect_Dead_Spray.h"
@@ -71,7 +73,19 @@ _int CTestScene_JS::Tick(_double TimeDelta)
 	if (0 > __super::Tick(TimeDelta))
 		return -1;
 
-	CGameObject* pMonster = nullptr;
+	//////////////////////////////////////////
+
+	//CTransform* pLeftTrans = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Back")->front()->Get_Transform();
+	//
+	//_vector vPos = { 1002.f - (g_iWinCx >> 1),-557.f + (g_iWinCy >> 1), 0.1f ,1.f };
+	//pLeftTrans->Set_State(CTransform::STATE_POSITION, vPos);
+	//
+	//_vector vScale = { 85.f ,13.f,1.f ,1.f };
+	//pLeftTrans->Scaling(vScale);
+
+	//////////////////////////////////////////
+
+	//CGameObject* pMonster = nullptr;
 	//if (g_pGameInstance->getkeyDown(DIK_COLON))
 	//{
 	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Bastion_2HSword", nullptr, &pMonster)))
@@ -87,24 +101,24 @@ _int CTestScene_JS::Tick(_double TimeDelta)
 	//	if(pMonster)
 	//		pMonster->setActive(true);
 	//}
-	if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
-	{
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
-		//	return -1;
-		//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_EarthAberrant", nullptr, &pMonster)))
-		//	return -1;
-		//if(pMonster)
-		//	pMonster->setActive(true);
-	}
-
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
-	{
-		CBoss_Bastion_Judicator* pMonster = nullptr;
-		_float3 fPos = { 0.f,5.f,20.f };
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_SEMICOLON))
+	//{
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_Crawler", nullptr, &pMonster)))
+	//	//	return -1;
+	//	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Monster", L"Proto_GameObject_Monster_EarthAberrant", nullptr, &pMonster)))
+	//	//	return -1;
+	//	//if(pMonster)
+	//	//	pMonster->setActive(true);
+	//}
+	//
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	//{
+	//	CBoss_Bastion_Judicator* pMonster = nullptr;
+	//	_float3 fPos = { 0.f,5.f,20.f };
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_Boss", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 
 	return _int();
 }
@@ -279,6 +293,51 @@ HRESULT CTestScene_JS::Ready_UI(const _tchar* LayerTag)
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Back
+	CUI_Skill_Meter_Back::UIDESC DescBack;
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1002.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Back", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Back2
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1096.f, 557.f, 0.1f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Back2", L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1000.f, 555.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Gauge_Full", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
+		return E_FAIL;
+
+	//Player Skill_Meter_Gauge
+	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
+	DescBack.bMinus = false;
+	DescBack.fAngle = 0.3f;
+	DescBack.fPos = { 1095.f, 556.f, 0.08f };
+	DescBack.fSize = { 85.f , 13.f };
+	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_TEST_JS, L"Layer_UI_Skill_Meter_Gauge_Fill", L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Blank_Ckey
