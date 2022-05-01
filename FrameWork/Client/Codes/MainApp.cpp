@@ -157,6 +157,16 @@ HRESULT CMainApp::NativeConstruct()
 
 _int CMainApp::Tick(_double TimeDelta)
 {
+
+	if (g_pGameInstance->getkeyDown(DIK_F8))
+	{
+		Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
+	}
+	if (g_pGameInstance->getkeyDown(DIK_F7))
+	{
+		Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
+	}
+
 	m_TimeAcc += TimeDelta;
 
 	g_pGameInstance->Update_InputDev();

@@ -71,7 +71,7 @@ HRESULT CBoss_Stun::EnterState()
 
 	m_pMonster->Set_IsAttack(false);
 
-	cout << "Boss Stun" << endl;
+	//cout << "Boss Stun" << endl;
 
 	//static_cast<CBoss_Solaris*>(m_pMonster)->OnEff_MeshShield(true);
 
@@ -79,6 +79,9 @@ HRESULT CBoss_Stun::EnterState()
 	m_pAnimator->Change_AnyEntryAnimation((_uint)CBoss_Solaris::M_BossAnimState::STUN_START);
 
 	static_cast<CBoss_Solaris*>(m_pMonster)->Set_ShieldDissolveOff();
+
+	STOP_SOUND(CHANNEL::Boss_Skill1);
+	PLAY_SOUND(L"Shield_Hit_01", CHANNEL::Boss_Skill1);
 
 	return S_OK;
 }

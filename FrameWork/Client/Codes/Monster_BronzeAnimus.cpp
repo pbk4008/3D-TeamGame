@@ -77,7 +77,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 
 	m_fMaxGroggyGauge = 10.f;
 	m_fGroggyGauge = 0.f;
-	m_fMaxHp = 30.f;
+	m_fMaxHp = 250.f;
 	m_fCurrentHp = m_fMaxHp;
 	m_isFall = true;
 	m_tAttackDesc.iLevel = 1;

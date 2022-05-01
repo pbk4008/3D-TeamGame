@@ -26,6 +26,12 @@ _int C2H_HammerAttackR2_01::Tick(const _double& _dDeltaTime)
 		m_pAnimationController->Set_PlaySpeed(1.2f);
 	}
 
+	if (24 < iCurKeyFrameIndex && 26 > iCurKeyFrameIndex)
+	{
+		STOP_SOUND(CHANNEL::Player_Sword_Attack);
+		PLAY_SOUND(L"Hammer_Swing", CHANNEL::Player_Sword_Attack);
+	}
+
 	if (m_pAnimationController->Is_Finished())
 	{
 		if (FAILED(m_pStateController->Change_State(L"2H_HammerIdle")))

@@ -47,6 +47,8 @@
 #include "Cinema5_1.h"
 #include "Cinema5_2.h"
 #include "Cinema5_3.h"
+ 
+#include "Boss_Solaris.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -90,6 +92,11 @@ HRESULT CStage3::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
+
+	g_pQuestManager->SetRender(true);
+	g_pInvenUIManager->SetRender(true);
+
+	g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
 	return S_OK;
 }
 
@@ -123,7 +130,14 @@ _int CStage3::Tick(_double TimeDelta)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
 			m_pCinematicManager->Active_Scenema(8);
+		
+		_float fDist = g_pObserver->Get_Dist(XMVectorSet(47.f, 1.5f, 99.f, 1.f));
 
+		if (fDist < 3.f && !m_bCinemaStart)
+		{
+			m_bCinemaStart = true;
+			m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA4_1);
+		}
 		m_pCinematicManager->Tick(TimeDelta);
 	}
 
@@ -137,13 +151,22 @@ _int CStage3::Tick(_double TimeDelta)
 	if(pParticle != nullptr)
 		pParticle->Set_State(CTransform::STATE_POSITION, XMVectorSet(38.f, 1.f, 55.f, 1.f));
 
+	if (m_pBoss->Get_Dead() && !m_bClear)
+	{
+		m_bClear = true;
+		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
+	}
 
 	return _int();
 }
 _int CStage3::LateTick(_double TimeDelta)
 {
 	if (m_pCinematicManager)
-		m_pCinematicManager->LateTick(TimeDelta);
+	{
+		_uint iProgress = m_pCinematicManager->LateTick(TimeDelta);
+		if (iProgress == 1)
+			return 0;
+	}
 
 	if (g_pVoiceManager)
 	{
@@ -256,7 +279,7 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
 	_float3 vpos = { 48.f, 5.f, 146.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos)))
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos, (CGameObject**)&m_pBoss)))
 		return E_FAIL;
 
 	return S_OK;
@@ -431,7 +454,7 @@ HRESULT CStage3::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(-1.f, -1.f, -1.f);
+	LightDesc.vDirection = _float3(1.f, -1.f, -1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
@@ -441,16 +464,19 @@ HRESULT CStage3::Ready_Light()
 	LightDesc.bactive = true;
 	if (FAILED(g_pGameInstance->CreateLightCam(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Creating DirectionLight Cam");
 
-	//ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
-	//LightDesc.eType = LIGHTDESC::TYPE_POINT;
-	//LightDesc.fRange = 10.f;
-	//LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
-	//LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	//LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	//LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
-	//LightDesc.bactive = true;
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
-	//if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
+	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
+	LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
+	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vPosition = _float3(57.f, 150.f, 243.f);
+	LightDesc.mlookat = _float4(48.f, -4.f, 141.f, 1.f);
+	LightDesc.mOrthinfo[0] = 50.f;
+	LightDesc.bactive = true;
+
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_SkyBox", L"Proto_GameObject_SkyBox")))
 		return E_FAIL;

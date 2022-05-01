@@ -204,6 +204,9 @@ void CUI_Equipment::ClickSlot(void)
 			temp.ItemType = EItemType::NONE;
 			m_pEquipData->SetEquipment((EEquipSlot)i, temp);
 			
+			STOP_SOUND(CHANNEL::EFFECT);
+			PLAY_SOUND(L"UI_Equip", CHANNEL::EFFECT);
+
 			UpdateSlot(i);
 		}
 	}

@@ -91,7 +91,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 5.f;
+	m_fMaxHp = 100.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -159,8 +159,13 @@ _int CMonster_Bastion_Spear::Tick(_double _dDeltaTime)
 		}
 		else
 		{
-			Set_Remove(true);
-			m_pPanel->Set_UIRemove(true);
+			//CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+			//if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+			//	static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+			m_bDead = true;
+			m_pStateController->Change_State(L"Death");
+			//Set_Remove(true);
+			//m_pPanel->Set_UIRemove(true);
 			return 0;
 		}
 	}

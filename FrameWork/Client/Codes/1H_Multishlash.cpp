@@ -76,6 +76,9 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 			tShakeEvent.tWaveZ.fFrequency = 8.f;
 			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			g_pShakeManager->Shake(tShakeEvent, vPos);
+
+			STOP_SOUND(CHANNEL::Player_Sword_Attack);
+			PLAY_SOUND(L"Needle_Attack_L_1", CHANNEL::Player_Sword_Attack);
 		}
 	}
 	else
@@ -141,6 +144,8 @@ HRESULT C1H_Multishlash::EnterState()
 
 	m_iCutIndex = 70;
 
+	STOP_SOUND(CHANNEL::Player_Sword_Attack);
+	PLAY_SOUND(L"Dash_Leap_01", CHANNEL::Player_Sword_Attack);
 	return S_OK;
 }
 

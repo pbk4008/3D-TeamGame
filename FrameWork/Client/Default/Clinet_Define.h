@@ -14,6 +14,7 @@ typedef CSoundMgr::CHANNELID CHANNEL;
 
 typedef CSoundMgr::CHANNELID CHANNEL;
 
+typedef CSoundMgr::CHANNELID CHANNEL;
 extern HWND g_hWnd;
 extern HINSTANCE  g_hInst;
 

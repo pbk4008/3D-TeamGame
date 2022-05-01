@@ -85,7 +85,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	m_fMaxHp = 5.f;
+	m_fMaxHp = 200.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -134,6 +134,9 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		Set_IsAttack(false);
 		if (L"Death" == m_pStateController->Get_CurStateTag())
 		{
+			if (m_pAnimator->Get_CurrentAnimation() == nullptr)
+				return 0;
+
 			if (m_pAnimator->Get_CurrentAnimation()->Is_Finished() && m_lifetime <= 0.f)
 			{
 				m_bdissolve = true;

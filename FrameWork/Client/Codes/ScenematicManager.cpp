@@ -62,12 +62,13 @@ void CScenematicManager::ResetCinema()
 
 _uint CScenematicManager::Tick(_double TimeDelta)
 {
+	_uint iProgress = 0;
 	if (m_pCurCinema)
 	{
 		if (m_pCurCinema->Get_Active())
-			m_pCurCinema->Tick(TimeDelta);
+			iProgress =m_pCurCinema->Tick(TimeDelta);
 	}
-	return _uint();
+	return iProgress;
 }
 
 _uint CScenematicManager::LateTick(_double TimeDelta)
@@ -75,7 +76,10 @@ _uint CScenematicManager::LateTick(_double TimeDelta)
 	if (m_pCurCinema)
 	{
 		if (m_pCurCinema->Get_Active())
-			m_pCurCinema->LateTick(TimeDelta);
+		{
+			_uint iProgress =m_pCurCinema->LateTick(TimeDelta);
+				return iProgress;
+		}
 		else
 		{
 			m_pCurCinema = nullptr;

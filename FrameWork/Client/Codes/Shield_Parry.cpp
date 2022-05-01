@@ -37,6 +37,8 @@ _int CShield_Parry::Tick(const _double& _dDeltaTime)
 		else
 			m_pSilvermane->Set_Radial(false);
 
+		PLAY_SOUND(L"Shield_Block", CHANNEL::Equip_Shield);
+
 	return _int();
 }
 

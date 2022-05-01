@@ -210,7 +210,9 @@ void CLoot_Shield::Take(void)
 	m_bInteractDead = true;
 	m_bTakable = false;
 	setActive(false);
-
+	
+	STOP_SOUND(CHANNEL::Equip_Shield);
+	PLAY_SOUND(L"Item_PickUp", CHANNEL::Equip_Shield);
 	static_cast<CSilvermane*>(m_pPlayer)->Loot_Shield();
 }
 

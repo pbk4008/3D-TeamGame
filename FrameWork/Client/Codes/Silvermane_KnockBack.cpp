@@ -98,6 +98,7 @@ HRESULT CSilvermane_KnockBack::EnterState()
 	m_iCutIndex = 70;
 
 	m_pSilvermane->Set_IsTrasceCamera(false);
+
 	return S_OK;
 }
 
