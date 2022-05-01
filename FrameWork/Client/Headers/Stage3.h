@@ -4,6 +4,7 @@
 #include "Level.h"
 BEGIN(Client)
 class CScenematicManager;
+class CBoss_Solaris;
 class CStage3 final : public CLevel
 {
 private:
@@ -43,6 +44,10 @@ private:
 	virtual void Free() override;
 private:
 	CScenematicManager* m_pCinematicManager;
+private:
+	_bool m_bCinemaStart = false;
+	_bool m_bClear = false;
+	CBoss_Solaris* m_pBoss=nullptr;
 };
 END
 #endif

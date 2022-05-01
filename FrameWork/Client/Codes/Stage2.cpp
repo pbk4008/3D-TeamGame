@@ -222,6 +222,9 @@ _int CStage2::Tick(_double TimeDelta)
 			{
 				if (m_iCountMonster == 0 && pBoss->Get_Dead())
 				{
+					g_pQuestManager->SetRender(false);
+					g_pInvenUIManager->SetRender(false);
+					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
 					if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
 						return -1;
 

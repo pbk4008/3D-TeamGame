@@ -67,9 +67,13 @@ _int CCinema4_6::LateTick(_double dDeltaTime)
 	{
 		m_bCinemaEnd = true;
 		m_pCam->Reset_Camera();
+
+		list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss");
+		pLayer->front()->setActive(true);
+
+		return 0;
 	}
 	m_pBoss->LateTick(dDeltaTime);
-	
 
 	return _int();
 }
