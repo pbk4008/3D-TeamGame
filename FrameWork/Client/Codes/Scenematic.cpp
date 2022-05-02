@@ -118,13 +118,16 @@ void CScenematic::OnOffPlayerWithUI(_bool bCheck)
 	g_pQuestManager->SetRender(bCheck);
 	g_pInvenUIManager->SetRender(bCheck);
 
-	pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC");
-	for (auto& pUI : *pUIList)
-		pUI->setActive(bCheck);
+	if ( m_iSceneID != (_uint)SCENEID::SCENE_STAGE3)
+	{
+		pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_BlankC");
+		for (auto& pUI : *pUIList)
+			pUI->setActive(bCheck);
 
-	pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC");
-	for (auto& pUI : *pUIList)
-		pUI->setActive(bCheck);
+		pUIList = g_pGameInstance->getObjectList(m_iSceneID, L"Layer_UI_FillC");
+		for (auto& pUI : *pUIList)
+			pUI->setActive(bCheck);
+	}
 }
 
 void CScenematic::Free()

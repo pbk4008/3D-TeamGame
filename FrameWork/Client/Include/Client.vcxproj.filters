@@ -2705,9 +2705,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>99.Default</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\MainApp.cpp">
-      <Filter>01.Scene\00.MainGame</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Level_Logo.cpp">
       <Filter>01.Scene\00.Logo</Filter>
     </ClCompile>
@@ -4114,6 +4111,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI_Skill_Meter_Gauge_Right.cpp">
       <Filter>02.GameObject\05.UI\01.UI_Ingame\01.Meter\00.Player\03.Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainApp.cpp">
+      <Filter>01.Scene\00.MainGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -224,11 +224,12 @@ _int CStage2::Tick(_double TimeDelta)
 			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Boss")->front();
 			if (nullptr != pBoss)
 			{
+				if(m_iCountMonster >= 10000)
+					m_iCountMonster = 0;
+
 				if (m_iCountMonster == 0 && pBoss->Get_ChangeLevel())
 				{
 					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
-					g_pQuestManager->SetRender(false);
-					g_pInvenUIManager->SetRender(false);
 					if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
 						return -1;
 
