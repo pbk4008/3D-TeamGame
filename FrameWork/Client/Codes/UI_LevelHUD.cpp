@@ -33,6 +33,8 @@ HRESULT CUI_LevelHUD::NativeConstruct(const _uint iSceneID, void* pArg)
 	m_pTransform->Scaling(_fvector{ 512.f, 124.f, 0.f, 0.f });
 
 	setActive(false);
+
+	return S_OK;
 }
 
 _int CUI_LevelHUD::Tick(_double dDeltaTime)
@@ -50,8 +52,6 @@ _int CUI_LevelHUD::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
-
-
 
 	return _int();
 }
@@ -78,6 +78,8 @@ HRESULT CUI_LevelHUD::Ready_Component(void)
 
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_SingleImage", L"SingleImage", (CComponent**)&m_pSigleImageCom, &ModalSprite)))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 void CUI_LevelHUD::SetImage(std::wstring szTexName)

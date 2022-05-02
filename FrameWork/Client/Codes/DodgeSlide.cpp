@@ -97,6 +97,8 @@ HRESULT CDodgeSlide::EnterState(void* _pArg)
 	_vector Pos = { 0.f, 0.5f, 0.f, 0.f };
 
 	CCameraShake::SHAKEEVENT tShakeEvent;
+	tShakeEvent.fOuterRadius = 50.f;
+	tShakeEvent.fInnerRadius = 0.2f;
 	tShakeEvent.fDuration = 1.f;
 	tShakeEvent.fBlendInTime = 0.2f;
 	tShakeEvent.fBlendOutTime = 0.8f;

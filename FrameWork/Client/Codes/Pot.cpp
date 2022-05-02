@@ -142,10 +142,10 @@ void CPot::OnTriggerEnter(CCollision& collision)
 		m_pTransform->Scaling(XMVectorSet(0.5f, 0.5f,0.5f,0.f));
 		CEffectManager* pInstance = GET_INSTANCE(CEffectManager);
 
-		CEffect* pEffect =pInstance->Get_Effect((_uint)EFFECT::HIT_FLOATING);
-
-		if(pEffect != nullptr)
-			pEffect->setActive(true);
+		/*CEffect* pEffect = CEffectManager::GetInstance()->Get_Effect((_uint)EFFECT::BROKEN_POD);
+		pEffect->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pTransform->Get_State(CTransform::STATE_POSITION) + _vector{ 0.f, 0.f, 0.f, 0.f });
+		pEffect->Set_Reset(true);
+		pEffect->setActive(true);*/
 
 		PLAY_SOUND(L"Pot_Broken", CHANNEL::MidBoss_Death);
 		RELEASE_INSTANCE(CEffectManager);

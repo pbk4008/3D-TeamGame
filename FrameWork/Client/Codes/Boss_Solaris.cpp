@@ -102,7 +102,7 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 	
 	//기본정보 
 	m_iObectTag = (_uint)GAMEOBJECT::BOSS;
-	m_fMaxHp = 10000.f;
+	m_fMaxHp = 15000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 1000.f;

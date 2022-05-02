@@ -314,14 +314,20 @@ _int CStage1::Tick(_double TimeDelta)
 		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss")->front();
 		if (nullptr != pBoss)
 		{
-			if (true == pBoss->Get_Dead())
+			if (pBoss->Get_HpRatio() <= 0.3f && !m_bBossClear)
+			{
+				m_bBossClear = true;
+				m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
+			}
+				
+			/*if (true == pBoss->Get_Dead())
 			{
 				if (!m_bBossClear)
 				{
 					m_bBossClear = true;
 					m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);
 				}
-			}
+			}*/
 		}
 	}
 
@@ -1415,7 +1421,7 @@ void CStage1::Portal_Spot5()
 		Open_Potal(XMVectorSet(-176.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
 		Open_Potal(XMVectorSet(-181.f, 29.f, 307.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
 		Open_Potal(XMVectorSet(-175.f, 29.f, 314.f, 1.f), (_uint)GAMEOBJECT::MONSTER_CRYSTAL);
-		Open_Potal(XMVectorSet(-175.f, 30.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-175.f, 30.f, 320.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		Open_Potal(XMVectorSet(-173.f, 30.f, 323.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		m_iCountMonster += 6;
 	}
@@ -1424,7 +1430,7 @@ void CStage1::Portal_Spot5()
 		m_iPortalCount = 13;
 		Open_Potal(XMVectorSet(-171.f, 29.f, 300.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-181.f, 29.f, 301.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		Open_Potal(XMVectorSet(-183.f, 29.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-179.f, 29.f, 305.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 3;
 	}
 	else if (m_iPortalCount == 13 && m_iCountMonster <= 0)
@@ -1455,7 +1461,7 @@ void CStage1::Portal_Spot6()
 		m_iPortalCount = 15;
 		Open_Potal(XMVectorSet(-178.f, 52.f, 391.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
 		Open_Potal(XMVectorSet(-170.f, 52.f, 390.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-		Open_Potal(XMVectorSet(-171.f, 52.f, 383.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
+		Open_Potal(XMVectorSet(-171.f, 52.f, 395.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 3;
 	}
 }

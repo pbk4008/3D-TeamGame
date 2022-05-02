@@ -3,6 +3,7 @@
 #include "CinemaCam.h"
 #include "CinemaActor.h"
 #include "CinemaWeapon.h"
+#include "Boss_Bastion_Judicator.h"
 #include "ScenematicManager.h"
 
 CCinema3_1::CCinema3_1()
@@ -110,7 +111,13 @@ void CCinema3_1::Set_Active(_bool bCheck)
 	(*iter)->setActive(true);
 
 	if (m_bActive)
+	{
 		m_pCam->Change_CurrentCam();
+		list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE1, L"Layer_Boss");
+		CGameObject* pObj = pLayer->front();
+
+		pObj->setActive(false);
+	}
 }
 
 HRESULT CCinema3_1::Ready_Components()

@@ -83,7 +83,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_pEff_Explosion->setActive(false);
 
 	//TODO : 아래 세팅은 꼭 해줄것, 그래야 UI나옴 초기값 넣어줘야됨
-	m_fMaxHp = 500.f;
+	m_fMaxHp = 7000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 50.f;
@@ -187,6 +187,12 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	}
 
 	if (m_fCurrentHp <= 0.f && m_bDead == false)
+	{
+		m_bDead = true;
+		m_pStateController->Change_State(L"Death");
+	}
+
+	if (m_fCurrentHp <= 0.f && m_bDead == false && g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 	{
 		m_bDead = true;
 		m_pStateController->Change_State(L"Death");

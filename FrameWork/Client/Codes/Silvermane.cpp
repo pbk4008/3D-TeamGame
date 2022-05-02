@@ -236,7 +236,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fMaxHp = 100000.f;
+	m_fMaxHp = 1000.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -280,7 +280,8 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 	Set_AttackDesc_Damaga(10.f);
 	m_isLootShield = false;
-	
+	m_fSkillGuage = 100.f;
+
 	return S_OK;
 }
 

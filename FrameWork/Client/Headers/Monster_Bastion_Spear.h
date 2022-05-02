@@ -86,7 +86,7 @@ private:
 	_bool m_bGuard = false;
 	_bool m_bHalf = false;
 	_bool m_bChargeOn = false;
-	_int m_iGuardCount = 7;
+	_int m_iGuardCount = 4;
 
 private:
 	CAnimation* m_pAnimation = nullptr;

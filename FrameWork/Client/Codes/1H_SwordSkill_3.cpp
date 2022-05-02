@@ -60,8 +60,8 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack = true;
 
-			STOP_SOUND(CHANNEL::Player_Sword_Attack);
-			PLAY_SOUND(L"Player_Gap_Closer", CHANNEL::Player_Sword_Attack);
+			//STOP_SOUND(CHANNEL::Player_Sword_Attack);
+			//PLAY_SOUND(L"Player_Gap_Closer", CHANNEL::Player_Sword_Attack);
 		}
 	}
 
@@ -150,10 +150,10 @@ HRESULT C1H_SwordSkill_3::EnterState()
 	m_pAnimationController->Set_PlaySpeed(1.4f);
 	m_pAnimationController->Mul_MoveSpeed(1.4f);
 
+	m_pSilvermane->Add_SkillGuage(-50.f);
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsDash(true);
 	m_pSilvermane->Set_IsSkill(true);
-	m_pSilvermane->Add_SkillGuage(-50.f);
 
 	if (!m_pSilvermane->IsEquipWeapon())
 	{
