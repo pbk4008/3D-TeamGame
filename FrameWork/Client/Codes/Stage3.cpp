@@ -62,6 +62,9 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Hexgrid", L"../bin/Resources/Mesh/Effect/T_Hexgrid.dds")))
 		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
 
+	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Hexgrid", L"../bin/Resources/Mesh/Effect/T_Hexgrid.dds")))
+		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
+
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -72,9 +75,6 @@ HRESULT CStage3::NativeConstruct()
 		return E_FAIL;
 
 	if (FAILED(Ready_MapObject()))
-		return E_FAIL;
-
-	if (FAILED(Ready_Data_Effect()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Boss(L"Layer_Boss")))
@@ -89,6 +89,9 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_Cinema()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Data_Effect()))
+		return E_FAIL;
+
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
 
@@ -98,7 +101,8 @@ HRESULT CStage3::NativeConstruct()
 	g_pQuestManager->SetRender(true);
 	g_pInvenUIManager->SetRender(true);
 
-	g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
+	//g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
+
 	return S_OK;
 }
 
@@ -488,6 +492,7 @@ HRESULT CStage3::Ready_Light()
 
 HRESULT CStage3::Ready_Data_Effect()
 {
+<<<<<<< HEAD
 #pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
 
 	//이펙트 매니저에 넣으면서 생성
@@ -1172,14 +1177,13 @@ HRESULT CStage3::Ready_Data_Effect()
 //	}
 //
 //#pragma endregion
-
 	//이펙트매니저 안들어가는거 
 	//Stage3 Env Respawn
-CEffect* pEffect = nullptr;
-wstring FullName = L"";
-vector<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC> vecFloatingUp;
-vecFloatingUp.clear();
-g_pGameInstance->LoadFile<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC>(vecFloatingUp, L"../bin/SaveData/Effect/Effect_Stage3_Env_Respawn.dat");
+	CEffect* pEffect = nullptr;
+	wstring FullName = L"";
+	vector<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC> vecFloatingUp;
+	vecFloatingUp.clear();
+	g_pGameInstance->LoadFile<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC>(vecFloatingUp, L"../bin/SaveData/Effect/Effect_Stage3_Env_Respawn.dat");
 
 	vecFloatingUp[0].fParticleRandomPos = { 3.f, 2.f, 25.f };
 	vecFloatingUp[0].ParticleColor = { 1.f,0.5f,0.3f, 1.f };
@@ -1203,7 +1207,6 @@ g_pGameInstance->LoadFile<CEffect_FloatingUp::EF_PAR_FLOATUP_DESC>(vecFloatingUp
 
 	return S_OK;
 }
-#pragma endregion
 
 
 HRESULT CStage3::Ready_Cinema()

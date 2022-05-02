@@ -186,7 +186,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		}
 	}
 
-	if (m_fCurrentHp <= 0.f && m_bDead == false)
+	if (m_fCurrentHp <= 0.f && m_bDead == false && g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
 	{
 		m_bDead = true;
 		m_pStateController->Change_State(L"Death");
@@ -220,7 +220,11 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 				Active_Effect((_uint)EFFECT::DEATH);
 
 			if (m_lifetime >= 1.f)
+			{
 				m_bchanglevel = true;
+				g_pQuestManager->SetRender(false);
+				g_pInvenUIManager->SetRender(false);
+			}
 		}
 		else
 		{
@@ -243,7 +247,11 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 				m_bdissolve = true;
 				
 				if (m_lifetime >= 1.f)
+				{
 					m_bchanglevel = true;
+					g_pQuestManager->SetRender(false);
+					g_pInvenUIManager->SetRender(false);
+				}
 
 				return 0;
 			}

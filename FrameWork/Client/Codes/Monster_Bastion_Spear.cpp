@@ -110,6 +110,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_rimtime = 1.f;
 	m_rimtimer = 1.f;
 
+	m_iGuardCount = 3;
 	return S_OK;
 }
 

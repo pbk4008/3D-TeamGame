@@ -208,19 +208,25 @@ HRESULT CCinemaActor::Render_Acoter()
 	}
 	else if (m_iActorTag == (_uint)CINEMA_ACTOR::ACTOR_BOSS)
 	{
-		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); i++)
+		wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
+		for (_uint i = 0; i < m_pModel->Get_NumMeshContainer(); ++i)
 		{
 			SCB desc;
 			ZeroMemory(&desc, sizeof(SCB));
-
-			CActor::BindConstantBuffer(CameraTag, &desc);
-			if (i == 3)
+			switch (i)
 			{
-				if (FAILED(m_pModel->Render(i, 2))) MSGBOX("Fialed To Rendering Silvermane");
-			}
-			else
-			{
-				if (FAILED(m_pModel->Render(i, 0))) MSGBOX("Fialed To Rendering Silvermane");
+			case 0: case 1: case 2:  // body
+				desc.metalic = 0.3f;
+				desc.roughness = -0.1f;
+				desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
+				desc.empower = 1.0f;
+				CActor::BindConstantBuffer(wstrCamTag, &desc);
+				m_pModel->Render(i, 0);
+				break;
+			case 3:  // cloak
+				CActor::BindConstantBuffer(wstrCamTag, &desc);
+				m_pModel->Render(i, 2);
+				break;
 			}
 		}
 	}

@@ -113,9 +113,6 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 	m_pWeapon->setActive(false);
 	setActive(false);
 
-	m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
-	m_pCharacterController->Update_OwnerTransform();
-
 	return S_OK;
 }
 
@@ -321,6 +318,9 @@ void CBoss_Solaris::setActive(_bool bActive)
 			m_pCharacterController->setOwnerTransform(m_pTransform);
 			m_pCharacterController->setShapeLayer((_uint)ELayer::Monster);
 
+			m_pCharacterController->setFootPosition(_float3(48.f, -5.f, 146.f));
+			m_pCharacterController->Update_OwnerTransform();
+
 			if (m_pWeapon)
 				m_pWeapon->setActive(true);
 		}
@@ -358,6 +358,7 @@ HRESULT CBoss_Solaris::SetUp_Components()
 
 	if (FAILED(__super::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"Com_StateController", (CComponent**)&m_pStateController)))
 		return E_FAIL;
+
 	m_pStateController->Set_GameObject(this);
 
 	return S_OK;
