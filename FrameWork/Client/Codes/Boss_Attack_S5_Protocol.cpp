@@ -156,7 +156,7 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 					{
 					case (_uint)GAMEOBJECT::PLAYER:
 						ATTACKDESC tAttackDesc = m_pMonster->Get_AttackDesc();
-						tAttackDesc.fDamage = 7.f;
+						tAttackDesc.fDamage += 40.f;
 						tAttackDesc.iLevel = 4;
 
 						pActor->Hit(tAttackDesc);
@@ -198,7 +198,7 @@ _int CBoss_Attack_S5_Protocol::Tick(const _double& TimeDelta)
 
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 6.f;
+			_float fDamage = 40.f;
 			_uint iLevel = 4;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);

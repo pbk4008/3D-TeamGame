@@ -115,6 +115,11 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		m_bDead = true;
 		m_pWeapon->setActive(false);
+		m_bActive = false;
+		m_bUIShow = false;
+		m_pPanel->Set_Show(false);
+		m_pPanel->setActive(false);
+		setActive(false);
 		
 		return 0;
 	}

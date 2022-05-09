@@ -69,7 +69,7 @@ _int CBoss_Attack_S3::Tick(const _double& TimeDelta)
 
 		m_pMonster->Set_IsAttack(true);
 
-		_float fDamage = 6.f;
+		_float fDamage = 50.f;
 		_uint iLevel = 3;
 		m_pMonster->Set_AttackDesc_Damaga(fDamage);
 		m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -99,7 +99,7 @@ _int CBoss_Attack_S3::Tick(const _double& TimeDelta)
 				{
 				case (_uint)GAMEOBJECT::PLAYER:
 					ATTACKDESC tAttackDesc = m_pMonster->Get_AttackDesc();
-					tAttackDesc.fDamage = 7.f;
+					tAttackDesc.fDamage += 30.f;
 					tAttackDesc.iLevel = 4;
 
 					pActor->Hit(tAttackDesc);

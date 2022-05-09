@@ -32,6 +32,8 @@
 #include "MeshEffect_EyeRazer.h"
 #include "DamageFont.h"
 
+#include "ScenematicManager.h"
+
 CBoss_Solaris::CBoss_Solaris(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CActor(pDevice, pDeviceContext)
 {
@@ -102,13 +104,14 @@ HRESULT CBoss_Solaris::NativeConstruct(const _uint _iSceneID, void* pArg)
 	
 	//기본정보 
 	m_iObectTag = (_uint)GAMEOBJECT::BOSS;
-	m_fMaxHp = 15000.f;
+	m_fMaxHp = 5000.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 1000.f;
+	m_fMaxGroggyGauge = 2000.f;
 	m_fGroggyGauge = m_fMaxGroggyGauge;
 
 	m_tAttackDesc.iLevel = 3;
+	m_tAttackDesc.fDamage = 15.f;
 
 	m_pWeapon->setActive(false);
 	setActive(false);
@@ -138,6 +141,14 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	{
 		//죽는게아니라 시네마틱재생 or 처형 
 		m_pWeapon->Set_IsAttack(false);
+		CScenematicManager* pInstance = GET_INSTANCE(CScenematicManager);
+
+		pInstance->Active_Scenema(7);
+		RELEASE_INSTANCE(CScenematicManager);
+
+		setActive(false);
+		
+		return 0;
 	}
 
 	m_pTransform->Set_Velocity(XMVectorZero());

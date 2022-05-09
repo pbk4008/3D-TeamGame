@@ -95,7 +95,7 @@ _int CMeshEffect_Razer::LateTick(_double _dDeltaTime)
 			if (pHitObject)
 			{
 				ATTACKDESC tAttackDesc;
-				tAttackDesc.fDamage = 15.f;
+				tAttackDesc.fDamage = 50.f;
 				tAttackDesc.iLevel = 4;
 				tAttackDesc.pOwner = this;
 				tAttackDesc.pHitObject = this;

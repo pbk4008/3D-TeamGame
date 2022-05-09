@@ -51,7 +51,7 @@ _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 4.f;
+				_float fDamage = 13.f;
 				_uint iLevel = 1;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
@@ -61,7 +61,7 @@ _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 5.f;
+				_float fDamage = 9.f;
 				_uint iLevel = 3;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
@@ -79,7 +79,7 @@ _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 5.f;
+				_float fDamage = 10.f;
 				_uint iLevel = 3;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
@@ -96,7 +96,7 @@ _int CBronzeAnimus_Attack::Tick(const _double& _dDeltaTime)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 5.f;
+				_float fDamage = 10.f;
 				_uint iLevel = 3;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);

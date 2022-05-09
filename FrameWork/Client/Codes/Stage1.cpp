@@ -1001,7 +1001,7 @@ HRESULT CStage1::Ready_Data_UI(const _tchar* pDataFilePath)
 HRESULT CStage1::Ready_Indicator()
 {
 	//monster Indicator
-	if (FAILED(m_pIndicatorManager->Add_Indicator((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Indicator", 10)))
+	if (FAILED(m_pIndicatorManager->Add_Indicator((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Indicator", 30)))
 	{
 		MSGBOX("Failed to Create Indicator");
 		return E_FAIL;

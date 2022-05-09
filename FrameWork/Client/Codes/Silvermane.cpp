@@ -236,7 +236,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		return E_FAIL;
 
 	m_isFall = true;
-	m_fMaxHp = 1000.f;
+	m_fMaxHp = 200.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_pRenderer->SetRenderButton(CRenderer::PIXEL, true);
@@ -631,7 +631,6 @@ HRESULT CSilvermane::Ready_Components()
 	m_pAnimationController->Set_Transform(m_pTransform);
 	m_pAnimationController->Set_MoveSpeed(36.f);
 	m_fMoveSpeed = 3.6f;
-	m_fCurrentHp = 1000.f;
 
 	// 스테이트 컨트롤러
 	if (FAILED(SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Proto_Component_StateController", L"StateController", (CComponent**)&m_pStateController)))

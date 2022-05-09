@@ -27,6 +27,7 @@
 #include "Potal.h"
 #include <Boss_Bastion_Judicator.h>
 #include "Pot.h"
+#include "Indicator_Manager.h"
 
 CStage2::CStage2(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	: CLevel(pDevice, pDeviceContext)
@@ -97,8 +98,16 @@ HRESULT CStage2::NativeConstruct()
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
+	m_pIndicatorManager = GET_INSTANCE(CIndicator_Manager);
+	if (FAILED(m_pIndicatorManager->Add_Indicator((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Indicator", 30)))
+	{
+		MSGBOX("Failed to Create Indicator");
+		return E_FAIL;
+	}
+
 	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
 	g_pGameInstance->PlayBGM(L"Stage2_BGM");
+	VOLUME_CHANGE(CHANNEL::BGM, 3.f);
 
 	return S_OK;
 }
@@ -266,6 +275,8 @@ _int CStage2::Tick(_double TimeDelta)
 	if (g_pVoiceManager && 4 == g_pGameInstance->getCurrentLevel())
 		g_pVoiceManager->Tick(TimeDelta);
 
+	if (m_pIndicatorManager)
+			m_pIndicatorManager->Active_Indicator();
 	return _int();
 }
 
@@ -1820,6 +1831,12 @@ void CStage2::Free()
 
 	if(m_pTriggerSystem)
 		Safe_Release(m_pTriggerSystem);
+
+	if (m_pIndicatorManager)
+	{
+		Safe_Release(m_pIndicatorManager);
+		CIndicator_Manager::DestroyInstance();
+	}
 
 	if(g_pInteractManager)
 		g_pInteractManager->Remove_Interactable();

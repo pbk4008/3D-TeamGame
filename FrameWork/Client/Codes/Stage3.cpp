@@ -101,6 +101,8 @@ HRESULT CStage3::NativeConstruct()
 	g_pQuestManager->SetRender(true);
 	g_pInvenUIManager->SetRender(true);
 
+	PLAY_SOUND(L"Stage3_BGM", CHANNEL::BGM);
+	VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 	//g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
 
 	return S_OK;
@@ -135,14 +137,15 @@ _int CStage3::Tick(_double TimeDelta)
 	if (m_pCinematicManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_END))
-			m_pCinematicManager->Active_Scenema(8);
+			m_pCinematicManager->Active_Scenema(6);
 		
 		_float fDist = g_pObserver->Get_Dist(XMVectorSet(47.f, 1.5f, 99.f, 1.f));
 
 		if (fDist < 3.f && !m_bCinemaStart)
 		{
 			m_bCinemaStart = true;
-			m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA4_1);
+			//m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA4_1);
+			m_pCinematicManager->Active_Scenema(0);
 		}
 		m_pCinematicManager->Tick(TimeDelta);
 	}
@@ -157,11 +160,11 @@ _int CStage3::Tick(_double TimeDelta)
 	if(pParticle != nullptr)
 		pParticle->Set_State(CTransform::STATE_POSITION, XMVectorSet(38.f, 1.f, 55.f, 1.f));
 
-	if (m_pBoss->Get_Dead() && !m_bClear)
-	{
-		m_bClear = true;
-		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
-	}
+	//if (m_pBoss->Get_Dead() && !m_bClear)
+	//{
+	//	m_bClear = true;
+	//	m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
+	//}
 
 	return _int();
 }
@@ -492,9 +495,6 @@ HRESULT CStage3::Ready_Light()
 
 HRESULT CStage3::Ready_Data_Effect()
 {
-<<<<<<< HEAD
-#pragma region 이펙트매니저에 들어가는것들, 순서지켜서 enum에 맞춰줘야됨 
-
 	//이펙트 매니저에 넣으면서 생성
 	// 주의 사항!! 넣을때 순서가 ENUM순서
 	//Manager에 넣을 Effect;
@@ -1199,6 +1199,7 @@ HRESULT CStage3::Ready_Data_Effect()
 	}
 	pEffect->setActive(true);
 
+	
 	//Stage3 Env Respawn
 	vecFloatingUp[0].fMyPos = { 55.f, 1.f, 55.f, 1.f };
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_Stage3_Env_Respawn", FullName, &vecFloatingUp[0], (CGameObject**)&pEffect)))
