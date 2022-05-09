@@ -81,6 +81,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	m_fCurrentHp = m_fMaxHp;
 	m_isFall = true;
 	m_tAttackDesc.iLevel = 1;
+	m_tAttackDesc.fDamage = 13;
 
 	if (FAILED(Ready_UI()))
 		return E_FAIL;

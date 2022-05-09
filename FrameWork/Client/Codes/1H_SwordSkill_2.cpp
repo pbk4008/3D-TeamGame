@@ -134,10 +134,10 @@ HRESULT C1H_SwordSkill_2::EnterState()
 		return E_FAIL;
 	m_pAnimationController->Set_RootMotion(true, true);
 
+	m_pSilvermane->Add_SkillGuage(-50.f);
 	m_pSilvermane->Set_IsTrasceCamera(false);
 	m_pSilvermane->Set_IsDash(true);
 	m_pSilvermane->Set_IsSkill(true);
-	m_pSilvermane->Add_SkillGuage(-50.f);
 
 	if (!m_pSilvermane->IsEquipWeapon())
 	{

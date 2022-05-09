@@ -74,7 +74,7 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 4.f;
+				_float fDamage = 14.f;
 				_uint iLevel = 2;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
@@ -90,7 +90,7 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 3.f;
+				_float fDamage = 12.f;
 				_uint iLevel = 1;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);
@@ -116,7 +116,7 @@ _int CBastion_Sword_Attack::Tick(const _double& _dDeltaTime)
 			{
 				pMonster->Set_IsAttack(true);
 
-				_float fDamage = 5.f;
+				_float fDamage = 10.f;
 				_uint iLevel = 3;
 				pMonster->Set_AttackDesc_Damaga(fDamage);
 				pMonster->Set_AttackDesc_Level(iLevel);

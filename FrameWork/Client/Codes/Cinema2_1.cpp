@@ -40,8 +40,10 @@ HRESULT CCinema2_1::NativeContruct(_uint iSceneID)
 	pSilvermaneTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(230.f));
 
 	CTransform* pBossTr = m_pMidBoss->Get_Transform();
-	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-152, 43.f, 417.f, 1.f));
-	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
+	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-175.7f, 51.5f, 419.8f, 1.f));
+	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(240.f));
+	pBossTr->Scale_One();
+	pBossTr->Scaling(XMVectorSet(0.5f, 0.5f, 0.5f, 0.f));
 
 	_matrix matPivot = XMMatrixTranslation(-172.f, 42.5f, 404.3f);
 	m_pCam->Set_CameraMatrix(matPivot);
@@ -64,11 +66,7 @@ _int CCinema2_1::Tick(_double dDeltaTime)
 	_matrix matPivot = XMMatrixTranslation(-172.f, 42.5f, 404.3f);
 	m_pCam->Set_CameraMatrix(matPivot);
 
-	CTransform* pBossTr = m_pMidBoss->Get_Transform();
-	pBossTr->Set_State(CTransform::STATE_POSITION, XMVectorSet(-175.7f, 51.5f, 419.8f, 1.f));
-	pBossTr->SetUp_Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(240.f));
-	pBossTr->Scale_One();
-	pBossTr->Scaling(XMVectorSet(0.5f, 0.5f, 0.5f, 0.f));
+
 	cout << m_pCam->Get_CamFrame() << endl;
 
 	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());

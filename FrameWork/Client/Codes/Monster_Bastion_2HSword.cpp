@@ -85,7 +85,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	m_fMaxHp = 200.f;
+	m_fMaxHp = 1500.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -96,6 +96,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 
 	m_isFall = true;
 	m_tAttackDesc.iLevel = 1;
+	m_tAttackDesc.fDamage = 20;
 
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);

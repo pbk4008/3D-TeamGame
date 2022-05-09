@@ -4,7 +4,9 @@
 #include "Level.h"
 #include "TriggerSystem.h"
 
+
 BEGIN(Client)
+class CIndicator_Manager;
 class CDropBoxData;
 class CStage2 final : public CLevel
 {
@@ -70,7 +72,7 @@ private:
 
 private:
 	std::vector<CDropBoxData*> m_pDumyDropData;
-
+	CIndicator_Manager* m_pIndicatorManager = nullptr;
 private:
 	CTriggerSystem<CStage2>* m_pTriggerSystem;
 	_bool m_bDebug;

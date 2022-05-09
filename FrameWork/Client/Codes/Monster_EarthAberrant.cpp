@@ -103,7 +103,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 
 	m_tAttackDesc.iLevel = 1;
-	m_tAttackDesc.fDamage = 3.f;
+	m_tAttackDesc.fDamage = 8.f;
 
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);

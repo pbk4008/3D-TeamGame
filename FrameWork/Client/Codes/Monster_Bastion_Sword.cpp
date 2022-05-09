@@ -94,7 +94,7 @@ HRESULT CMonster_Bastion_Sword::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_bUIShow = false;
 
 	m_tAttackDesc.iLevel = 2;
-	m_tAttackDesc.fDamage = 5.f;
+	m_tAttackDesc.fDamage = 10.f;
 	
 	m_fMaxHp = 175.f;
 	m_fCurrentHp = m_fMaxHp;

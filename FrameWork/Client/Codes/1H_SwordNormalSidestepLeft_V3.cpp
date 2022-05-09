@@ -61,6 +61,8 @@ HRESULT C1H_SwordNormalSidestepLeft_V3::EnterState()
 	m_pAnimationController->Set_RootMotion(true, true);
 
 
+	m_tShakeEvent.fOuterRadius = 50.f;
+	m_tShakeEvent.fInnerRadius = 0.2f;
 	m_tShakeEvent.fDuration = 1.f;
 	m_tShakeEvent.fBlendInTime = 0.2f;
 	m_tShakeEvent.fBlendOutTime = 0.8f;

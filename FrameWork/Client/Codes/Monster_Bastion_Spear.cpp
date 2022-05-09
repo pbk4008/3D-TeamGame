@@ -102,6 +102,7 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_isFall = true;
 	m_tAttackDesc.iLevel = 1;
+	m_tAttackDesc.fDamage = 20;
 
 	m_pWeapon->setActive(false);
 	m_pPanel->setActive(false);

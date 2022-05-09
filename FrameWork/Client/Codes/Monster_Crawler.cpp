@@ -247,7 +247,7 @@ void CMonster_Crawler::OnTriggerEnter(CCollision& collision)
 			if (!m_IsAttack)
 				return;
 
-			m_tAttackDesc.fDamage = 3;
+			m_tAttackDesc.fDamage = 8;
 			m_tAttackDesc.iLevel = 1;
 			static_cast<CActor*>(collision.pGameObject)->Hit(m_tAttackDesc);
 			return;
