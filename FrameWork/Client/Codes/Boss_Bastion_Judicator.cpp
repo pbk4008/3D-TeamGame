@@ -115,6 +115,7 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 	{
 		m_bDead = true;
 		m_pWeapon->setActive(false);
+		m_bActive = false;
 		
 		return 0;
 	}

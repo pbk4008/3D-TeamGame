@@ -354,13 +354,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
-	{
-		CMonster_EarthAberrant* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD1))
+	//{
+	//	CMonster_EarthAberrant* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_EarthAberrant", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD2))
 	//{
 	//	CMonster_Bastion_Sword* pMonster = nullptr;
@@ -383,13 +383,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//		return -1;
 	//	pMonster->setActive(true);
 	//}
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
-	{
-		CMonster_Bastion_2HSword* pMonster = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
-			return -1;
-		pMonster->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD5))
+	//{
+	//	CMonster_Bastion_2HSword* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Monster_Bastion_2HSword", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//	pMonster->setActive(true);
+	//}
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD6))
 	//{
 	//	CMonster_Bastion_Spear* pMonster = nullptr;
@@ -424,7 +424,7 @@ _int CStage1::Tick(_double TimeDelta)
 	if (m_pScenemaManager)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_N))
-			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_4);;
+			m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA3_1);;
 
 		m_pScenemaManager->Tick(TimeDelta);
 	}
@@ -995,7 +995,7 @@ HRESULT CStage1::Ready_Data_UI(const _tchar* pDataFilePath)
 HRESULT CStage1::Ready_Indicator()
 {
 	//monster Indicator
-	if (FAILED(m_pIndicatorManager->Add_Indicator((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Indicator", 10)))
+	if (FAILED(m_pIndicatorManager->Add_Indicator((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Indicator", 20)))
 	{
 		MSGBOX("Failed to Create Indicator");
 		return E_FAIL;
