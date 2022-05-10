@@ -219,7 +219,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(Render_PhysX()))
 			return E_FAIL;
 
-		if (m_bRenderbtn[DBG] == false)
+		if (m_bRenderbtn[DBG] == true)
 		{
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))		return E_FAIL;
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))		return E_FAIL;

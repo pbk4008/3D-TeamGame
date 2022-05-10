@@ -35,13 +35,14 @@ private:
 	_tchar				m_szFPS[MAX_PATH] = TEXT("");
 
 	_bool				m_isPause = false;
+	_bool				m_bPBR = true;
 	_bool				m_isRender = true;
-	_bool				m_bHDR = false;
-	_bool				m_bDBG = false;
-	_bool				m_bShadow = false;
-	_bool				m_bOutline = false;
-	_bool				m_bMotionblur = false;
-	_bool				m_bMotiontrail = false;
+	_bool				m_bHDR = true;
+	_bool				m_bDBG = true;
+	_bool				m_bShadow = true;
+	_bool				m_bOutline = true;
+	_bool				m_bMotionblur = true;
+	_bool				m_bMotiontrail = true;
 
 	_bool				m_isFreeze = false;
 	_bool				m_isDeltaTimeZero = false;
