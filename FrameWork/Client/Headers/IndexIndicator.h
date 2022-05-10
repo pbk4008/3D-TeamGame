@@ -56,8 +56,9 @@ private:
 
 private:
 	_bool m_bMove = false;
-	_float m_fInitPos = -550.f;
-	_float m_fEndPos  = -450.f;
+
+	_float m_fInitPos = -820.f;
+	_float m_fEndPos  = -720.f;
 
 private:
 	virtual void Free() override;

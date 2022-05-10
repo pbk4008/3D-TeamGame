@@ -28,8 +28,8 @@ HRESULT CUI_EquippedWeapon::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 450.f, -230.f, 0.2f, 1.f });
-	m_pTransform->Scaling(_fvector{ 230.f, 50.f, 0.f, 0.0f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 740.f, -380.f, 0.2f, 1.f });
+	m_pTransform->Scaling(_fvector{ 260.f, 60.f, 0.f, 0.0f });
 
 	setActive(false);
 	return S_OK;
@@ -51,9 +51,6 @@ _int CUI_EquippedWeapon::LateTick(_double TimeDelta)
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 
-	
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 450.f, -230.f, 0.2f, 1.f });
-	m_pTransform->Scaling(_fvector{ 230.f, 50.f, 0.f, 0.0f });
 	return _int();
 }
 

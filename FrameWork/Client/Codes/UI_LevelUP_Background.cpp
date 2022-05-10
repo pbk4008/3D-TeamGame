@@ -29,7 +29,7 @@ HRESULT CUI_LevelUP_Background::NativeConstruct(const _uint iSceneID, void* pArg
 	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f , -270.f, 0.1f, 1.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f , -400.f, 0.1f, 1.f });
 	m_pLocalTransform->Scaling(_vector{ 47.f, 47.f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;

@@ -186,11 +186,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	if (FAILED(Ready_Meteor()))
-	{
-		MSGBOX("Meteor");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Meteor()))
+	//{
+	//	MSGBOX("Meteor");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -220,7 +220,7 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
 	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
@@ -444,6 +444,7 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pQuestManager->Tick(g_dImmutableTime);
 	
 	if (g_pGuideManager)
+
 		g_pGuideManager->Tick(g_dImmutableTime);
 
 	if (g_pVoiceManager)
@@ -732,8 +733,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1002.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -743,8 +744,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1096.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -754,8 +755,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1000.f, 555.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.08f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
@@ -765,9 +766,12 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1095.f, 556.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 882.f, 0.08f };
+	DescBack.fSize = { 102.f , 17.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
+		return E_FAIL;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
@@ -1578,6 +1582,8 @@ void CStage1::Trgger_Function1()
 	m_iCountMonster = 3;
 
 	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_Sunforge");
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox");
+
 }
 
 //대지 1마리
@@ -1682,7 +1688,6 @@ void CStage1::Trgger_Function3()
 	}
 	m_iCountMonster = 4;
 
-	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_DropBox");
 	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_EquipNewWeapon");
 }
 //땅강아지 3마리

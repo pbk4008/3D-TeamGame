@@ -78,6 +78,7 @@ _int CUI_PlayerStatusWindow::LateTick(_double TimeDelta)
 		m_pSecondDPS->LateTick(TimeDelta);
 		m_pMaxHp->LateTick(TimeDelta);
 	}
+
 	return _int();
 }
 

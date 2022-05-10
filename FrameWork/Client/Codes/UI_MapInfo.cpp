@@ -53,6 +53,9 @@ _int CMapInfo::LateTick(_double TimeDelta)
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, 400.f, 0.1f, 1.f });
+
+
 	return _int();
 }
 

@@ -31,7 +31,7 @@ HRESULT CUI_PlayerStatus_Spirit::NativeConstruct(const _uint iSceneID, void* pAr
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 432.f, 120.f, 0.5f, 1.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 600.f, 170.f, 0.5f, 1.f });
 	m_pLocalTransform->Scaling(_vector{ 53.f, 53.f, 1.f, 1.f });
 
 	m_pOwner = desc.pOwner;

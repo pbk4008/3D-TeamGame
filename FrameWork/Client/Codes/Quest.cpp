@@ -71,11 +71,10 @@ _int CQuest::Tick(_double dDeltaTime)
 
 	if (!m_bSetY)
 	{
-  		m_pQuestText->SetPosy(30.f * m_iIndex);
-		m_pQuestClear->SetPosy(30.f * m_iIndex);
+  		m_pQuestText->SetPosy(32.f * m_iIndex);
+		m_pQuestClear->SetPosy(32.f * m_iIndex);
 		m_bSetY = true;
 	}
-
 
 	if (m_bPosUp)
 	{

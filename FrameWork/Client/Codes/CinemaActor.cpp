@@ -216,8 +216,8 @@ HRESULT CCinemaActor::Render_Acoter()
 			switch (i)
 			{
 			case 0: case 1: case 2:  // body
-				desc.metalic = 0.3f;
-				desc.roughness = -0.1f;
+				desc.metalic = 0.1f;
+				desc.roughness = 0.5f;
 				desc.color = _float4(0.811f, 1.f, 0.898f, 1.f);
 				desc.empower = 1.0f;
 				CActor::BindConstantBuffer(wstrCamTag, &desc);

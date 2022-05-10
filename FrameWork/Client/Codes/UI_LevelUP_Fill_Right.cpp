@@ -30,7 +30,8 @@ HRESULT UI_LevelUP_Fill_Right::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 155.0f , -270.f, 0.09f, 1.f });
+
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 155.0f , -400.f, 0.09f, 1.f });
 	m_pLocalTransform->Scaling(_vector{ 250.f, 30.f, 1.f, 0.f });
 
 
@@ -75,7 +76,6 @@ _int UI_LevelUP_Fill_Right::LateTick(_double TimeDelta)
 		return -1;
 
 	m_pSigleImageCom->SetRenderVal(&Bufferdesc);
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 155.0f , -270.f, 0.09f, 1.f });
 
 	Attach_Owner();
 
