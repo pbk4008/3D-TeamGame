@@ -35,7 +35,7 @@ private:
 	_tchar				m_szFPS[MAX_PATH] = TEXT("");
 
 	_bool				m_isPause = false;
-	_bool				m_bPBR = true;
+	_bool				m_bHalfView = true;
 	_bool				m_isRender = true;
 	_bool				m_bHDR = true;
 	_bool				m_bDBG = true;

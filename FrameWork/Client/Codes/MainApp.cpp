@@ -600,8 +600,8 @@ void CMainApp::RenderingBnt()
 	}
 	else if (g_pGameInstance->getkeyDown(DIK_F2))
 	{
-		m_bPBR = !m_bPBR;
-		m_pRenderer->SetRenderButton(CRenderer::PBR, m_bPBR);
+		m_bHalfView = !m_bHalfView;
+		m_pRenderer->SetRenderButton(CRenderer::HALFVIEW, m_bHalfView);
 	}
 	else if (g_pGameInstance->getkeyDown(DIK_F3))
 	{

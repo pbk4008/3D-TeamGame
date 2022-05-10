@@ -85,12 +85,12 @@ HRESULT CLight_Manager::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pD
 }
 
 
-HRESULT CLight_Manager::Render_Lights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool pbr, _bool shadow)
+HRESULT CLight_Manager::Render_Lights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool pbr, _bool shadow, _bool haflview)
 {
 	for (auto& pLight : m_Lights)
 	{
 		if(pLight->Get_LightDesc()->bactive == true)
-			pLight->Render(pTarget_Manager, pCameraTag, pbr, shadow);
+			pLight->Render(pTarget_Manager, pCameraTag, pbr, shadow, haflview);
 	}
 
 	return S_OK;
