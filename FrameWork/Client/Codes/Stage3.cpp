@@ -62,9 +62,6 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Hexgrid", L"../bin/Resources/Mesh/Effect/T_Hexgrid.dds")))
 		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Hexgrid", L"../bin/Resources/Mesh/Effect/T_Hexgrid.dds")))
-		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
-
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -163,11 +160,11 @@ _int CStage3::Tick(_double TimeDelta)
 	if(pParticle != nullptr)
 		pParticle->Set_State(CTransform::STATE_POSITION, XMVectorSet(38.f, 1.f, 55.f, 1.f));
 
-	//if (m_pBoss->Get_Dead() && !m_bClear)
-	//{
-	//	m_bClear = true;
-	//	m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
-	//}
+	if (m_pBoss->Get_Dead() && !m_bClear)
+	{
+		m_bClear = true;
+		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
+	}
 
 	g_pInvenUIManager->Tick(TimeDelta);
 
@@ -404,27 +401,27 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 		return E_FAIL;
 
 	//Boss HpBar Red
-	CUI_Boss_HpBar_Red::UIDESC Desc2;
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.46f;
-	Desc2.fPos = { 625.f, 40.f, 0.08f };
-	Desc2.fSize = { 356.f , 14.f };
-	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	//CUI_Boss_HpBar_Red::UIDESC Desc2;
+	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
+	//Desc2.bMinus = false;
+	//Desc2.fAngle = 0.46f;
+	//Desc2.fPos = { 625.f, 40.f, 0.08f };
+	//Desc2.fSize = { 356.f , 14.f };
+	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
+	//	return E_FAIL;
 
-	//Boss ShieldBar Blue
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.46f;
-	Desc2.fPos = { 640.f, 55.f, 0.08f };
-	Desc2.fSize = { 356.f , 14.f };
-	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	////Boss ShieldBar Blue
+	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
+	//Desc2.bMinus = false;
+	//Desc2.fAngle = 0.46f;
+	//Desc2.fPos = { 640.f, 55.f, 0.08f };
+	//Desc2.fSize = { 356.f , 14.f };
+	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -474,10 +471,10 @@ HRESULT CStage3::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(1.f, -1.f, -1.f);
+	LightDesc.vDirection = _float3(0.f, -1.f, -1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vSpecular = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
 	LightDesc.vPosition = _float3(57.f,150.f,243.f);
 	LightDesc.mlookat = _float4(48.f,-4.f,141.f,1.f);
 	LightDesc.mOrthinfo[0] = 50.f;
@@ -487,11 +484,11 @@ HRESULT CStage3::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.vPosition = _float3(57.f, 150.f, 243.f);
+	LightDesc.vSpecular = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vAmbient = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	LightDesc.vPosition = _float3(57.f, 150.f, 143.f);
 	LightDesc.mlookat = _float4(48.f, -4.f, 141.f, 1.f);
 	LightDesc.mOrthinfo[0] = 50.f;
 	LightDesc.bactive = true;

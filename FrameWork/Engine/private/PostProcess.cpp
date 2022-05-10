@@ -184,7 +184,8 @@ HRESULT CPostProcess::GaussianBlurVertical(CTarget_Manager* pTargetMgr, const ws
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(in.c_str())))) return E_FAIL;
 
-	_float2 pixel = { 0.1f / sizex , 0.1f / sizey };
+	_float2 pixel = { 0.3f / sizex , 0.3f / sizey };
+
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RtperPixel", &pixel, sizeof(_float2)))) return E_FAIL;
 
 	m_pVIBuffer->Buffer_Resize(sizex, sizey);
@@ -202,7 +203,8 @@ HRESULT CPostProcess::GaussianblurHorizontal(CTarget_Manager* pTargetMgr, const 
 
 	if (FAILED(m_pVIBuffer->SetUp_TextureOnShader("g_Basetexture", pTargetMgr->Get_SRV(in.c_str())))) return E_FAIL;
 
-	_float2 pixel = { 0.1f / sizex , 0.1f / sizey };
+	_float2 pixel = { 0.3f / sizex , 0.3f / sizey };
+
 	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_RtperPixel", &pixel, sizeof(_float2)))) return E_FAIL;
 
 	m_pVIBuffer->Buffer_Resize(sizex, sizey);

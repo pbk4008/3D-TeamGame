@@ -19,7 +19,7 @@ public:
 public:
 	HRESULT NativeConstruct(const LIGHTDESC& LightDesc);
 	void	Tick();
-	HRESULT Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck,_bool Shadow);
+	HRESULT Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck,_bool Shadow, _bool halfview);
 	HRESULT RenderVolumetric(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag);
 
 private:
