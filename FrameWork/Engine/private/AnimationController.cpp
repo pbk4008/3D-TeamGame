@@ -278,8 +278,8 @@ void CAnimationController::Lerp_Anim(vector<CAnimation*>& _vecvecAnimations)
 	_vector vRotation{};
 	_vector vPosition{};
 
-	_uint iCurSize = vecCurrentAnim.size();
-	_uint iNextSize = vecNextAnim.size();
+	_uint iCurSize = (_uint)vecCurrentAnim.size();
+	_uint iNextSize = (_uint)vecNextAnim.size();
 	for (size_t i = 0; i < iNextSize; ++i)
 	{
 		_vector		vSourScale, vSourRotation, vSourPosition;
