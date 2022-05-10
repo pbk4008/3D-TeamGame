@@ -93,7 +93,6 @@ _int CUI_ItemSlot::LateTick(_double TimeDelta)
 	if (m_pSelectEffect->getActive())
 		m_pSelectEffect->LateTick(TimeDelta);
 
-
 	return _int();
 }
 

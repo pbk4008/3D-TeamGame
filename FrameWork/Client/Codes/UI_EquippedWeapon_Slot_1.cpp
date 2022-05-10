@@ -28,8 +28,8 @@ HRESULT CUI_EquippedWeapon_Slot_1::NativeConstruct(const _uint iSceneID, void* p
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 450.f, -230.f, 0.2f, 1.f });
-	m_pTransform->Scaling(_fvector{ 230.f, 50.f, 0.f, 0.0f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 740.f, -380.f, 0.2f, 1.f });
+	m_pTransform->Scaling(_fvector{ 260.f, 60.f, 0.f, 0.0f });
 
 	setActive(false);
 	return S_OK;
@@ -104,9 +104,9 @@ void CUI_EquippedWeapon_Slot_1::UpdateSlot(_double TimeDelta)
 			if (m_fInitPos2 >= m_fEndPos2)
 			{
 				m_fInitPos2 = m_fEndPos;
-				m_fInitPos = 450.f;
+				m_fInitPos = 720.f;
 			}
-			m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ m_fInitPos2, -230.f , 0.2f, 1.f });
+			m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ m_fInitPos2, -380.f , 0.2f, 1.f });
 		}
 	}
 	else
@@ -118,10 +118,10 @@ void CUI_EquippedWeapon_Slot_1::UpdateSlot(_double TimeDelta)
 			if (m_fInitPos >= m_fEndPos)
 			{
 				m_fInitPos = m_fEndPos;
-				m_fInitPos2 = 450.f;
+				m_fInitPos2 = 720.f;
 				m_IsRightMoveEnd = true;
 			}
-			m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ m_fInitPos, -230.f , 0.2f, 1.f});
+			m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ m_fInitPos, -380.f , 0.2f, 1.f});
 		}
 	}
 }

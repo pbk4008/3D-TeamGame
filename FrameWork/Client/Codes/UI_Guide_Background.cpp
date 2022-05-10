@@ -31,7 +31,7 @@ HRESULT CUI_Guide_Background::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc.fRotationPerSec = 1.f;
 	m_pTransform->Set_TransformDesc(desc);
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, 0.f, 0.2f, 1.f });
-	m_pTransform->Scaling(_fvector{ 1280.f, 720.f, 1.f, 0.f });
+	m_pTransform->Scaling(_fvector{ 1920.f, 1280.f, 1.f, 0.f });
 
 	setActive(true);
 
@@ -56,6 +56,7 @@ _int CUI_Guide_Background::LateTick(_double TimeDelta)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 
 	m_pTransform->Rotation_Axis(_vector{ 0.f, 0.f, 1.f, 0.f }, TimeDelta * 0.25f);
+	m_pTransform->Scaling(_fvector{ 1920.f, 1080.f, 1.f, 0.f });
 
 	return _int();
 }

@@ -19,9 +19,9 @@ HRESULT CLevel_Logo::NativeConstruct()
 	m_pobj->Set_FadeInCheck(true);
 	m_pobj->setActive(true);
 	
-	STOP_SOUND(CHANNEL::BGM);
-	PLAY_SOUND(L"Logo_BGM", CHANNEL::BGM);
-	VOLUME_CHANGE(CHANNEL::BGM, 0.7f);
+	//STOP_SOUND(CHANNEL::BGM);
+	//PLAY_SOUND(L"Logo_BGM", CHANNEL::BGM);
+	//VOLUME_CHANGE(CHANNEL::BGM, 0.7f);
 
 	return S_OK;
 }

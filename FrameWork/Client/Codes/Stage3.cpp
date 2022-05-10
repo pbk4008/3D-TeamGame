@@ -83,8 +83,8 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_Effect()))
 		return E_FAIL;
@@ -100,8 +100,10 @@ HRESULT CStage3::NativeConstruct()
 
 	//PLAY_SOUND(L"Stage3_BGM", CHANNEL::BGM);
 	//VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
-	
 	//g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
+
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_Sunforge");
+
 
 	return S_OK;
 }
@@ -164,6 +166,11 @@ _int CStage3::Tick(_double TimeDelta)
 		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
 	}
 
+	g_pInvenUIManager->Tick(TimeDelta);
+
+	if (g_pQuestManager)
+		g_pQuestManager->Tick(g_dImmutableTime);
+
 	return _int();
 }
 _int CStage3::LateTick(_double TimeDelta)
@@ -179,6 +186,9 @@ _int CStage3::LateTick(_double TimeDelta)
 	{
 		g_pVoiceManager->Late_Tick(TimeDelta);
 	}
+
+	if (g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -350,8 +360,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1002.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -361,8 +371,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1096.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -372,8 +382,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1000.f, 555.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.08f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
@@ -383,8 +393,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1095.f, 556.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 882.f, 0.08f };
+	DescBack.fSize = { 102.f , 17.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))

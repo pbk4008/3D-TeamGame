@@ -28,8 +28,8 @@ HRESULT CUI_EquippedWeapon_Slot_2::NativeConstruct(const _uint iSceneID, void* p
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 530.f, -270.f, 0.2f, 1.f });
-	m_pTransform->Scaling(_fvector{ 160.f, 30.f, 0.f, 0.0f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 815.f, -430.f, 0.2f, 1.f });
+	m_pTransform->Scaling(_fvector{ 200.f, 40.f, 0.f, 0.0f });
 
 	setActive(false);
 	return S_OK;
@@ -53,6 +53,9 @@ _int CUI_EquippedWeapon_Slot_2::LateTick(_double TimeDelta)
 
 	UpdateSlot(TimeDelta);
 	
+
+
+
 	return _int();
 }
 

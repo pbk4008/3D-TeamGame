@@ -112,8 +112,8 @@ HRESULT CUI_Indexes::Ready_UIObject(void)
 {
 	CButton_Equipment::Desc Equipment_Btn;
 	{
-		Equipment_Btn.fPos = { -550.f, 335.f };
-		Equipment_Btn.fScale = { 60.f, 30.f };
+		Equipment_Btn.fPos = { -820.f, 450.f };
+		Equipment_Btn.fScale = { 90.f, 45.f };
 		Equipment_Btn.pOwner = this;
 
 		m_pEquipmentBtn = static_cast<CButton_Equipment*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Equipment", &Equipment_Btn));
@@ -121,8 +121,8 @@ HRESULT CUI_Indexes::Ready_UIObject(void)
 	}
 	CButton_Armory::Desc Armory_Btn;
 	{
-		Armory_Btn.fPos = { -450.f, 335.f };
-		Armory_Btn.fScale = { 60.f, 30.f };
+		Armory_Btn.fPos = { -680.f, 450.f };
+		Armory_Btn.fScale = { 90.f, 45.f };
 		Armory_Btn.pOwner = this;
 
 		m_pArmoryBtn = static_cast<CButton_Armory*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_Button_Armory", &Armory_Btn));
@@ -184,7 +184,7 @@ _bool CUI_Indexes::Click_Equipment(void)
 		{
 			STOP_SOUND(CHANNEL::EFFECT);
 			PLAY_SOUND(L"UI_tab_over", CHANNEL::EFFECT);
-			m_pIndexIndicator->SetInitEquipXPos(-550.f);
+			m_pIndexIndicator->SetInitEquipXPos(-820.f);
 			m_bClickEquipment = true;
 			m_bClickArmory = false;
 			return true;
@@ -201,7 +201,7 @@ _bool CUI_Indexes::Click_Armory(void)
 		{
 			STOP_SOUND(CHANNEL::EFFECT);
 			PLAY_SOUND(L"UI_tab_over", CHANNEL::EFFECT);
-			m_pIndexIndicator->SetInitArmoryXPos(-450.f);
+			m_pIndexIndicator->SetInitArmoryXPos(-680.f);
 			m_bClickEquipment = false;
 			m_bClickArmory = true;
 			return true;

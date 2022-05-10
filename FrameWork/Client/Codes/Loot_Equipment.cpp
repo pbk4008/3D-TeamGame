@@ -32,7 +32,7 @@ HRESULT CLoot_Equipment::NativeConstruct(const _uint iSceneID, void* pArg)
 		return E_FAIL;
 	
 	desc = (*(CHud::Desc*)pArg);
-	desc.pOwner = this;
+	desc.pOwner = this;                   
 	desc.fInitPos = { 0.f, 0.f };
 
 	_float fPosyYOffset = desc.iQueueIndex * 90.f;
@@ -68,6 +68,7 @@ _int CLoot_Equipment::LateTick(_double TimeDelta)
 
 	if (desc.fDisapeatTime <= m_fAliveTime)
 		m_bAlive = false;
+
 
 	m_pBG->LateTick(TimeDelta);
 	m_pFrame->LateTick(TimeDelta);

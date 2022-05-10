@@ -31,7 +31,7 @@ HRESULT CUI_LevelUP_Fill_Lead_Left::NativeConstruct(const _uint iSceneID, void* 
 	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -40.f , -273.f, 0.2f, 1.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -40.f , -404.f, 0.2f, 1.f });
 	m_pLocalTransform->Scaling(_vector{ 30.f, 8.f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;
@@ -68,7 +68,7 @@ _int CUI_LevelUP_Fill_Lead_Left::LateTick(_double TimeDelta)
 		Gap = m_fRatio * (XMVectorGetX(m_pFill->Get_Transform()->Get_State(CTransform::STATE_RIGHT)) - 20.f);
 	}
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -40.f - Gap , -274.f, 0.05f, 1.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -40.f - Gap , -404.f, 0.05f, 1.f });
 
 	Attach_Owner();
 

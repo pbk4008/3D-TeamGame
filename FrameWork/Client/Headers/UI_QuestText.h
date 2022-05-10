@@ -39,7 +39,7 @@ private:
 	CTransform*	  m_pLocalTransform = nullptr;
 	CUI*		  m_pOwner = nullptr;
 	Desc		  desc;
-	_float		  m_fPosY = 182.f;
+	_float		  m_fPosY = 270.f;
 	_bool		  m_bOffsetY = false;
 public:
 	static CUI_QuestText* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pDeviceContext);

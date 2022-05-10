@@ -37,7 +37,7 @@ HRESULT CUI_Guide_Texture::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	/* for. Texture Render*/
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 20.f, 0.f, 0.1f, 1.f });
-	m_pTransform->Scaling(_fvector{ 600.f, 350.f, 1.f, 0.f });
+	m_pTransform->Scaling(_fvector{ 800.f, 450.f, 1.f, 0.f });
 
 	setActive(false);
 
@@ -81,7 +81,7 @@ _int CUI_Guide_Texture::LateTick(_double TimeDelta)
 		m_pRenderer->Add_RenderGroup(desc.ERenderGroup, this);
 
 	m_pSigleImageCom->LateTick(TimeDelta);
-
+	m_pTransform->Scaling(_fvector{ 800.f, 500.f, 1.f, 0.f });
 	return _int();
 }
 

@@ -47,7 +47,7 @@ HRESULT CUI_Ingame::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	_vector vPos = { m_Desc.fPos.x - (g_iWinCx >> 1),-m_Desc.fPos.y + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };
+	_vector vPos = { m_Desc.fPos.x - (g_iWinCx >> 1),- m_Desc.fPos.y + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	_vector vScale = { m_Desc.fSize.x,m_Desc.fSize.y,1.f ,1.f };

@@ -31,8 +31,8 @@ HRESULT CUI_PlayerStatus_BG::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 440.f, 0.f, 0.7f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 360.f, 580.f, 1.f, 1.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 600.f, 0.f, 0.6f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 520.f, 860.f, 1.f, 1.f });
 
 	m_pOwner = desc.pOwner;
 
@@ -60,9 +60,6 @@ _int CUI_PlayerStatus_BG::LateTick(_double TimeDelta)
 		return -1;
 
 	Attach_Owner();
-
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 0.f, 0.6f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 360.f, 600.f, 1.f, 1.f });
 
 	return _int();
 }

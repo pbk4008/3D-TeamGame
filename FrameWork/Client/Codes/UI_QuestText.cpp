@@ -58,6 +58,9 @@ _int CUI_QuestText::LateTick(_double TimeDelta)
 
 	Attach_Owner();
 	
+	//m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -710.f, 270.f, 0.02f, 1.f });
+	//m_pTransform->Scaling(_vector{ 400.f , 43.f, 1.f, 0.f });
+
 	return _int();
 }
 
@@ -109,8 +112,8 @@ void CUI_QuestText::SetPosy(_float fPosy)
 {
 	m_fPosY -= fPosy;
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -445.f, m_fPosY, 0.03f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 295.f , 38.f, 1.f, 0.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -710.f, m_fPosY, 0.03f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 400.f, 43.f, 1.f, 0.f });
 }
 
 void CUI_QuestText::SetFadeOut(void)
