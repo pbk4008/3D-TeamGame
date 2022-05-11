@@ -97,7 +97,7 @@ float myfbm2(half3 p)
 
 half4 Noisfunction(Texture2D MainTex, SamplerState sample, half2 UV, half delta, half4 color3)
 {
-	half2 resolution = half2(1280.f, 720.f);
+	half2 resolution = half2(1920.f, 1080.f);
 	half2 uv = UV / resolution.y;
 	half3 v;
 	half3 p = Scale2 * half3(UV, 0) - delta * half3(1.0, 1.0, 1.0) * 0.1;

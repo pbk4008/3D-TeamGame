@@ -155,98 +155,22 @@ _int CStage2::Tick(_double TimeDelta)
 		}
 
 
-		/*if (m_iCountMonster == 0 && m_bFirst)
+		CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Boss")->front();
+		if (nullptr != pBoss)
 		{
-			if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 1)
+			if (m_iCountMonster >= 10000)
+				m_iCountMonster = 0;
+
+			if (m_iCountMonster == 0 && pBoss->Get_ChangeLevel())
 			{
-				if (m_iPortalCount == 0)
-				{
-					m_pTriggerSystem->Trigger_Clear();
+				g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
+				if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
+					return -1;
 
-					Open_Potal(XMVectorSet(67.f, 18.f, 160.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
-					Open_Potal(XMVectorSet(76.f, 18.f, 157.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					Open_Potal(XMVectorSet(71.f, 18.f, 151.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-					m_iPortalCount = 3;
-					m_iCountMonster += 3;
-					m_bPortalClear = true;
-				}
-				else if(m_bPortalClear)
-				{
-					m_pTriggerSystem->Next_TriggerOn();
-					m_bPortalClear = false;
-				}
-			}
-			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 5)
-			{
-				if (m_iPortalCount == 3)
-				{
-					m_pTriggerSystem->Trigger_Clear();
-
-					Open_Potal(XMVectorSet(6.f, 17.f, 321.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					Open_Potal(XMVectorSet(5.f, 17.f, 331.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(3.f, 17.f, 310.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
-					m_iPortalCount +=3;
-					m_iCountMonster += 3;
-					m_bPortalClear = true;
-				}
-				else if (m_bPortalClear)
-				{
-					m_pTriggerSystem->Next_TriggerOn();
-					m_bPortalClear = false;
-				}
-			}
-			else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 8)
-			{
-				if (m_iPortalCount == 6)
-				{
-					m_pTriggerSystem->Trigger_Clear();
-					Open_Potal(XMVectorSet(59.f, 32.f, 460.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					Open_Potal(XMVectorSet(62.f, 32.f, 443.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					m_iPortalCount += 2;
-					m_iCountMonster += 2;
-				}
-				else if (m_iPortalCount == 8)
-				{
-					Open_Potal(XMVectorSet(59.f, 32.f, 448, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
-					Open_Potal(XMVectorSet(64.f, 32.f, 449.f, 1.f), (_uint)GAMEOBJECT::MONSTER_2H);
-					Open_Potal(XMVectorSet(74.f, 32.f, 462.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
-					m_iPortalCount += 3;
-					m_iCountMonster += 3;
-				}
-				else if (m_iPortalCount == 11)
-				{
-					Open_Potal(XMVectorSet(61.f, 32.f, 462, 1.f), (_uint)GAMEOBJECT::MONSTER_SHOOTER);
-					Open_Potal(XMVectorSet(68.f, 32.f, 452.f, 1.f), (_uint)GAMEOBJECT::MONSTER_1H);
-					m_iPortalCount += 2;
-					m_iCountMonster += 2;
-					m_bPortalClear = true;
-				}
-				else if (m_bPortalClear)
-				{
-					m_bPortalClear = false;
-					m_pTriggerSystem->setAllTriggerClear(true); 
-				}
-			}
-			else
-				m_pTriggerSystem->Check_Clear();*/
-
-			CBoss_Bastion_Judicator* pBoss = (CBoss_Bastion_Judicator*)g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Boss")->front();
-			if (nullptr != pBoss)
-			{
-				if(m_iCountMonster >= 10000)
-					m_iCountMonster = 0;
-
-				if (m_iCountMonster == 0 && pBoss->Get_ChangeLevel())
-				{
-					g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEIN, true);
-					if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE3))))
-						return -1;
-
-					return 0;
-				}
+				return 0;
 			}
 		}
-
+	}
 	g_pInvenUIManager->Tick(TimeDelta);
 
 	if (g_pGameInstance->getkeyDown(DIK_I))
@@ -276,7 +200,8 @@ _int CStage2::Tick(_double TimeDelta)
 		g_pVoiceManager->Tick(TimeDelta);
 
 	if (m_pIndicatorManager)
-			m_pIndicatorManager->Active_Indicator();
+		m_pIndicatorManager->Active_Indicator();
+
 	return _int();
 }
 
@@ -1742,14 +1667,10 @@ void CStage2::Portal_Spot5()
 		Open_Potal(XMVectorSet(66.f, 32.f, 444.f, 1.f), (_uint)GAMEOBJECT::MONSTER_HEALER);
 		m_iCountMonster += 3;
 	}
-	else if (m_iCountMonster == 1 || m_iCountMonster == 0)
+	else if (m_iCountMonster == 0&& m_iPortalCount == 19)
 	{
-		if (m_iPortalCount == 19)
-		{
-			m_iCountMonster = 0;
-			m_pTriggerSystem->Check_Clear();
-			m_pTriggerSystem->setAllTriggerClear(true);
-		}
+		m_pTriggerSystem->Check_Clear();
+		m_pTriggerSystem->setAllTriggerClear(true);
 	}
 }
 

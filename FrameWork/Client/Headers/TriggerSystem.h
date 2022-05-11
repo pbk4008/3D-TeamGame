@@ -49,7 +49,6 @@ public:
 		{
 			if (m_vecTrigger[i]->getActive())
 			{
-
 				m_vecTrigger[i]->Tick(dDeltaTime);
 				if (m_vecTrigger[i]->Get_OnTrigger() && !m_vecTrigger[i]->Get_Overlap())
 				{
