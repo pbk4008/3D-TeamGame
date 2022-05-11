@@ -26,9 +26,17 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 		m_fFootStepTime += (_float)_dDeltaTime;
 		if (0.36f < m_fFootStepTime)
 		{
-			STOP_SOUND(CHANNEL::PLAYER1);
-			PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
-			VOLUME_CHANGE(CHANNEL::PLAYER1, 2.0);
+			//if (IS_PLAYING(CHANNEL::FootStep1))
+			//{
+			//	PLAY_SOUND(L"Player_Step_3", CHANNEL::FootStep2);
+			//	VOLUME_CHANGE(CHANNEL::FootStep2, 0.5f);
+			//}
+			//else
+			//{
+			STOP_SOUND(CHANNEL::FootStep1);
+			PLAY_SOUND(L"Player_Step_3", CHANNEL::FootStep1);
+			VOLUME_CHANGE(CHANNEL::FootStep1, 3.f);
+			//}
 
 			m_fFootStepTime = 0.f;
 		}
@@ -79,7 +87,7 @@ HRESULT CSilvermane_SprintFwdStart::EnterState()
 	//	}
 	//	return STATE_CHANGE;
 	//}
-	
+
 	m_iCutIndex = 57;
 
 	return S_OK;

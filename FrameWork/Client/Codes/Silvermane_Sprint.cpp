@@ -46,7 +46,7 @@ HRESULT CSilvermane_Sprint::EnterState()
 		return E_FAIL;
 
 	m_pSilvermane->Set_IsMove(true);
-	
+
 	return S_OK;
 }
 

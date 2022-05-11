@@ -32,10 +32,11 @@ _int CSilvermane_SprintFwd::Tick(const _double& _dDeltaTime)
 		//}
 		//else
 		//{
-			STOP_SOUND(CHANNEL::FootStep1);
-			PLAY_SOUND(L"Player_Step_3", CHANNEL::FootStep1);
-			VOLUME_CHANGE(CHANNEL::FootStep1, 0.5f);
+		STOP_SOUND(CHANNEL::FootStep1);
+		PLAY_SOUND(L"Player_Step_3", CHANNEL::FootStep1);
+		VOLUME_CHANGE(CHANNEL::FootStep1, 3.f);
 		//}
+
 		m_fFootStepTime = 0.f;
 	}
 
