@@ -2,8 +2,8 @@
 
 #include "Engine_Defines.h"
 #include <io.h>
-#define WINCX 1280
-#define WINCY 720
+#define WINCX 1920
+#define WINCY 1080
 
 extern HINSTANCE g_hInst;
 extern HWND g_hWnd;

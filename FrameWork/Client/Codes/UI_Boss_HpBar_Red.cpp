@@ -53,7 +53,7 @@ HRESULT CUI_Boss_HpBar_Red::NativeConstruct(const _uint _iSceneID, void* pArg)
 	_tcscpy_s(Desc0.TextureTag, L"Texture_Bar_Mark");
 	Desc0.bMinus = false;
 	Desc0.fAngle = 0.f;
-	Desc0.fPos = { 685.f, 28.f, 0.08f };
+	Desc0.fPos = { 1022.f, 26.f, 0.08f };
 	Desc0.fSize = { 22.f , 8.f };
 	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
@@ -65,7 +65,7 @@ HRESULT CUI_Boss_HpBar_Red::NativeConstruct(const _uint _iSceneID, void* pArg)
 	_tcscpy_s(Desc0.TextureTag, L"Texture_Bar_Mark");
 	Desc0.bMinus = false;
 	Desc0.fAngle = 0.f;
-	Desc0.fPos = { 555.f, 28.f, 0.08f };
+	Desc0.fPos = { 855.f, 26.f, 0.08f };
 	Desc0.fSize = { 22.f , 8.f };
 	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
@@ -128,17 +128,17 @@ _int CUI_Boss_HpBar_Red::Tick(_double TimeDelta)
 		m_pBarMarkFillShield->setActive(false);
 	}
 
-	//_vector vPos = { 685.f - (g_iWinCx >> 1),-28.f + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };;
-	//m_pBarMarkPattern->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);;
+	/*_vector vPos = { 1022.f - (g_iWinCx >> 1),-26.f + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };;
+	m_pBarMarkPattern->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);;
 
-	//_vector vScale = { 22.f , 8.f,1.f ,1.f };
-	//m_pBarMarkPattern->Get_Transform()->Scaling(vScale);
+	_vector vScale = { 22.f , 8.f,1.f ,1.f };
+	m_pBarMarkPattern->Get_Transform()->Scaling(vScale);
 
-	//vPos = { 555.f - (g_iWinCx >> 1),-28.f + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };
-	//m_pBarMarkFillShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
+	vPos = { 855.f - (g_iWinCx >> 1),-26.f + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };
+	m_pBarMarkFillShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 
-	//vScale = { 22.f , 8.f,1.f ,1.f };
-	//m_pBarMarkFillShield->Get_Transform()->Scaling(vScale);
+	vScale = { 22.f , 8.f,1.f ,1.f };
+	m_pBarMarkFillShield->Get_Transform()->Scaling(vScale);*/
 
 	return 0;
 }

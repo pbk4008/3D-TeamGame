@@ -25,10 +25,17 @@ _int CSilvermane_SprintFwd::Tick(const _double& _dDeltaTime)
 	m_fFootStepTime += (_float)_dDeltaTime;
 	if (0.36f < m_fFootStepTime)
 	{
-		STOP_SOUND(CHANNEL::PLAYER1);
-		PLAY_SOUND(L"Player_Step_2", CHANNEL::PLAYER1);
-		VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
-
+		//if (IS_PLAYING(CHANNEL::FootStep1))
+		//{
+		//	PLAY_SOUND(L"Player_Step_3", CHANNEL::FootStep2);
+		//	VOLUME_CHANGE(CHANNEL::FootStep2, 0.5f);
+		//}
+		//else
+		//{
+			STOP_SOUND(CHANNEL::FootStep1);
+			PLAY_SOUND(L"Player_Step_3", CHANNEL::FootStep1);
+			VOLUME_CHANGE(CHANNEL::FootStep1, 0.5f);
+		//}
 		m_fFootStepTime = 0.f;
 	}
 
@@ -72,6 +79,7 @@ HRESULT CSilvermane_SprintFwd::ExitState()
 
 	VOLUME_CHANGE(CHANNEL::PLAYER1, 1.f);
 	m_motiontrailidx = 0;
+	m_fFootStepTime = 0.f;
 
 	return S_OK;
 }

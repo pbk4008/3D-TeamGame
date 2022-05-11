@@ -112,11 +112,15 @@ _int CUI_Shield_Meter::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (nullptr != m_pRenderer)
+	if (false == g_pGuideManager->IsOpenDeathUI())
 	{
-		if (g_pInvenUIManager->Get_OpenCheck() == false)
-			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		if (nullptr != m_pRenderer)
+		{
+			if (g_pInvenUIManager->Get_OpenCheck() == false)
+				m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		}
 	}
+	
 	return _int();
 }
 

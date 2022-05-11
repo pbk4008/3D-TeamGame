@@ -170,6 +170,12 @@ _int CBoss_Solaris::Tick(_double TimeDelta)
 	_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
+	if (80.f <= fDistToPlayer)
+	{
+		//플레이어가 죽고 위치이동됐을때 보스가 날아오는거 막기위해서.. 
+		m_pStateController->Change_State(L"Idle");
+	}
+
 	if (0.f >= m_fGroggyGauge && false == m_bFirstGroggy)
 	{
 		//그로기게이지가 0이 되고 첫번째 그로기 상태도 오지않았을때는 그로기상태로 만들어줌

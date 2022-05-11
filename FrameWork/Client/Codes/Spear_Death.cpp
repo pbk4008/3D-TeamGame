@@ -31,10 +31,6 @@ _int CSpear_Death::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	//if(!m_bDeath)
-	//	m_pAnimator->Tick(_dDeltaTime);
-
-
 	return _int();
 }
 

@@ -682,9 +682,9 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	CUI_Player_HpBar::UIDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 200.f , 30.f };
+	Desc.fAngle = 0.35f;
+	Desc.fPos = { 333.f, 912.f, 0.f };
+	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
@@ -695,8 +695,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
 	Desc.fAngle = 0.3f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 200.f , 30.f };
+	Desc.fPos = { 333.f, 912.f, 0.f };
+	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
@@ -708,8 +708,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc0.TextureTag, L"Texture_Monster_LevelNum");
 	Desc0.bMinus = false;
 	Desc0.fAngle = 0.f;
-	Desc0.fPos = { 175.f, 638.f, 0.08f };
-	Desc0.fSize = { 40.f , 40.f };
+	Desc0.fPos = { 197.f, 911.f, 0.08f };
+	Desc0.fSize = { 50.f , 50.f };
 	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_HpHeal_Num", &Desc0)))
@@ -721,8 +721,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Shield_Meter");
 	Desc1.UIDesc.bMinus = false;
 	Desc1.UIDesc.fAngle = 0.f;
-	Desc1.UIDesc.fPos = { 100.f, 620.f, 0.06f };
-	Desc1.UIDesc.fSize = { 50.f, 50.f };
+	Desc1.UIDesc.fPos = { 150.f, 920.f, 0.06f };
+	Desc1.UIDesc.fSize = { 60.f, 60.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
@@ -833,6 +833,17 @@ HRESULT CStage1::Ready_Light()
 	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
 	LightDesc.bactive = true;
 	LightDesc.vPosition = _float3(2.f, 15.f, 110.f);
+
+	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
+
+	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
+	LightDesc.eType = LIGHTDESC::TYPE_POINT;
+	LightDesc.fRange = 7.f;
+	LightDesc.vDiffuse = _float4(1.0f, 0.34509f, 0.1333f, 1.f);
+	LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
+	LightDesc.bactive = true;
+	LightDesc.vPosition = _float3(-36.9665833f, -4.63226175f, 86.0816040f);
 
 	if (FAILED(g_pGameInstance->Add_Light(m_pDevice, m_pDeviceContext, LightDesc))) MSGBOX("Failed To Adding PointLight");
 

@@ -46,6 +46,9 @@ HRESULT CUI_HpHeal_Num::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
+	m_Desc.fPos = { 238.f, 943.f,0.08f };
+	m_Desc.fSize = { 50.f , 50.f };
+
 	_vector vPos = { m_Desc.fPos.x - (g_iWinCx >> 1),-m_Desc.fPos.y + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
@@ -62,6 +65,7 @@ _int CUI_HpHeal_Num::Tick(_double TimeDelta)
 	if (FAILED(CUI::Tick(TimeDelta)))
 		return -1;
 
+
 	return 0;
 }
 
@@ -70,10 +74,13 @@ _int CUI_HpHeal_Num::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
-	if (nullptr != m_pRenderer)
+	if (false == g_pGuideManager->IsOpenDeathUI())
 	{
-		if (g_pInvenUIManager->Get_OpenCheck() == false)
-			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		if (nullptr != m_pRenderer)
+		{
+			if (g_pInvenUIManager->Get_OpenCheck() == false)
+				m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+		}
 	}
 	return _int();
 }

@@ -20,9 +20,6 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	//PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
-	//VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
-
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (6 < iCurKeyFrameIndex)
 	{
@@ -97,6 +94,7 @@ HRESULT CSilvermane_SprintFwdStart::ExitState()
 
 
 	m_motiontrailidx = 0;
+	m_fFootStepTime = 0.f;
 	return S_OK;
 }
 
