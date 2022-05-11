@@ -49,8 +49,8 @@ HRESULT CUI_Fill_Space::NativeConstruct(const _uint _iSceneID, void* pArg)
 		return E_FAIL;
 	}
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 110.f, -97.f, 0.1f, 1.f });
-	_vector vScale = { m_Desc.UIDesc.fSize.x,m_Desc.UIDesc.fSize.y,1.f ,1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 140.f, -145.f, 0.3f, 1.f });
+	_vector vScale = { m_Desc.UIDesc.fSize.x + 10.f ,m_Desc.UIDesc.fSize.y + 10.f ,1.f ,1.f };
 	m_pTransform->Scaling(vScale);
 
 	setActive(false);
@@ -106,7 +106,6 @@ _int CUI_Fill_Space::LateTick(_double TimeDelta)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
-
 	return _int();
 }
 

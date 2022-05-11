@@ -10,9 +10,6 @@ const float MAXGROOGUGAGUE  = 10.0f;
 #define HALF_WINCY 540
 #define Max_InventorySlot 32
 #define Max_EquipmentSlot 8
-typedef CSoundMgr::CHANNELID CHANNEL;
-
-typedef CSoundMgr::CHANNELID CHANNEL;
 
 typedef CSoundMgr::CHANNELID CHANNEL;
 extern HWND g_hWnd;
