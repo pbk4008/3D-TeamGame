@@ -23,8 +23,8 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
 	if (6 < iCurKeyFrameIndex)
 	{
-		m_fFootStepTime += (_float)_dDeltaTime;
-		if (0.36f < m_fFootStepTime)
+		m_pSilvermane->Add_FootStepTime((_float)_dDeltaTime);
+		if (0.36f < m_pSilvermane->Get_FootStepTime())
 		{
 			//if (IS_PLAYING(CHANNEL::FootStep1))
 			//{
@@ -38,7 +38,7 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 				VOLUME_CHANGE(CHANNEL::FootStep1, 0.5f);
 			//}
 
-			m_fFootStepTime = 0.f;
+			m_pSilvermane->Set_FootStepTime(0.f);
 		}
 	}
 
@@ -102,7 +102,6 @@ HRESULT CSilvermane_SprintFwdStart::ExitState()
 
 
 	m_motiontrailidx = 0;
-	m_fFootStepTime = 0.f;
 	return S_OK;
 }
 
@@ -194,32 +193,34 @@ _int CSilvermane_SprintFwdStart::Input(const _double& _dDeltaTime)
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogFwd")))
 				return -1;
-			return STATE_CHANGE;
+			//return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_S))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogBwd")))
 				return -1;
-			return STATE_CHANGE;
+			//return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_A))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogLeft")))
 				return -1;
-			return STATE_CHANGE;
+			//return STATE_CHANGE;
 		}
 		else if (g_pGameInstance->getkeyPress(DIK_D))
 		{
 			if (FAILED(m_pStateController->Change_State(L"JogRight")))
 				return -1;
-			return STATE_CHANGE;
+			//return STATE_CHANGE;
 		}
 		else
 		{
 			if (FAILED(m_pStateController->Change_State(L"SprintFwdStop")))
 				return -1;
-			return STATE_CHANGE;
+			//return STATE_CHANGE;
 		}
+		m_pSilvermane->Set_FootStepTime(0.f);
+		return STATE_CHANGE;
 	}
 
 	return _int();
