@@ -214,12 +214,24 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Item/A_Breakable_Stone_Large_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Pot_Broken", pSound); else return E_FAIL;
 
-	/* for. Player */
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Heavy_Armour_Plate_Gak_Step_10.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_1", pSound); else return E_FAIL;
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_Lava_Strong_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_2", pSound); else return E_FAIL;
+
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_SolidStone_Soft_10.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_3", pSound); else return E_FAIL;
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_SolidStone_Soft_11.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_4", pSound); else return E_FAIL;
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_SolidStone_Soft_12.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_5", pSound); else return E_FAIL;
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_SolidStone_Soft_19.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_6", pSound); else return E_FAIL;
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_WetSolidStone_Soft_01.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_7", pSound); else return E_FAIL;
+	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Player_Footstep_WetSolidStone_Soft_04.ogg", FMOD_DEFAULT, 0, &pSound);
+	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Step_8", pSound); else return E_FAIL;
 
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Player/A_Zamora_Foley_Dash_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Player_Dash", pSound); else return E_FAIL;
@@ -299,7 +311,7 @@ HRESULT CSoundMgr::LoadSoundFile()
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Hammer/A_Player_Weapon_Hammer_L2_ChargeIgnite_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Hammer_L2_ChargeIgnite", pSound); else return E_FAIL;
 
-	/* for.Monster */
+	/* for.Monster *////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	eRes = FMOD_System_CreateSound(m_pSystem, "../bin/Resources/Sound/Monster/A_Attack_Liquid_Hit_Generic_01.ogg", FMOD_DEFAULT, 0, &pSound);
 	if (eRes == FMOD_OK) m_mapSound.emplace(L"Monster_Hit", pSound); else return E_FAIL;
 
