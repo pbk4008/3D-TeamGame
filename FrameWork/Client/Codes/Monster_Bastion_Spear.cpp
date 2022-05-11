@@ -222,18 +222,21 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
-		return -1;
-
-	if(!m_bDead)
+	if (!m_bDead)
 		m_pCharacterController->Update_OwnerTransform();
 
-	m_pWeapon->LateTick(_dDeltaTime);
-
-	/* State FSM Late Update */
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
+
+
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
+		return -1;
+
+	m_pWeapon->LateTick(_dDeltaTime);
 
 	return _int();
 }

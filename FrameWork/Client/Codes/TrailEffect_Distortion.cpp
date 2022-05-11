@@ -45,6 +45,7 @@ _int CTrailEffect_Distortion::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
+
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_DYDISTORTION, this);
 
 	return _int();

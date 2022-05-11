@@ -173,10 +173,15 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 		return -1;
 	}
 	if (!m_bDead)
-	{
 		m_pCharacterController->Update_OwnerTransform();
-		m_pWeapon->LateTick(_dDeltaTime);
-	}
+
+	m_pStateController->LateTick(_dDeltaTime);
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
+
+	m_pWeapon->LateTick(_dDeltaTime);
+
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 	
 	return 0;

@@ -100,7 +100,8 @@ _int CJumpNode::Tick(_double _dDeltaTime)
 
 _int CJumpNode::LateTick(_double _dDeltaTime)
 {
-
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 6.f))
+		return 0;
 
 	_int iProgress = __super::LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
