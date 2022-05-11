@@ -30,8 +30,8 @@ HRESULT CPostProcess::AlphaBlur(CTarget_Manager* pTargetMgr, _bool alpha)
 {
 	if (alpha == true)
 	{
-		if (FAILED(BlurPass(pTargetMgr, L"Target_AlphaBlend", L"Target_ParticleV2", L"Target_ParticleH2", 640, 360))) return E_FAIL;
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", 320, 180))) return E_FAIL;
+		if (FAILED(BlurPass(pTargetMgr, L"Target_AlphaBlend", L"Target_ParticleV2", L"Target_ParticleH2", (m_viewport.Width * 0.5f), (m_viewport.Height * 0.5f)))) return E_FAIL;
+		if (FAILED(BlurPass(pTargetMgr, L"Target_ParticleH2", L"Target_ParticleV4", L"Target_ParticleH4", (m_viewport.Width * 0.25f), (m_viewport.Height * 0.25f)))) return E_FAIL;
 
 		if (FAILED(BloomPass(pTargetMgr,L"Target_Alpha", L"Target_AlphaBlend", L"Target_ParticleH2", L"Target_ParticleH4", 1.0f, false))) return E_FAIL;
 	}
@@ -43,8 +43,8 @@ HRESULT CPostProcess::Shadowblur(CTarget_Manager* pTargetMgr, _bool shadow, _flo
 {
 	if (shadow == true)
 	{
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ShadeShadow", L"Target_ShadowV2", L"Target_ShadowH2", 640, 360))) return E_FAIL;
-		if (FAILED(BlurPass(pTargetMgr, L"Target_ShadowH2", L"Target_ShadowV4", L"Target_ShadowH4", 320, 180))) return E_FAIL;
+		if (FAILED(BlurPass(pTargetMgr, L"Target_ShadeShadow", L"Target_ShadowV2", L"Target_ShadowH2", (m_viewport.Width * 0.5f), (m_viewport.Height * 0.5f)))) return E_FAIL;
+		if (FAILED(BlurPass(pTargetMgr, L"Target_ShadowH2", L"Target_ShadowV4", L"Target_ShadowH4", (m_viewport.Width * 0.25f), (m_viewport.Height * 0.25f)))) return E_FAIL;
 
 		if (FAILED(BloomPass(pTargetMgr, L"Target_BlurShadow", L"Target_ShadeShadow", L"Target_ShadowH2", L"Target_ShadowH4", weight, true))) return E_FAIL;
 	}
@@ -65,15 +65,15 @@ HRESULT CPostProcess::PossProcessing(CTonemapping* tone,CTarget_Manager* pTarget
 
 	if (FAILED(tone->ToneMapping(pTargetMgr))) return E_FAIL;
 
-	if (FAILED(BlurPass(pTargetMgr, L"Target_Emission", L"Target_Vertical2", L"Target_Horizontal2", 640, 360))) return E_FAIL;
-	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal2", L"Target_Vertical4", L"Target_Horizontal4", 320, 180))) return E_FAIL;
-	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal4", L"Target_Vertical8", L"Target_Horizontal8", 160, 90))) return E_FAIL;
-	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64, 64))) return E_FAIL;
+	if (FAILED(BlurPass(pTargetMgr, L"Target_Emission", L"Target_Vertical2", L"Target_Horizontal2", (m_viewport.Width * 0.5f), (m_viewport.Height * 0.5f)))) return E_FAIL;
+	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal2", L"Target_Vertical4", L"Target_Horizontal4", (m_viewport.Width * 0.25f), (m_viewport.Height * 0.25f)))) return E_FAIL;
+	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal4", L"Target_Vertical8", L"Target_Horizontal8", (m_viewport.Width * 0.125f), (m_viewport.Height * 0.125f)))) return E_FAIL;
+	if (FAILED(BlurPass(pTargetMgr, L"Target_Horizontal8", L"Target_Vertical16", L"Target_Horizontal16", 64.f, 64.f))) return E_FAIL;
 
 	if (FAILED(tone->Blend_FinalPass(pTargetMgr, hdr))) return E_FAIL;
 
-	if (FAILED(BlurPass(pTargetMgr, L"Target_Blend", L"Target_VT2", L"Target_HZ2", 640, 360))) return E_FAIL;
-	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", 320, 180))) return E_FAIL;
+	if (FAILED(BlurPass(pTargetMgr, L"Target_Blend", L"Target_VT2", L"Target_HZ2", (m_viewport.Width * 0.5f), (m_viewport.Height * 0.5f)))) return E_FAIL;
+	if (FAILED(BlurPass(pTargetMgr, L"Target_HZ2", L"Target_VT4", L"Target_HZ4", (m_viewport.Width * 0.25f), (m_viewport.Height * 0.25f)))) return E_FAIL;
 
 	if (FAILED(BloomPass(pTargetMgr, L"Target_Bloom", L"Target_HZ2", L"Target_HZ4"))) return E_FAIL;
 
