@@ -45,6 +45,9 @@ _int CWall::Tick(_double _dDeltaTime)
 
 _int CWall::LateTick(_double _dDeltaTime)
 {
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 5.f))
+		return 0;
+
 	if (nullptr != m_pRenderer)
 	{
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);

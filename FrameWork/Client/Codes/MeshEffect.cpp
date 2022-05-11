@@ -76,6 +76,9 @@ _int CMeshEffect::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProcess)
 		return iProcess;
 
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
+
 	return _int();
 }
 

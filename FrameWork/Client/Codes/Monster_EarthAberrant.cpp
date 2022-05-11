@@ -261,13 +261,13 @@ _int CMonster_EarthAberrant::LateTick(_double _dDeltaTime)
 		return -1;
 	}
 
-	_int iProgress = m_pStateController->LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress)
-	{
-		return iProgress;
-	}
-	if(!m_bDead)
+	if (!m_bDead)
 		m_pCharacterController->Update_OwnerTransform();
+
+	m_pStateController->LateTick(_dDeltaTime);
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
