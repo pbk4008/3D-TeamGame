@@ -29,21 +29,9 @@ _int CSpear_State::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	//m_bTargetOn = false;
-	//m_bAttackOn = false;
-	//m_bPlayerAttack = false;
-
-	//Check_Attack(_dDeltaTime);
-
-	/*_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));*/
-
 	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	m_pOwner = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
 
-	/*if (2.0f >= fDistToPlayer && false == m_bChargeOn)
-		m_bAttackOn = true;*/
 	if (m_pOwner->Get_HpRatio() < 0.5f)
 		m_pOwner->Set_Half(true);
 
@@ -105,35 +93,31 @@ _int CSpear_State::Tick(const _double& _dDeltaTime)
 			}
 		}
 	}
+
 	if (FAILED(Check_State()))
 		return -1;
 
-
-	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+	if (!m_pOwner->Get_Dead())
 	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		CMonster_Bastion_Spear* pMonster = static_cast<CMonster_Bastion_Spear*>(m_pMonster);
+		if (m_pOwner->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+		{
+			//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+			m_pOwner->Set_Groggy(true);
+			m_pOwner->Groggy_Start();
+		}
+		if (0 >= m_pOwner->Get_CurrentHp())
+		{
+			m_pOwner->Set_Dead();
+			m_pOwner->Remove_Collider();
 
-		m_pOwner->Set_Groggy(true);
-		m_pOwner->Groggy_Start();
+			m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
+			m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+
+			m_pStateController->Change_State(L"Death");
+
+			m_pOwner->Set_LightCheck(true);
+		}
 	}
-
-	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
-	{
-		m_pOwner->Set_Dead();
-		m_pOwner->Remove_Collider();
-
-		m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
-		m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
-
-		m_pStateController->Change_State(L"Death");
-
-		m_pOwner->Set_LightCheck(true);
-	}
-
-	//if (0 >= m_pMonster->Get_CurrentHp())
-	//	m_pStateController->Change_State(L"Death");
-
 	return _int();
 }
 
