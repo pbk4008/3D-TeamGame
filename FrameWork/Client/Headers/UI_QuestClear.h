@@ -41,9 +41,9 @@ private:
 	CUI*		  m_pOwner = nullptr;
 	CTransform*	  m_pLocalTransform = nullptr;
 	Desc		  desc;
-	_float		  m_fPosY      = 180.f;
-	_float2		  m_fInitScale = { 150.f, 150.f };
-	_float2		  m_fEndScale  = { 30.5f , 30.5f };
+	_float		  m_fPosY      = 270.f;
+	_float2		  m_fInitScale = { 160.f, 160.f };
+	_float2		  m_fEndScale  = { 40.5f , 40.5f };
 	_bool		  m_bShowEnd   = false;
 	_float4		  m_fOwnerPos;
 

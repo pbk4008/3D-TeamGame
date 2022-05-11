@@ -62,9 +62,6 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Hexgrid", L"../bin/Resources/Mesh/Effect/T_Hexgrid.dds")))
 		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
 
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Hexgrid", L"../bin/Resources/Mesh/Effect/T_Hexgrid.dds")))
-		MSGBOX("Failed To Add 메쉬이펙트용 텍스처 Tex");
-
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
 
@@ -86,8 +83,8 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_UI(L"Layer_UI")))
 		return E_FAIL;
 
-	if (FAILED(Ready_Cinema()))
-		return E_FAIL;
+	//if (FAILED(Ready_Cinema()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_Effect()))
 		return E_FAIL;
@@ -101,9 +98,12 @@ HRESULT CStage3::NativeConstruct()
 	g_pQuestManager->SetRender(true);
 	g_pInvenUIManager->SetRender(true);
 
-	PLAY_SOUND(L"Stage3_BGM", CHANNEL::BGM);
-	VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+	//PLAY_SOUND(L"Stage3_BGM", CHANNEL::BGM);
+	//VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 	//g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
+
+	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_Sunforge");
+
 
 	return S_OK;
 }
@@ -160,11 +160,16 @@ _int CStage3::Tick(_double TimeDelta)
 	if(pParticle != nullptr)
 		pParticle->Set_State(CTransform::STATE_POSITION, XMVectorSet(38.f, 1.f, 55.f, 1.f));
 
-	//if (m_pBoss->Get_Dead() && !m_bClear)
-	//{
-	//	m_bClear = true;
-	//	m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
-	//}
+	if (m_pBoss->Get_Dead() && !m_bClear)
+	{
+		m_bClear = true;
+		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
+	}
+
+	g_pInvenUIManager->Tick(TimeDelta);
+
+	if (g_pQuestManager)
+		g_pQuestManager->Tick(g_dImmutableTime);
 
 	return _int();
 }
@@ -181,6 +186,9 @@ _int CStage3::LateTick(_double TimeDelta)
 	{
 		g_pVoiceManager->Late_Tick(TimeDelta);
 	}
+
+	if (g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -352,8 +360,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1002.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -363,8 +371,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1096.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -374,8 +382,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1000.f, 555.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.08f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
@@ -385,35 +393,35 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1095.f, 556.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 882.f, 0.08f };
+	DescBack.fSize = { 102.f , 17.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
 	//Boss HpBar Red
-	CUI_Boss_HpBar_Red::UIDESC Desc2;
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.46f;
-	Desc2.fPos = { 625.f, 40.f, 0.08f };
-	Desc2.fSize = { 356.f , 14.f };
-	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	//CUI_Boss_HpBar_Red::UIDESC Desc2;
+	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
+	//Desc2.bMinus = false;
+	//Desc2.fAngle = 0.46f;
+	//Desc2.fPos = { 625.f, 40.f, 0.08f };
+	//Desc2.fSize = { 356.f , 14.f };
+	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
+	//	return E_FAIL;
 
-	//Boss ShieldBar Blue
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.46f;
-	Desc2.fPos = { 640.f, 55.f, 0.08f };
-	Desc2.fSize = { 356.f , 14.f };
-	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	////Boss ShieldBar Blue
+	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
+	//Desc2.bMinus = false;
+	//Desc2.fAngle = 0.46f;
+	//Desc2.fPos = { 640.f, 55.f, 0.08f };
+	//Desc2.fSize = { 356.f , 14.f };
+	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -463,10 +471,10 @@ HRESULT CStage3::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(1.f, -1.f, -1.f);
+	LightDesc.vDirection = _float3(0.f, -1.f, -1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
+	LightDesc.vSpecular = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
 	LightDesc.vPosition = _float3(57.f,150.f,243.f);
 	LightDesc.mlookat = _float4(48.f,-4.f,141.f,1.f);
 	LightDesc.mOrthinfo[0] = 50.f;
@@ -476,11 +484,11 @@ HRESULT CStage3::Ready_Light()
 	ZeroMemory(&LightDesc, sizeof(LIGHTDESC));
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float3(1.f, -1.f, 1.f);
+	LightDesc.vDirection = _float3(0.f, -1.f, 1.f);
 	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vSpecular = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.vPosition = _float3(57.f, 150.f, 243.f);
+	LightDesc.vSpecular = _float4(0.2f, 0.2f, 0.2f, 1.f);
+	LightDesc.vAmbient = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	LightDesc.vPosition = _float3(57.f, 150.f, 143.f);
 	LightDesc.mlookat = _float4(48.f, -4.f, 141.f, 1.f);
 	LightDesc.mOrthinfo[0] = 50.f;
 	LightDesc.bactive = true;

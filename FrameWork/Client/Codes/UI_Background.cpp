@@ -26,7 +26,7 @@ HRESULT CUI_Background::NativeConstruct(const _uint iSceneID, void* pArg)
 		return E_FAIL;
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ 0.f, m_fInitPos, 0.9f, 1.f});
-	m_pTransform->Scaling(_vector{ 1400.f, 780.f, 1.f, 1.f });
+	m_pTransform->Scaling(_vector{ 2220.f, 1180.f, 1.f, 1.f });
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;

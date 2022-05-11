@@ -30,7 +30,7 @@ HRESULT CUI_EquipedText::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x , desc.fPos.y - 28.f, 0.2f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y - 60.f, 1.f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y - 90.f, 1.f, 1.f });
 	m_pOwner = desc.pOwner;
 	assert("Owner is nullptr!" && m_pOwner);
 
@@ -61,6 +61,8 @@ _int CUI_EquipedText::LateTick(_double TimeDelta)
 
 	//if (nullptr != m_pRenderer)
 	//	m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ desc.fPos.x , desc.fPos.y - 44.f, 0.2f, 1.f });
+	m_pTransform->Scaling(_vector{ desc.fScale.x, desc.fScale.y - 85.f, 1.f, 1.f });
 
 	return _int();
 }

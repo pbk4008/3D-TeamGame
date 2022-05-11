@@ -26,7 +26,7 @@ public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc);
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, const LIGHTDESC& LightDesc, CLight** ppOutLight);
 
-	HRESULT Render_Lights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool pbr, _bool shadow);
+	HRESULT Render_Lights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag, _bool pbr, _bool shadow, _bool haflview);
 	HRESULT	Render_VolumetricLights(CTarget_Manager* pTarget_Manager, const wstring& pCameraTag);
 private:
 	vector<class CLight*>				m_Lights;

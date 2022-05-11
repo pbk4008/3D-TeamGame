@@ -29,8 +29,8 @@ HRESULT CUI_QuestHeadText::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	desc = (*(Desc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -570.f, 208.f, 0.02f, 1.f });
-	m_pTransform->Scaling(_vector{ 80.f , 39.f, 1.f, 0.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -870.f, 308.f, 0.02f, 1.f });
+	m_pTransform->Scaling(_vector{ 110.f , 47.f, 1.f, 0.f });
 
 	setActive(false);
 

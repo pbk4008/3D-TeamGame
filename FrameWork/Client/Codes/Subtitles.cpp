@@ -40,8 +40,8 @@ HRESULT CSubtitles::NativeConstruct(const _uint iSceneID, void* pArg)
 	}
 
 	/* for. Texture Render*/
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, -215.f, 0.1f, 1.f });
-	m_pTransform->Scaling(_fvector{ 520.f, 33.f, 0.f, 0.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, -415.f, 0.1f, 1.f });
+	m_pTransform->Scaling(_fvector{ 720.f, 40.5f, 0.f, 0.f });
 
 	setActive(false);
 
@@ -74,6 +74,8 @@ _int CSubtitles::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
+
+
 
 	return _int();
 }

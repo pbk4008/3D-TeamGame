@@ -37,11 +37,11 @@ private:
 	CSingleImage* m_pSigleImageCom = nullptr;
 	_bool		  m_IsMainSlot = false;
 	_bool		  m_IsRightMoveEnd = false;
-	_float		  m_fInitPos = 440.f;
-	_float		  m_fEndPos =  460.f;
+	_float		  m_fInitPos = 720.f;
+	_float		  m_fEndPos =  740.f;
 
-	_float		  m_fInitPos2 = 440.f;
-	_float		  m_fEndPos2 = 460.f;
+	_float		  m_fInitPos2 = 720.f;
+	_float		  m_fEndPos2 =  740.f;
 
 public:
 	static CUI_EquippedWeapon_Slot_1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);

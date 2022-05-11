@@ -2,12 +2,12 @@
 #ifndef __CLIENT_DEFINE_H__
 #define __CLIENT_DEFINE_H__
 
-const unsigned int g_iWinCx = 1280;
-const unsigned int g_iWinCy = 720;
+const unsigned int g_iWinCx = 1920;
+const unsigned int g_iWinCy = 1080;
 const float MAXGROOGUGAGUE  = 10.0f;
 
-#define HALF_WINCX 640
-#define HALF_WINCY 360
+#define HALF_WINCX 960
+#define HALF_WINCY 540
 #define Max_InventorySlot 32
 #define Max_EquipmentSlot 8
 typedef CSoundMgr::CHANNELID CHANNEL;

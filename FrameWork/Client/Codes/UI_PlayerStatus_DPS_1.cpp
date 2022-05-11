@@ -31,8 +31,8 @@ HRESULT CUI_PlayerStatus_DPS_1::NativeConstruct(const _uint iSceneID, void* pArg
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 540.f, 78.f, 0.5f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 30.f, 30.f, 1.f, 1.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 740.f, 115.f, 0.5f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 40.f, 40.f, 1.f, 1.f });
 
 	m_pOwner = desc.pOwner;
 

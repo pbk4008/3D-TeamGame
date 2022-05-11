@@ -54,6 +54,7 @@ cbuffer ShaderCheck
 	bool g_distort;
 	bool g_fog;
 	bool g_motion;
+	bool g_HalfView;
 };
 
 cbuffer CountBuffer
@@ -209,7 +210,68 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 	
 	half4 normal = half4(normaltest * 2.f - 1.f, 0.f);
 	
-	if (g_bPBRHDR == true)
+	//if (1.f >= In.vTexUV.x && 0.4f <= In.vTexUV.x)
+		
+	if (g_HalfView == true)
+	{
+		if (1.f >= In.vTexUV.x && 0.425f <= In.vTexUV.x)
+		{
+			half3 normal3 = normalize(normal.xyz);
+			half3 N = normal3;
+			half3 V = normalize(g_vCamPosition.xyz - vWorldPos.xyz);
+			half3 L = g_vLightDir.xyz * -1;
+			half F0 = 0.93;
+		
+			half specular = LightingGGX_Ref(N, V, L, F0, MRA.g);
+	
+		////-------------------------------------------------------------------------//
+			half3 color = g_lightcolor;
+			half ambientintensity = g_ambientintensity;
+			half4 light = CalcLightInternal(color, ambientintensity, g_vCamPosition.xyz, g_vLightDir.xyz, vWorldPos.xyz, normal3);
+		//half4 light = g_vLightDiffuse * (saturate(dot(normalize(g_vLightPos - vWorldPos) * -1.f, normal)) + (g_vLightAmbient * g_vMtrlAmbient)); // Lamburt
+		//half lightpow = 2.f;
+		//half4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient)); // half Lamburt
+		
+			half3 CamToWorldDirection = normalize(vWorldPos.xyz - g_vCamPosition.xyz);
+			half3 worldReflectDirection = reflect(CamToWorldDirection, normal3);
+		
+			half4 cubeRef1 = g_SkyBoxTexture.Sample(SkyBoxSampler, worldReflectDirection.xy);
+		
+			half smoothness = 1 - MRA.g;
+			half InvMetalic = (1 - MRA.r);
+			InvMetalic = max(InvMetalic, g_InvMetalicMax);
+			half4 lightpower = InvMetalic * light * MRA.b;
+		
+			if (g_shadow == true)
+			{
+				half4 shadow = g_ShadowTexture.Sample(DefaultSampler, In.vTexUV);
+				shadow = saturate(shadow + 0.5f);
+			
+				Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness * shadow);
+				Out.vShade = lightpower * shadow;
+			}
+			else
+			{
+				Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness);
+				Out.vShade = saturate(lightpower);
+			}
+		}
+		else
+		{
+			half lightpow = 3.f;
+			vector vReflect = reflect(normalize(g_vLightDir), normal);
+
+			vector vLook = normalize(vWorldPos - g_vCamPosition);
+
+			Out.vSpecular = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 20.f));
+		
+			half4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
+			Out.vShade = light;
+			Out.vShade.a = 1.f;
+		}
+
+	}
+	else
 	{
 		half3 normal3 = normalize(normal.xyz);
 		half3 N = normal3;
@@ -250,19 +312,6 @@ PS_OUT_DIRLIGHTACC PS_MAIN_LIGHTACC_DIRECTIONAL(PS_IN In)
 			Out.vSpecular = saturate((light * specular + cubeRef1) * MRA.r * smoothness);
 			Out.vShade = saturate(lightpower);
 		}
-	}
-	else
-	{
-		half lightpow = 1.f;
-		vector vReflect = reflect(normalize(g_vLightDir), normal);
-
-		vector vLook = normalize(vWorldPos - g_vCamPosition);
-
-		Out.vSpecular = ((g_vLightSpecular * g_vMtrlSpecular) * pow(saturate(dot(normalize(vReflect) * -1.f, vLook)), 30.f));
-		
-		half4 light = saturate(pow((dot(normalize(vector(g_vLightDir.xyz, 0.f)) * -1.f, normal) * 0.5f + 0.5f), lightpow) * (g_vLightDiffuse * g_vMtrlDiffuse) + (g_vLightAmbient * g_vMtrlAmbient));
-		Out.vShade = light;
-		Out.vShade.a = 1.f;
 	}
 	
 	return Out;

@@ -105,6 +105,8 @@ _int CUI_Skill_Meter_Gauge_Right::LateTick(_double TimeDelta)
 		if (g_pInvenUIManager->Get_OpenCheck() == false)
 			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
 	}
+
+
 	return _int();
 }
 

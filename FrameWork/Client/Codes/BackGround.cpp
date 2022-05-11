@@ -37,8 +37,8 @@ HRESULT CBackGround::NativeConstruct(const _uint _iSceneID, void* pArg)
 	if (FAILED(Ready_GameObject(pArg)))
 		return E_FAIL;
 
-	m_fPos = { 640.f,360.f };
-	m_fSize = { 1280.f,720.f};
+	m_fPos = { g_iWinCx * 0.5f, g_iWinCy * 0.5f };
+	m_fSize = { (_float)g_iWinCx, (_float)g_iWinCy };
 
 	_vector vPos = { m_fPos.x - (g_iWinCx >> 1),-m_fPos.y + (g_iWinCy>> 1),1.f,1.f };
 	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);

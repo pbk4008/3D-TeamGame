@@ -75,6 +75,11 @@ _int CUI_Skill_Meter_Back::LateTick(_double TimeDelta)
 		if (g_pInvenUIManager->Get_OpenCheck() == false)
 			m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI, this);
 	}
+
+
+	_vector vPos = { m_Desc.fPos.x - (g_iWinCx >> 1),-m_Desc.fPos.y + (g_iWinCy >> 1), m_Desc.fPos.z,1.f };
+	m_pTransform->Set_State(CTransform::STATE_POSITION, vPos);
+
 	return _int();
 }
 

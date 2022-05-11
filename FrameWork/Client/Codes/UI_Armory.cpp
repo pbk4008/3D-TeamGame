@@ -28,7 +28,7 @@ HRESULT CUI_Armory::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(__super::NativeConstruct(iSceneID, pArg)))
 		return E_FAIL;
 
-	m_pTransform->Scaling(_vector{ 1280.f, 720.f });
+	m_pTransform->Scaling(_vector{ 1920.f, 1080.f });
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ HALF_WINCX, HALF_WINCY });
 
 	if (FAILED(Ready_Component()))
@@ -90,8 +90,8 @@ HRESULT CUI_Armory::Ready_Component(void)
 
 HRESULT CUI_Armory::Ready_UIObject(void)
 {
-	_float2 fInitPos = { -550.f, 140.f };
-	_float2 fResultPos = { -550.f, 140.f };
+	_float2 fInitPos = { -750.f, 140.f };
+	_float2 fResultPos = { -750.f, 140.f };
 
 	for (_int i = 0; i < 32; ++i)
 	{
@@ -102,15 +102,15 @@ HRESULT CUI_Armory::Ready_UIObject(void)
 			if (0 == i % 8)
 			{
 				fResultPos.x = fInitPos.x;
-				fResultPos.y -= 100.f;
+				fResultPos.y -= 130.f;
 			}
 			else
 			{
-				fResultPos.x += 100.f;
+				fResultPos.x += 130.f;
 			}
 		}
 		slotDesc.fPos = fResultPos;
-		slotDesc.fScale = { 90.f, 90.f };
+		slotDesc.fScale = { 120.f, 120.f };
 		auto itemSlot = static_cast<CUI_ItemSlot*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemSlot", &slotDesc));
 		InsertSlotVector(itemSlot);
 		SetResourceCount();

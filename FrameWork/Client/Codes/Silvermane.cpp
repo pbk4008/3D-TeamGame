@@ -243,6 +243,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::PBR, true);
 	m_pRenderer->SetRenderButton(CRenderer::HDR, true);
 	m_pRenderer->SetRenderButton(CRenderer::OUTLINE, true);
+	m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
@@ -478,7 +479,8 @@ HRESULT CSilvermane::Render()
 	}
 
 #ifdef _DEBUG
-	Render_Debug();
+	//Render_Debug();
+
 #endif
 
 

@@ -31,10 +31,9 @@ HRESULT CIndexIndicator::NativeConstruct(const _uint iSceneID, void* pArg)
 
 	desc = (*(Desc*)pArg);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -550.f, 290.f, 0.3f, 1.f });
-	m_pTransform->Scaling(_vector{ desc.fScale.x - 70.f, desc.fScale.y - 70.f, 1.f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -815.f, 410.f, 0.4f, 1.f });
+	m_pTransform->Scaling(_vector{ desc.fScale.x - 50.f, desc.fScale.y - 50.f, 1.f, 1.f });
 
-	
 	setActive(false);
 
 	return S_OK;
@@ -99,9 +98,10 @@ _bool CIndexIndicator::ButtonClicked(void)
 
 void CIndexIndicator::ResetXPos(void)
 {
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -550.f, 290.f, 0.3f, 1.f });
-	m_fEndPos = -550.f;
-	m_fInitPos = -450.f;
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -815.f, 410.f, 0.4f, 1.f });
+
+	m_fEndPos  = -820.f;
+	m_fInitPos = -720.f;
 }
 
 void CIndexIndicator::MoveLeft(_double TimeDelta)
@@ -114,10 +114,9 @@ void CIndexIndicator::MoveLeft(_double TimeDelta)
 		{
 			m_fInitPos = m_fEndPos;
 		}
-		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 290.f, 0.2f, 1.f });
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 410.f, 0.2f, 1.f });
 	}
 }
-
 
 void CIndexIndicator::MoveRight(_double TimeDelta)
 {
@@ -128,7 +127,7 @@ void CIndexIndicator::MoveRight(_double TimeDelta)
 		{
 			m_fInitPos = m_fEndPos;
 		}
-		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 290.f, 0.3f, 1.f });
+		m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fInitPos, 410.f, 0.3f, 1.f });
 	}
 }
 

@@ -105,9 +105,9 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
-	g_pGameInstance->PlayBGM(L"Stage2_BGM");
-	VOLUME_CHANGE(CHANNEL::BGM, 3.f);
+	//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+	//g_pGameInstance->PlayBGM(L"Stage2_BGM");
+	//VOLUME_CHANGE(CHANNEL::BGM, 3.f);
 
 	return S_OK;
 }
@@ -450,8 +450,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1002.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -461,8 +461,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Back");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1096.f, 557.f, 0.1f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 880.f, 0.1f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Back", &DescBack)))
@@ -472,8 +472,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Full");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1000.f, 555.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1600.f, 880.f, 0.08f };
+	DescBack.fSize = { 102.f , 13.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge", &DescBack)))
@@ -483,8 +483,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(DescBack.TextureTag, L"Texture_Skill_Meter_Gauge_Fill");
 	DescBack.bMinus = false;
 	DescBack.fAngle = 0.3f;
-	DescBack.fPos = { 1095.f, 556.f, 0.08f };
-	DescBack.fSize = { 85.f , 13.f };
+	DescBack.fPos = { 1710.f, 882.f, 0.08f };
+	DescBack.fSize = { 102.f , 17.f };
 	DescBack.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))

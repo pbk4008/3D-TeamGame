@@ -54,7 +54,7 @@ private:
 
 private:
 	_float			m_fDisaperXInitPos = 0.f;
-	_float			m_fDisaperXEndPos  = -600.f;
+	_float			m_fDisaperXEndPos  = -700.f;
 	_float			m_fDisapearTime = 0.f;
 	_float			m_fUpYInitPos = 0.f;
 	_float			m_fUpYEndPos = 30.f;

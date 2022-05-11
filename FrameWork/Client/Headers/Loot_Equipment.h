@@ -60,11 +60,11 @@ private:
 	_float2				m_fInitScale;
 	_float2				m_fEndScale;
 
-	_float4				m_fInitPos = { 500.f, 80.f, 0.1f, 1.0f };
-	_float4				m_fEndPos  = { 500.f, 130.f, 0.1f, 1.0f };
+	_float4				m_fInitPos = { 760.f, 200.f, 0.1f, 1.0f };
+	_float4				m_fEndPos = { 760.f, 250.f, 0.1f, 1.0f };
 
-	_float				m_fDisaperXInitPos = 500.f;
-	_float				m_fDisaperXEndPos = 530.f;
+	_float				m_fDisaperXInitPos = 760.f;
+	_float				m_fDisaperXEndPos  = 840.f;
 
 	_bool				m_bBye = false;
 	_bool				m_bByeBye = false;

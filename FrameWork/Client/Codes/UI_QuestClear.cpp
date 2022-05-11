@@ -31,8 +31,8 @@ HRESULT CUI_QuestClear::NativeConstruct(const _uint iSceneID, void* pArg)
 	
 	XMStoreFloat4(&m_fOwnerPos, desc.pQuestTextTrans->Get_State(CTransform::STATE_POSITION));
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -580.5f, desc.fInitPosY, 0.02f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -894.f, desc.fInitPosY, 0.02f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 40.5f , 40.5f, 1.f, 0.f });
 
 	m_pOwner = desc.pOwner;
 	assert(m_pOwner);
@@ -60,15 +60,13 @@ _int CUI_QuestClear::LateTick(_double TimeDelta)
 	if (FAILED(CUI::LateTick(TimeDelta)))
 		return -1;
 
+	//m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
+
 	if (!m_bShowEnd)
 		Show(TimeDelta);
 
-	//m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ m_fOwnerPos.x, m_fOwnerPos.y, 0.02f, 1.f });
-	//m_pLocalTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
-
 //	if(m_bShowEnd)
 		Attach_Owner();
-
 
 	return _int();
 }
@@ -140,8 +138,8 @@ void CUI_QuestClear::SetPosy(_float fPosy)
 {
 	m_fPosY -= fPosy;
 
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -580.5f, m_fPosY + 2.f, 0.02f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 30.5f , 30.5f, 1.f, 0.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ -894.f, m_fPosY + 2.f, 0.02f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 40.5f , 40.5f, 1.f, 0.f });
 }
 
 void CUI_QuestClear::SetFadeOut(void)

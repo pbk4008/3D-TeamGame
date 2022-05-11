@@ -34,7 +34,7 @@ HRESULT CUI_Equipment::NativeConstruct(const _uint iSceneID, void* pArg)
 	if (FAILED(Ready_UIObject()))
 		return E_FAIL;
 
-	m_pTransform->Scaling(_vector{ 1280.f, 720.f });
+	m_pTransform->Scaling(_vector{ 1920.f, 1080.f });
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ HALF_WINCX, HALF_WINCY });
 
 	m_pInventoryData = g_pDataManager->GET_DATA(CInventoryData, L"InventoryData");
@@ -89,8 +89,8 @@ HRESULT CUI_Equipment::Ready_Component(void)
 
 HRESULT CUI_Equipment::Ready_UIObject(void)
 {
-	_float2 fInitPos   = { 50.f, 140.f };
-	_float2 fResultPos = { 50.f, 140.f };
+	_float2 fInitPos   = { -50.f, 140.f };
+	_float2 fResultPos = { -50.f, 140.f };
 
 	for (_int i = 0; i < 8 ; ++i)
 	{
@@ -100,16 +100,16 @@ HRESULT CUI_Equipment::Ready_UIObject(void)
 		{
 			if (1 == i % 2)
 			{
-				fResultPos.x += 100.f;
+				fResultPos.x += 130.f;
 			}
 			else
 			{
 				fResultPos.x = fInitPos.x;
-				fResultPos.y -= 100.f;
+				fResultPos.y -= 130.f;
 			}
 		}
 		slotDesc.fPos = fResultPos;
-		slotDesc.fScale = { 90, 90.f };
+		slotDesc.fScale = { 120.f, 120.f };
 		auto itemSlot = static_cast<CUI_ItemSlot*>(g_pGameInstance->Clone_GameObject((_uint)SCENEID::SCENE_STATIC, L"Proto_GameObject_UI_ItemSlot", &slotDesc));
 		InsertSlotVector(itemSlot);
 		SetResourceCount();

@@ -31,7 +31,7 @@ void CLight::Tick()
 {
 }
 
-HRESULT CLight::Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow)
+HRESULT CLight::Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTag, _bool PBRHDRcheck, _bool Shadow, _bool halfview)
 {
 	if (m_pVIBuffer != nullptr)
 	{
@@ -48,6 +48,8 @@ HRESULT CLight::Render(CTarget_Manager* pTarget_Manager,const wstring& pCameraTa
 			if(FAILED(Render_PointLight(pTarget_Manager, pCameraTag, PBRHDRcheck, iPassIndex))) MSGBOX("Failed To Rendering Point Light")
 		}
 	}
+
+	if (FAILED(m_pVIBuffer->SetUp_ValueOnShader("g_HalfView", &halfview, sizeof(_bool)))) MSGBOX("Failed To Apply Directional ShadowCheck");
 
 	return S_OK;
 }

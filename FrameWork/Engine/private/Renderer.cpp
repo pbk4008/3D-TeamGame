@@ -69,6 +69,9 @@ void CRenderer::SetRenderButton(RENDERBUTTON ebutton, _bool check)
 	case CRenderer::FADEOUT:
 		m_bRenderbtn[FADEOUT] = check;
 		break;
+	case CRenderer::HALFVIEW:
+		m_bRenderbtn[HALFVIEW] = check;
+		break;
 	}
 }
 
@@ -187,7 +190,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 
 			if (FAILED(MotionTrailPass())) MSGBOX("Failed To Rendering Motiontrail");
 
-			if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bRenderbtn[PBR], m_bRenderbtn[SHADOW]))) MSGBOX("Failed To Rendering LightPass");
+			if (FAILED(m_pRenderAssit->Render_LightAcc(m_pTargetMgr, m_CameraTag, m_bRenderbtn[PBR], m_bRenderbtn[SHADOW], m_bRenderbtn[HALFVIEW]))) MSGBOX("Failed To Rendering LightPass");
 
 			if (FAILED(DistortionPass())) MSGBOX("Failed To Rendering Distortion");
 
@@ -219,7 +222,7 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(Render_PhysX()))
 			return E_FAIL;
 
-		if (m_bRenderbtn[DBG] == false)
+		if (m_bRenderbtn[DBG] == true)
 		{
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_SkyBox"))))		return E_FAIL;
 			if (FAILED(m_pTargetMgr->Render_Debug_Buffer(TEXT("MRT_Shadow"))))		return E_FAIL;
@@ -548,7 +551,7 @@ HRESULT CRenderer::ShadowPass()
 
 	if (FAILED(m_pTargetMgr->End_MRTNotClear(m_pDeviceContext))) return E_FAIL;
 
-	if (FAILED(m_pPostProcess->Shadowblur(m_pTargetMgr, m_bRenderbtn[SHADOW], 0.5f))) MSGBOX("Failed To Rendering ShadowBlurPass");
+	if (FAILED(m_pPostProcess->Shadowblur(m_pTargetMgr, m_bRenderbtn[SHADOW], 0.1f))) MSGBOX("Failed To Rendering ShadowBlurPass");
 
 	return S_OK;
 }

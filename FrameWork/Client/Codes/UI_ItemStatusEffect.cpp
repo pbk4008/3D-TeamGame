@@ -29,8 +29,8 @@ HRESULT UI_ItemStatusEffect::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(Desc*)pArg);
 
 	m_pLocalTransform = g_pGameInstance->Clone_Component<CTransform>(0, L"Proto_Component_Transform");
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 125.f, 0.2f, 1.f });
-	m_pLocalTransform->Scaling(_vector{ 300.f, 300.f, 1.f, 0.f });
+	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 600.f, 180.f, 0.1f, 1.f });
+	m_pLocalTransform->Scaling(_vector{ 340.f, 340.f, 1.f, 0.f });
 
 	if (FAILED(Ready_Component()))
 		return E_FAIL;
@@ -57,9 +57,9 @@ _int UI_ItemStatusEffect::LateTick(_double TimeDelta)
 		return -1;
 
 	m_pLocalTransform->Rotation_Axis(_vector{ 0.f, 0.f, 1.f, 0.f }, TimeDelta);
-	m_pLocalTransform->Set_State(CTransform::STATE_POSITION, _vector{ 430.f, 125.f, 0.1f, 1.f });
 
 	Attach_Owner();
+
 
 
 	return _int();
