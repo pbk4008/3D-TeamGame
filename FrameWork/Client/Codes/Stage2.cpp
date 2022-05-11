@@ -475,8 +475,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
 	Desc.bMinus = true;
 	Desc.fAngle = 0.3f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 200.f , 30.f };
+	Desc.fPos = { 333.f, 912.f, 0.f };
+	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
@@ -487,8 +487,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
 	Desc.fAngle = 0.3f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 200.f , 30.f };
+	Desc.fPos = { 333.f, 912.f, 0.f };
+	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI", L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
@@ -500,8 +500,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc0.TextureTag, L"Texture_Monster_LevelNum");
 	Desc0.bMinus = false;
 	Desc0.fAngle = 0.f;
-	Desc0.fPos = { 175.f, 638.f, 0.08f };
-	Desc0.fSize = { 40.f , 40.f };
+	Desc0.fPos = { 197.f, 911.f, 0.08f };
+	Desc0.fSize = { 50.f , 50.f };
 	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_HpHeal_Num", &Desc0)))
@@ -513,8 +513,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Shield_Meter");
 	Desc1.UIDesc.bMinus = false;
 	Desc1.UIDesc.fAngle = 0.f;
-	Desc1.UIDesc.fPos = { 100.f, 620.f, 0.06f };
-	Desc1.UIDesc.fSize = { 50.f, 50.f };
+	Desc1.UIDesc.fPos = { 150.f, 920.f, 0.06f };
+	Desc1.UIDesc.fSize = { 60.f, 60.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))

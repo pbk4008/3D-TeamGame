@@ -36,13 +36,13 @@ _int CMidBoss_Turn::Tick(const _double& TimeDelta)
 		_vector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
 		_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
-		if (8.f > fDistToPlayer)
+		if (15.f > fDistToPlayer)
 		{
 			m_pStateController->Change_State(L"Attack");
 			cout << "turn update" << endl;
 		}
 	
-		if (8.f <= fDistToPlayer)
+		if (15.f <= fDistToPlayer)
 		{
 			m_pStateController->Change_State(L"Run");
 

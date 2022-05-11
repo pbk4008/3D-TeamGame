@@ -310,8 +310,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
 	Desc.bMinus = true;
 	Desc.fAngle = 0.3f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 200.f , 30.f };
+	Desc.fPos = { 333.f, 912.f, 0.f };
+	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Green", L"Proto_GameObject_UI_Player_HpBar", &Desc)))
@@ -322,8 +322,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
 	Desc.fAngle = 0.3f;
-	Desc.fPos = { 0.f, 0.f, 0.f };
-	Desc.fSize = { 200.f , 30.f };
+	Desc.fPos = { 333.f, 912.f, 0.f };
+	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_HpBar_Red", &Desc)))
@@ -335,8 +335,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc0.TextureTag, L"Texture_Monster_LevelNum");
 	Desc0.bMinus = false;
 	Desc0.fAngle = 0.f;
-	Desc0.fPos = { 175.f, 638.f, 0.08f };
-	Desc0.fSize = { 40.f , 40.f };
+	Desc0.fPos = { 197.f, 911.f, 0.08f };
+	Desc0.fSize = { 50.f , 50.f };
 	Desc0.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_HpHeal_Num", &Desc0)))
@@ -348,8 +348,8 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc1.UIDesc.TextureTag, L"Texture_Shield_Meter");
 	Desc1.UIDesc.bMinus = false;
 	Desc1.UIDesc.fAngle = 0.f;
-	Desc1.UIDesc.fPos = { 100.f, 620.f, 0.06f };
-	Desc1.UIDesc.fSize = { 50.f, 50.f };
+	Desc1.UIDesc.fPos = { 150.f, 920.f, 0.06f };
+	Desc1.UIDesc.fSize = { 60.f, 60.f };
 	Desc1.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Shield_Meter", &Desc1)))
@@ -401,27 +401,27 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 		return E_FAIL;
 
 	//Boss HpBar Red
-	//CUI_Boss_HpBar_Red::UIDESC Desc2;
-	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
-	//Desc2.bMinus = false;
-	//Desc2.fAngle = 0.46f;
-	//Desc2.fPos = { 625.f, 40.f, 0.08f };
-	//Desc2.fSize = { 356.f , 14.f };
-	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	CUI_Boss_HpBar_Red::UIDESC Desc2;
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.46f;
+	Desc2.fPos = { 939.f, 38.f, 0.08f };
+	Desc2.fSize = { 510.f , 20.f };
+	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
+		return E_FAIL;
 
-	////Boss ShieldBar Blue
-	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
-	//Desc2.bMinus = false;
-	//Desc2.fAngle = 0.46f;
-	//Desc2.fPos = { 640.f, 55.f, 0.08f };
-	//Desc2.fSize = { 356.f , 14.f };
-	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	//Boss ShieldBar Blue
+	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
+	Desc2.bMinus = false;
+	Desc2.fAngle = 0.46f;
+	Desc2.fPos = { 960.f, 59.f, 0.08f };
+	Desc2.fSize = { 510.f , 20.f };
+	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
-	//	return E_FAIL;
+	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
+		return E_FAIL;
 
 	return S_OK;
 }

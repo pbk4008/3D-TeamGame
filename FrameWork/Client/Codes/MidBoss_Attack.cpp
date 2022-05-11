@@ -492,7 +492,7 @@ HRESULT CMidBoss_Attack::EnterState()
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	if (5.f > fDistToPlayer )
+	if (8.f > fDistToPlayer )
 	{
 		_int iRandom = rand() % 4;
 
@@ -523,7 +523,7 @@ HRESULT CMidBoss_Attack::EnterState()
 		}
 	}
 
-	else if (5.f <= fDistToPlayer)
+	else if (8.f <= fDistToPlayer)
 	{
 		_int iRandom = rand() % 3;
 
