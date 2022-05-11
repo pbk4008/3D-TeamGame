@@ -31,7 +31,7 @@ HRESULT CUI_Death::NativeConstruct(const _uint iSceneID, void* pArg)
 		return E_FAIL;
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.f, 0.f, 0.4f, 1.f });
-	m_pTransform->Scaling(_fvector{ 1280.f, 720.f, 1.f, 0.f });
+	m_pTransform->Scaling(_fvector{ 1920.f, 1080.f, 1.f, 0.f });
 
 	setActive(true);
 

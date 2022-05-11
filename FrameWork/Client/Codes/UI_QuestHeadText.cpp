@@ -30,7 +30,7 @@ HRESULT CUI_QuestHeadText::NativeConstruct(const _uint iSceneID, void* pArg)
 	desc = (*(Desc*)pArg);
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -870.f, 308.f, 0.02f, 1.f });
-	m_pTransform->Scaling(_vector{ 110.f , 47.f, 1.f, 0.f });
+	m_pTransform->Scaling(_vector{ 110.f , 48.f, 1.f, 0.f });
 
 	setActive(false);
 
@@ -57,7 +57,6 @@ _int CUI_QuestHeadText::LateTick(_double TimeDelta)
 
 	if (nullptr != m_pRenderer)
 		m_pRenderer->Add_RenderGroup(CRenderer::RENDER::RENDER_UI_ACTIVE, this);
-
 	return _int();
 }
 

@@ -23,6 +23,7 @@ public:
 
 protected:
 	virtual _int Input(const _double& _dDeltaTime);
+	_float m_fFootStepTime = 0.f;
 
 public:
 	virtual void Free() override;

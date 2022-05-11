@@ -36,7 +36,7 @@ HRESULT CUI_Guide_Texture::NativeConstruct(const _uint iSceneID, void* pArg)
 	m_pTriggerTrans->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&desc.fPos));
 
 	/* for. Texture Render*/
-	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 20.f, 0.f, 0.1f, 1.f });
+	m_pTransform->Set_State(CTransform::STATE_POSITION, _fvector{ 0.4f, 0.f, 0.1f, 1.f });
 	m_pTransform->Scaling(_fvector{ 800.f, 450.f, 1.f, 0.f });
 
 	setActive(false);

@@ -114,12 +114,12 @@ void CSubtitles::SetImage(std::wstring szTexName)
 
 void CSubtitles::UpScaleing(void)
 {
-	m_pTransform->Scaling(_fvector{ 620.f, 36.f, 0.f, 0.f });
+	m_pTransform->Scaling(_fvector{ 650.f, 37.5f, 0.f, 0.f });
 }
 
 void CSubtitles::DownScaleing(void)
 {
-	m_pTransform->Scaling(_fvector{ 520.f, 33.f, 0.f, 0.f });
+	m_pTransform->Scaling(_fvector{ 720.f, 40.5f, 0.f, 0.f });
 }
 
 CSubtitles* CSubtitles::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)

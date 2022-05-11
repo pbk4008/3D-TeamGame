@@ -21,8 +21,16 @@ _int CSilvermane_SprintFwd::Tick(const _double& _dDeltaTime)
 		return iProgress;
 
 	//m_pSilvermane->Add_Velocity(CTransform::STATE_LOOK, _dDeltaTime * 2.f);
-	PLAY_SOUND(L"Player_Step_2", CHANNEL::PLAYER1);
-	VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
+
+	m_fFootStepTime += (_float)_dDeltaTime;
+	if (0.36f < m_fFootStepTime)
+	{
+		STOP_SOUND(CHANNEL::PLAYER1);
+		PLAY_SOUND(L"Player_Step_2", CHANNEL::PLAYER1);
+		VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
+
+		m_fFootStepTime = 0.f;
+	}
 
 	return _int();
 }

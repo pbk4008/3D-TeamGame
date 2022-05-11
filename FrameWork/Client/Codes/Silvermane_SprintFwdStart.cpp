@@ -20,8 +20,22 @@ _int CSilvermane_SprintFwdStart::Tick(const _double& _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
-	VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
+	//PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
+	//VOLUME_CHANGE(CHANNEL::PLAYER1, 2.f);
+
+	_uint iCurKeyFrameIndex = m_pAnimationController->Get_CurKeyFrameIndex();
+	if (6 < iCurKeyFrameIndex)
+	{
+		m_fFootStepTime += (_float)_dDeltaTime;
+		if (0.36f < m_fFootStepTime)
+		{
+			STOP_SOUND(CHANNEL::PLAYER1);
+			PLAY_SOUND(L"Player_Walk", CHANNEL::PLAYER1);
+			VOLUME_CHANGE(CHANNEL::PLAYER1, 2.0);
+
+			m_fFootStepTime = 0.f;
+		}
+	}
 
 	return _int();
 }

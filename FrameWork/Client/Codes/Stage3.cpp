@@ -102,8 +102,7 @@ HRESULT CStage3::NativeConstruct()
 	//VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
 	//g_pMainApp->Set_RenderBtn(CRenderer::RENDERBUTTON::FADEOUT, true);
 
-	START_QUEST(EQuestHeaderType::FirestStep, L"T_HUD_Find_Sunforge");
-
+	START_QUEST(EQuestHeaderType::Boss, L"T_HUD_KillAllMonster");
 
 	return S_OK;
 }
