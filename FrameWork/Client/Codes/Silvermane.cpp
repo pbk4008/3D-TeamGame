@@ -1208,6 +1208,11 @@ const _float CSilvermane::Get_Angle() const
 	return m_fAngle;
 }
 
+const _float CSilvermane::Get_FootStepTime() const
+{
+	return m_fFootStepTime;
+}
+
 const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
 {
 	SCENEMOVEDATA tDesc;
@@ -1363,6 +1368,11 @@ void CSilvermane::Add_HP(const _float _fValue)
 		m_fCurrentHp = m_fMaxHp;
 }
 
+void CSilvermane::Add_FootStepTime(const _float _fValue)
+{
+	m_fFootStepTime += _fValue;
+}
+
 void CSilvermane::Respawn()
 {
 	m_pCharacterController->setPosition(m_vRespawnPos);
@@ -1401,6 +1411,11 @@ void CSilvermane::Set_Position(const _float3 _vPosition)
 void CSilvermane::Set_FootPosition(const _float3& _vPos)
 {
 	m_pCharacterController->setFootPosition(_vPos);
+}
+
+void CSilvermane::Set_FootStepTime(const _float _fValue)
+{
+	m_fFootStepTime = _fValue;
 }
 
 

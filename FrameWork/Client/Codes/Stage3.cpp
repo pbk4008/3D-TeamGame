@@ -165,10 +165,10 @@ _int CStage3::Tick(_double TimeDelta)
 		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
 	}
 
-	g_pInvenUIManager->Tick(TimeDelta);
+	//g_pInvenUIManager->Tick(TimeDelta);
 
-	if (g_pQuestManager)
-		g_pQuestManager->Tick(g_dImmutableTime);
+	//if (g_pQuestManager)
+		//g_pQuestManager->Tick(g_dImmutableTime);
 
 	return _int();
 }
@@ -181,13 +181,13 @@ _int CStage3::LateTick(_double TimeDelta)
 			return 0;
 	}
 
-	if (g_pVoiceManager)
-	{
-		g_pVoiceManager->Late_Tick(TimeDelta);
-	}
+	//if (g_pVoiceManager)
+	//{
+		//g_pVoiceManager->Late_Tick(TimeDelta);
+	//}
 
-	if (g_pQuestManager)
-		g_pQuestManager->Late_Tick(TimeDelta);
+	//if (g_pQuestManager)
+		//g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -399,28 +399,28 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, LayerTag, L"Proto_GameObject_UI_Player_Skill_Meter_Gauge_Right", &DescBack)))
 		return E_FAIL;
 
-	//Boss HpBar Red
-	CUI_Boss_HpBar_Red::UIDESC Desc2;
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.46f;
-	Desc2.fPos = { 939.f, 38.f, 0.08f };
-	Desc2.fSize = { 510.f , 20.f };
-	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	////Boss HpBar Red
+	//CUI_Boss_HpBar_Red::UIDESC Desc2;
+	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_HpBar_Red");
+	//Desc2.bMinus = false;
+	//Desc2.fAngle = 0.46f;
+	//Desc2.fPos = { 939.f, 38.f, 0.08f };
+	//Desc2.fSize = { 510.f , 20.f };
+	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_HpBar", L"Proto_GameObject_UI_Boss_HpBar_Red", &Desc2)))
+	//	return E_FAIL;
 
-	//Boss ShieldBar Blue
-	_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
-	Desc2.bMinus = false;
-	Desc2.fAngle = 0.46f;
-	Desc2.fPos = { 960.f, 59.f, 0.08f };
-	Desc2.fSize = { 510.f , 20.f };
-	Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
+	////Boss ShieldBar Blue
+	//_tcscpy_s(Desc2.TextureTag, L"Texture_Boss_ShieldBar_Blue");
+	//Desc2.bMinus = false;
+	//Desc2.fAngle = 0.46f;
+	//Desc2.fPos = { 960.f, 59.f, 0.08f };
+	//Desc2.fSize = { 510.f , 20.f };
+	//Desc2.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
 
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_UI_Boss_ShieldBar", L"Proto_GameObject_UI_Boss_ShieldBar_Blue", &Desc2)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -444,7 +444,7 @@ HRESULT CStage3::Ready_Data_UI(const _tchar* pDataFilePath)
 	}
 
 	//º¸½º ui
-	vecUI.clear();
+	/*vecUI.clear();
 	g_pGameInstance->LoadFile<CUI::UIDESC>(vecUI, L"../bin/SaveData/UI/UI_Boss.dat");
 
 	for (int i = 0; i < vecUI.size(); ++i)
@@ -457,7 +457,7 @@ HRESULT CStage3::Ready_Data_UI(const _tchar* pDataFilePath)
 			MSGBOX("Failed to Creating in CStage1::Ready_UI()");
 			return E_FAIL;
 		}
-	}
+	}*/
 	return S_OK;
 }
 

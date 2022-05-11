@@ -18,7 +18,6 @@ HRESULT CUI_QuestText::NativeConstruct_Prototype(void)
 	if (FAILED(CUI::NativeConstruct_Prototype()))
 		return E_FAIL;
 
-
 	return S_OK;
 }
 
@@ -57,10 +56,6 @@ _int CUI_QuestText::LateTick(_double TimeDelta)
 		return -1;
 
 	Attach_Owner();
-	
-	//m_pTransform->Set_State(CTransform::STATE_POSITION, _vector{ -710.f, 270.f, 0.02f, 1.f });
-	//m_pTransform->Scaling(_vector{ 400.f , 43.f, 1.f, 0.f });
-
 	return _int();
 }
 

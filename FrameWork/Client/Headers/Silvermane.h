@@ -76,6 +76,7 @@ public:
 	CModel* Get_Model() const;
 	const _float Get_PlusAngle() const;
 	const _float Get_Angle() const;
+	const _float Get_FootStepTime() const;
 	//플레이어 씬 이동시 다음씬으로 넘어가야 할 데이터 생성 후 밖으로 빼내기
 	const SCENEMOVEDATA Get_SceneMoveData() const;
 
@@ -94,10 +95,12 @@ public:
 	void Set_PlusAngle(const _float _fAngle);
 	void Set_Position(const _float3 _vPosition);
 	virtual void Set_FootPosition(const _float3& _vPos) override;
+	void Set_FootStepTime(const _float _fValue);
 
 	void Add_PlusAngle(const _float _fDeltaAngle);
 	void Add_Velocity(const CTransform::STATE _eState, const _double& _dDeltaTime);
 	void Add_HP(const _float _fValue);
+	void Add_FootStepTime(const _float _fValue);
 
 	void Respawn();
 
@@ -195,6 +198,8 @@ public:
 	_float m_fAngle = 0.f;
 	_float m_fPlusAngle = 0.f;
 	_float3 m_vRespawnPos = { 0.f, 0.f, 0.f };
+
+	_float m_fFootStepTime = 0.f;
 
 private: /* For.Weapon */
 	CWeapon* m_pCurWeapon = nullptr;

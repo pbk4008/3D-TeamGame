@@ -56,7 +56,8 @@ _int CWeapon::LateTick(_double _dDeltaTime)
 {
 	if (0 > __super::LateTick(_dDeltaTime))
 		return -1;
-	
+
+
 	return _int();
 }
 
