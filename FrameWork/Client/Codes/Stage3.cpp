@@ -178,10 +178,11 @@ _int CStage3::Tick(_double TimeDelta)
 		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
 	}
 
-	g_pInvenUIManager->Tick(TimeDelta);
+	if (g_pInvenUIManager)
+		g_pInvenUIManager->Tick(TimeDelta);
 
-	//if (g_pQuestManager)
-		//g_pQuestManager->Tick(g_dImmutableTime);
+	if (g_pQuestManager)
+		g_pQuestManager->Tick(g_dImmutableTime);
 
 	return _int();
 }
@@ -197,13 +198,11 @@ _int CStage3::LateTick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Late_Tick(g_dImmutableTime);
 
-	//if (g_pVoiceManager)
-	//{
-		//g_pVoiceManager->Late_Tick(TimeDelta);
-	//}
+	if (g_pVoiceManager)
+		g_pVoiceManager->Late_Tick(TimeDelta);
 
-	//if (g_pQuestManager)
-		//g_pQuestManager->Late_Tick(TimeDelta);
+	if (g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
