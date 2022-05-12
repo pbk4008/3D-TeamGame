@@ -177,8 +177,6 @@ _int CMonster_Bastion_Sword::LateTick(_double _dDeltaTime)
 
 	m_pStateController->LateTick(_dDeltaTime);
 
-	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
-		return 0;
 
 	m_pWeapon->LateTick(_dDeltaTime);
 
