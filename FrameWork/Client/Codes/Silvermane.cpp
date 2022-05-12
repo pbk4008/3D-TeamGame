@@ -221,7 +221,6 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	}
 	else
 		m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 1.f, -1.f, 1.f));
-	m_vRespawnPos = { 2.f, 1.f, -1.f };
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -2119,7 +2118,6 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 	case (_uint)GAMEOBJECT::MONSTER_SHOOTER:
 	case (_uint)GAMEOBJECT::MONSTER_ANIMUS:
 	case (_uint)GAMEOBJECT::MONSTER_HEALER:
-	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
 		if (static_cast<CActor*>(pHitObject)->Get_Groggy())
 		{
 			if (!m_isExecution)
@@ -2140,6 +2138,34 @@ const void CSilvermane::Raycast_DropBox(const _double& _dDeltaTime)
 					m_pTargetExecution->Execution();
 					Set_Execution(true);
 					m_pBlankFKey->setActive(false);
+				}
+			}
+		}
+		break;
+	case (_uint)GAMEOBJECT::MIDDLE_BOSS:
+		if ((_uint)SCENEID::SCENE_STAGE2 == g_pGameInstance->getCurrentLevel())
+		{
+			if (static_cast<CActor*>(pHitObject)->Get_Groggy())
+			{
+				if (!m_isExecution)
+				{
+					if (m_pBlankFKey)
+					{
+						m_pBlankFKey->setActive(true);
+						CTransform* pTargetTransform = pHitObject->Get_Transform();
+						_vector svTargetLook = XMVector3Normalize(pTargetTransform->Get_State(CTransform::STATE_LOOK));
+						_vector svTargetPos = pTargetTransform->Get_State(CTransform::STATE_POSITION);
+						svTargetPos += _vector{ 0.f, 1.2f, 0.f, 0.f } + svTargetLook * 1.f;
+						m_pBlankFKey->Set_Position(svTargetPos);
+					}
+
+					if (g_pGameInstance->getkeyDown(DIK_F))
+					{
+						m_pTargetExecution = static_cast<CActor*>(pHitObject);
+						m_pTargetExecution->Execution();
+						Set_Execution(true);
+						m_pBlankFKey->setActive(false);
+					}
 				}
 			}
 		}

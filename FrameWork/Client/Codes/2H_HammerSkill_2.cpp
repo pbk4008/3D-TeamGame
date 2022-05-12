@@ -62,7 +62,7 @@ _int C2H_HammerSkill_2::Tick(const _double& _dDeltaTime)
 			_float3 vPos; XMStoreFloat3(&vPos, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			g_pShakeManager->Shake(tShakeEvent, vPos);
 
-			m_pSilvermane->RangeAttack(2.f);
+			m_pSilvermane->RangeAttack(4.f);
 			m_isAttack = true;
 		}
 	}

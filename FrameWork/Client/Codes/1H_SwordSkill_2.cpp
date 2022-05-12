@@ -59,7 +59,7 @@ _int C1H_SwordSkill_2::Tick(const _double& _dDeltaTime)
 
 			m_pSilvermane->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE, (svLook * 2.f) + (svUp * 0.1f));
 
-			m_pSilvermane->RangeAttack(3.f);
+			m_pSilvermane->RangeAttack(5.f);
 			m_isAttack = true;
 
 			STOP_SOUND(CHANNEL::Player_Sword_Attack);

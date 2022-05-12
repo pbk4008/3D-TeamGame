@@ -7,6 +7,7 @@
 #include "JumpNode.h"
 #include "DropBoxData.h"
 #include "BoxBridge.h"
+#include "Boss_Bastion_Judicator.h"
 
 //UI
 #include "UI_Player_HpBar.h"
@@ -80,17 +81,17 @@ HRESULT CStage2::NativeConstruct()
 		return E_FAIL;
 	}
 
-	/* 랜더타겟 지우지 못하는 버그있음요 */
-	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-		return E_FAIL;
+	///* 랜더타겟 지우지 못하는 버그있음요 */
+	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Treasure_Chest()))
 	{
 		MSGBOX("Chest");
 		return E_FAIL;
 	}
-	if (FAILED(Ready_Portal()))
-		return E_FAIL;
+	//if (FAILED(Ready_Portal()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
@@ -129,6 +130,16 @@ _int CStage2::Tick(_double TimeDelta)
 	//list<CGameObject*>* pLayer = g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE2, L"Layer_Crawler");
 
 #endif //  _DEBUG
+	_float3 fPos = { 70.f, 3.f, 5.f };
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	{
+		CBoss_Bastion_Judicator* pMidBoss = nullptr;
+		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMidBoss)))
+			return -1;
+		pMidBoss->setActive(true);
+	}
+
+
 	if (nullptr != m_pTriggerSystem)
 	{
 		if (g_pGameInstance->getkeyDown(DIK_BACKSPACE))

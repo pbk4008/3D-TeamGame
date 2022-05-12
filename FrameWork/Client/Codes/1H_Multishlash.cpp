@@ -62,7 +62,7 @@ _int C1H_Multishlash::Tick(const _double& _dDeltaTime)
 			//tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
 			//pTarget->Hit(tAttackDesc);
 
-			m_pSilvermane->RangeAttack(2.f);
+			m_pSilvermane->RangeAttack(3.f);
 			m_isAttack = true;
 
 			CCameraShake::SHAKEEVENT tShakeEvent;

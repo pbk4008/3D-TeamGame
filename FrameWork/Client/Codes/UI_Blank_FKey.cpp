@@ -84,7 +84,7 @@ _int CUI_Blank_FKey::LateTick(_double TimeDelta)
 	_float fDistToUI = XMVectorGetX(XMVector3Length(vDist));
 
 	_vector vScale = XMVectorZero();
-	vScale = { fDistToUI * 0.08f,fDistToUI * 0.08f,1.f,1.f };
+	vScale = { fDistToUI * 0.06f,fDistToUI * 0.06f,1.f,1.f };
 	m_pTransform->Scaling(vScale);
 
 	if (nullptr != m_pRenderer)

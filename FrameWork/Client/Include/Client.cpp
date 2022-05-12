@@ -245,17 +245,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         }
         break;
-    case WM_KEYDOWN:
-    {
-        switch (wParam)
-        {
-        case VK_ESCAPE:
-            PostQuitMessage(0);
-            break;
-        default:
-            break;
-        }
-    }
+    //case WM_KEYDOWN:
+    //{
+    //    switch (wParam)
+    //    {
+    //    case VK_ESCAPE:
+    //        PostQuitMessage(0);
+    //        break;
+    //    default:
+    //        break;
+    //    }
+    //}
         break;
     case WM_DESTROY:
         PostQuitMessage(0);

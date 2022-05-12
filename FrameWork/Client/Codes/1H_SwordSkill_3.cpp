@@ -83,7 +83,7 @@ _int C1H_SwordSkill_3::Tick(const _double& _dDeltaTime)
 			//tAttackDesc.fDamage += 50.f;
 			//tAttackDesc.pHitObject = m_pSilvermane->Get_CurerntWeapon();
 			//pTarget->Hit(tAttackDesc);
-			m_pSilvermane->RangeAttack(3.f);
+			m_pSilvermane->RangeAttack(5.f);
 			m_isAttack2 = true;
 
 			STOP_SOUND(CHANNEL::Player_Sword_Attack);
