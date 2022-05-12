@@ -31,7 +31,7 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 	if (0 > (__super::Tick(TimeDelta)))
 		return -1;
 
-	if (g_pGameInstance->getkeyDown(DIK_RETURN) && m_pobj->Get_FadeIn() == false)
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9) && m_pobj->Get_FadeIn() == false)
 	{
 		m_pobj->Set_FadeOutCheck(true);
 		PLAY_SOUND(L"UI_tab_over", CHANNEL::UI);

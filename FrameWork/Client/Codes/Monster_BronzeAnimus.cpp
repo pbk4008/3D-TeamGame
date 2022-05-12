@@ -174,15 +174,6 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 		}
 	}
 
-	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		m_bGroggy = true;
-		m_fGroggyGauge = 0.f;
-		m_pStateController->Change_State(L"Groggy");
-		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-	}
-
 	if (true == m_bGroggy || true == m_bDead)
 	{
 		m_fGroggyGauge = 0.f;

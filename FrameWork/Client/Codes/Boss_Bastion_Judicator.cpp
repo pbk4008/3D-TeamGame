@@ -95,8 +95,7 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_tAttackDesc.iLevel = 2;
 
 	m_pWeapon->setActive(false);
-	//setActive(false);
-	setActive(true);
+	setActive(false);
 	
 	m_pPanel->setActive(false);
 	m_bUIShow = false;

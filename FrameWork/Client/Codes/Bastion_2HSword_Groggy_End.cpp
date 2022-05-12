@@ -24,6 +24,7 @@ _int CBastion_2HSword_Groggy_End::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
+
 	return _int();
 }
 
