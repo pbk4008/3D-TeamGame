@@ -204,7 +204,7 @@ void CBastion_2HSword_Attack::Play_Sound()
 	CAnimation* pAnim = m_pAnimator->Get_CurrentAnimation();
 	if (pAnim)
 	{
-		_uint iFrame=pAnim->Get_TrackPoition();
+		_uint iFrame= (_int)pAnim->Get_TrackPoition();
 		switch (m_iType)
 		{
 		case 0://°­°ø130  270

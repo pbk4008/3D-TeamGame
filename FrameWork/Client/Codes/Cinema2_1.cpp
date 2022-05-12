@@ -121,7 +121,7 @@ void CCinema2_1::Set_Active(_bool bCheck)
 	m_pCam->Reset_Camera();
 	m_pMidBoss->Acotr_AnimFrameSet(260.0);
 	m_pCam->Set_Fov(XMConvertToRadians(90.f));
-	m_iSubTitleSequence = 0.f;
+	m_iSubTitleSequence = 0;
 	if (m_bActive)
 		m_pCam->Change_CurrentCam();
 }

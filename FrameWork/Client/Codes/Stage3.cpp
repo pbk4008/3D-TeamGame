@@ -308,7 +308,7 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	CUI_Player_HpBar::UIDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.35f;
 	Desc.fPos = { 333.f, 912.f, 0.f };
 	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
@@ -320,7 +320,7 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	ZeroMemory(&Desc, sizeof(CUI_Player_HpBar::UIDESC));
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.35f;
 	Desc.fPos = { 333.f, 912.f, 0.f };
 	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;

@@ -51,7 +51,7 @@ _int CLevel_UP::Tick(_double dDeltaTime)
 
 	if (true == m_pLevelUp_HUD->getActive())
 	{
-		m_fTimeLevelUp_HUD += dDeltaTime;
+		m_fTimeLevelUp_HUD += (_float)dDeltaTime;
 
 		if (3.f <= m_fTimeLevelUp_HUD)
 		{

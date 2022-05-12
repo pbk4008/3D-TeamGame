@@ -132,7 +132,7 @@ _int CCinema1_1::Tick(_double dDeltaTime)
 		m_pSubTitlePhoenix->setActive(true);
 		g_pGameInstance->Play_Shot(L"IfAnyoneCan", CHANNEL::Cinema);
 	}
-	int a;
+
 	return _int();
 }
 
