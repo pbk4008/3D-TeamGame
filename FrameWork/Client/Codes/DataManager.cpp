@@ -72,11 +72,12 @@ HRESULT CDataManager::NativeConstruct(void)
 	item1.weaponType = EWeaponType::Hammer;
 
 	pInventoryData->PushItem(weaponItemData);
-	pInventoryData->PushItem(item3);
-	pInventoryData->PushItem(item1);
+	//pInventoryData->PushItem(item3);
+	//pInventoryData->PushItem(item1);
 
-	pEquipmentData->SetEquipment(EEquipSlot::Weapon1, item3);
-	pEquipmentData->SetEquipment(EEquipSlot::Weapon2, item1);
+	//pEquipmentData->SetEquipment(EEquipSlot::Weapon1, item3);
+	//pEquipmentData->SetEquipment(EEquipSlot::Weapon2, item1);
+	pEquipmentData->SetEquipment(EEquipSlot::Weapon1, weaponItemData);
 
 	return S_OK;
 }
