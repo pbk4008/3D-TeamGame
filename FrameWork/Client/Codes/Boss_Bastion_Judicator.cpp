@@ -95,7 +95,8 @@ HRESULT CBoss_Bastion_Judicator::NativeConstruct(const _uint _iSceneID, void* pA
 	m_tAttackDesc.iLevel = 2;
 
 	m_pWeapon->setActive(false);
-	setActive(false);
+	//setActive(false);
+	setActive(true);
 	
 	m_pPanel->setActive(false);
 	m_bUIShow = false;
@@ -160,13 +161,14 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 
 		m_fUIShowTimeAcc += (_float)TimeDelta;
 	}
+
 	if (1.f <= m_fUIShowTimeAcc && m_bUIShow)
 	{
 		m_pPanel->Set_Show(false);
 		m_bUIShow = false;
 		m_fUIShowTimeAcc = 0.f;
 	}
-	
+
 	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
@@ -189,12 +191,6 @@ _int CBoss_Bastion_Judicator::Tick(_double TimeDelta)
 		{
 			m_bGroggy = false;
 		}
-	}
-
-	if (m_fCurrentHp <= 0.f && m_bDead == false && g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
-	{
-		m_bDead = true;
-		m_pStateController->Change_State(L"Death");
 	}
 
 	if (m_fCurrentHp <= 0.f && m_bDead == false && g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
@@ -282,13 +278,13 @@ _int CBoss_Bastion_Judicator::LateTick(_double TimeDelta)
 		return -1;
 	}
 
-	_int iProgress = m_pStateController->LateTick(TimeDelta);
-	if (NO_EVENT != iProgress)
-	{
-		return iProgress;
-	}
+	if (!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
 
-	m_pCharacterController->Update_OwnerTransform();
+	m_pStateController->LateTick(TimeDelta);
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);
 
@@ -470,6 +466,11 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Loco_Jog_Fwd_Start_Normal");
 	if (FAILED(m_pAnimator->Insert_Animation(JOG_FWD_START_H, HEAD, pAnim, true, true, false, ERootOption::XYZ)))
 		return E_FAIL;
+	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_2H_Hammer_Loco_Jog_Fwd_Normal");
+	if (FAILED(m_pAnimator->Insert_Animation(JOG_FWD_H, JOG_FWD_START_H, pAnim, true, true, true, ERootOption::XYZ)))
+		return E_FAIL;
+	if (FAILED(m_pAnimator->Connect_Animation(RAGE, JOG_FWD_H, false)))
+		return E_FAIL;
 
 #pragma region 공격재시작루프
 	pAnim = m_pModel->Get_Animation("SK_Bastion_Tier4.ao|A_BattleCry_Start_Phalanxar");
@@ -585,6 +586,8 @@ HRESULT CBoss_Bastion_Judicator::Set_Animation_FSM()
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_START, STUN_LOOP);
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_LOOP, STUN_END);
 	m_pAnimator->Set_UpAutoChangeAnimation(STUN_END, RAGE);
+
+	m_pAnimator->Set_UpAutoChangeAnimation(JOG_FWD_START_H, JOG_FWD_H);
 
 	m_pAnimator->Insert_AnyEntryAnimation(IDLE_START_H);
 	m_pAnimator->Insert_AnyEntryAnimation(RAGE);
@@ -718,10 +721,10 @@ void CBoss_Bastion_Judicator::Hit(const ATTACKDESC& _tAttackDesc)
 	if (true == m_bFirstHit)
 	{
 		m_pPanel->Set_BackUIGapY(1.f);
-		m_pStateController->Change_State(L"BattleCry");
 	}
+
 	m_fCurrentHp -= _tAttackDesc.fDamage;
-	m_fGroggyGauge += 2; //TODO::수치정해서바꿔줘야됨
+	m_fGroggyGauge += 6; //TODO::수치정해서바꿔줘야됨
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
 

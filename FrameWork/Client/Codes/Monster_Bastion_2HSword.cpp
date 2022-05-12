@@ -85,7 +85,7 @@ HRESULT CMonster_Bastion_2HSword::NativeConstruct(const _uint _iSceneID, void* _
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	m_fMaxHp = 1500.f;
+	m_fMaxHp = 1200.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
@@ -217,17 +217,20 @@ _int CMonster_Bastion_2HSword::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	/* State FSM Late Update */
+	if (!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
+
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
 
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 	m_pWeapon->LateTick(_dDeltaTime);
 
-	if (!m_bDead)
-		m_pCharacterController->Update_OwnerTransform();
 
 	return _int();
 }

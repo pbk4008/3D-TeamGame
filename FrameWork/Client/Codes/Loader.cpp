@@ -1739,6 +1739,29 @@ HRESULT CLoader::Ready_Stage3()
 	if (FAILED(Load_Stage3_Object()))
 		return E_FAIL;
 
+
+	//Boss Bastion_Tier4
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Boss_Bastion_Tier4", CModel::Create(m_pDevice, m_pDeviceContext,
+		L"../bin/FBX/Monster/Bastion_Tier4.fbx", CModel::TYPE_ANIM, true))))
+		return E_FAIL;
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Boss_Bastion", CBoss_Bastion_Judicator::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
+	//weapon
+	//ShieldBreaker_BossWeapon
+	_matrix matPivot = XMMatrixIdentity();
+
+	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Weapon_ShieldBreaker", CModel::Create(m_pDevice, m_pDeviceContext,
+		"../bin/Resources/Mesh/ShieldBreaker/", "ShieldBreaker.fbx",
+		L"../../Reference/ShaderFile/Shader_StaticMesh.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	{
+		return E_FAIL;
+	}
+
+	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_ShieldBreaker", CShieldBreaker::Create(m_pDevice, m_pDeviceContext))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -2481,13 +2504,15 @@ HRESULT CLoader::Load_StaticEffects()
 	FullName = L"Proto_GameObject_Effect_Explosion";
 	vecHitParticle[0].ParticleColor = { 0.3f, 0.3f, 1.f ,1.f };
 	vecHitParticle[0].Power = 2.5f;
+	vecHitParticle[0].fParticleSize = { 0.8f, 0.8f };
+	vecHitParticle[0].fParticleVelocity = 5.f;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Guard", FullName, &vecHitParticle[0], (CGameObject**)&pEffect)))
 	{
 		MSGBOX("Failed to Creating Effect_Monster_Guard in CStage1::Ready_Effect()");
 		return E_FAIL;
 	}
-	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Guard", pEffect, 8)))
+	if (FAILED(g_pGameInstance->Add_Effect((_uint)SCENEID::SCENE_STATIC, L"Layer_Effect_Monster_Guard", pEffect, 10)))
 	{
 		MSGBOX("Falild to Add_Effect_Monster_Guard in CStage1::Ready_Effect()");
 		return E_FAIL;

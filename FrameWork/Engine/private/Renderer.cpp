@@ -218,9 +218,11 @@ HRESULT CRenderer::Draw_RenderGroup()
 		if (FAILED(Render_UI_Top()))
 			return E_FAIL;
 
-#ifdef _DEBUG
 		if (FAILED(Render_PhysX()))
 			return E_FAIL;
+#ifdef _DEBUG
+		//if (FAILED(Render_PhysX()))
+		//	return E_FAIL;
 
 		if (m_bRenderbtn[DBG] == true)
 		{

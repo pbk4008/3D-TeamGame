@@ -80,7 +80,7 @@ _int CPot::Tick(_double TimeDelta)
 
 _int CPot::LateTick(_double TimeDelta)
 {
-	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 0.f))
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
 		return 0;
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this);

@@ -35,6 +35,7 @@ HRESULT CTrailEffect::NativeConstruct(_uint _iSceneID, void* _pArg)
 
 _int CTrailEffect::Tick(_double _dDeltaTime)
 {
+
 	_int iProgress = __super::Tick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;

@@ -75,7 +75,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 20.f;
 	m_fGroggyGauge = 0.f;
 	m_fMaxHp = 250.f;
 	m_fCurrentHp = m_fMaxHp;
@@ -210,18 +210,19 @@ _int CMonster_BronzeAnimus::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
+	if (!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
+
+	m_pStateController->LateTick(_dDeltaTime);
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
+
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
-	if(!m_bDead)
-		m_pCharacterController->Update_OwnerTransform();
 
 	m_pWeapon->LateTick(_dDeltaTime);
-
-	/* State FSM Late Update */
-	iProgress = m_pStateController->LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress)
-		return iProgress;
 
 	return _int();
 }
@@ -707,7 +708,7 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 		Active_Effect((_uint)EFFECT::HIT_IMAGE, Pos);
 
 		//TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
-		m_fGroggyGauge += 2.f;
+		m_fGroggyGauge += 4.f;
 
 		m_pPanel->Set_HpBar(Get_HpRatio());
 

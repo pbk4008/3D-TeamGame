@@ -245,6 +245,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	m_pRenderer->SetRenderButton(CRenderer::OUTLINE, true);
 	m_pRenderer->SetRenderButton(CRenderer::VELOCITYBLUR, true);
 
+
 	//m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
 
 	m_pTransform->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f,5.f, 10.f, 1.f));
@@ -288,6 +289,9 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 
 _int CSilvermane::Tick(_double _dDeltaTime)
 {
+	if(g_pGameInstance->getCurrentLevel() != 4)
+		m_pRenderer->SetRenderButton(CRenderer::SHADOW, true);
+
 	if (g_pMainApp->IsDeltaTimeZero())
 		return NO_EVENT;
 
@@ -1206,6 +1210,11 @@ const _float CSilvermane::Get_Angle() const
 	return m_fAngle;
 }
 
+const _float CSilvermane::Get_FootStepTime() const
+{
+	return m_fFootStepTime;
+}
+
 const CSilvermane::SCENEMOVEDATA CSilvermane::Get_SceneMoveData() const
 {
 	SCENEMOVEDATA tDesc;
@@ -1361,6 +1370,11 @@ void CSilvermane::Add_HP(const _float _fValue)
 		m_fCurrentHp = m_fMaxHp;
 }
 
+void CSilvermane::Add_FootStepTime(const _float _fValue)
+{
+	m_fFootStepTime += _fValue;
+}
+
 void CSilvermane::Respawn()
 {
 	m_pCharacterController->setPosition(m_vRespawnPos);
@@ -1399,6 +1413,11 @@ void CSilvermane::Set_Position(const _float3 _vPosition)
 void CSilvermane::Set_FootPosition(const _float3& _vPos)
 {
 	m_pCharacterController->setFootPosition(_vPos);
+}
+
+void CSilvermane::Set_FootStepTime(const _float _fValue)
+{
+	m_fFootStepTime = _fValue;
 }
 
 

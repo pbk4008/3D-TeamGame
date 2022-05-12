@@ -90,10 +90,10 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 150.f;
+	m_fMaxHp = 350.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 15.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
@@ -230,18 +230,25 @@ _int CMonster_Bastion_Healer::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
+	if (!m_bDead)
+		m_pCharacterController->Update_OwnerTransform();
+
+	iProgress = m_pStateController->LateTick(_dDeltaTime);
+	if (NO_EVENT != iProgress)
+		return iProgress;
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
+
 	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
 		return -1;
 
-	if(!m_bDead)
-		m_pCharacterController->Update_OwnerTransform();
+
 
 	m_pWeapon->LateTick(_dDeltaTime);
 
 	/* State FSM Late Update */
-	iProgress = m_pStateController->LateTick(_dDeltaTime);
-	if (NO_EVENT != iProgress)
-		return iProgress;
+	
 
 	return _int();
 }
@@ -258,7 +265,7 @@ HRESULT CMonster_Bastion_Healer::Render()
 	RIM RimDesc;
 	ZeroMemory(&RimDesc, sizeof(RIM));
 
-	if (m_pLinkMonster)
+	if (m_pLinkMonster && !m_bDead)
 	{
 		RimDesc.rimcheck = true;
 		RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
@@ -337,8 +344,7 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 				Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 				Active_Effect((_uint)EFFECT::HIT_IMAGE);
 
-				//m_fCurrentHp -= 5.f;
-				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+				m_fGroggyGauge += 4; 
 
 				m_pPanel->Set_HpBar(Get_HpRatio());
 

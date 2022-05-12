@@ -91,10 +91,10 @@ HRESULT CMonster_Bastion_Spear::NativeConstruct(const _uint _iSceneID, void* _pA
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 100.f;
+	m_fMaxHp = 250.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 20.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
@@ -222,18 +222,21 @@ _int CMonster_Bastion_Spear::LateTick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress) 
 		return iProgress;
 
-	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
-		return -1;
-
-	if(!m_bDead)
+	if (!m_bDead)
 		m_pCharacterController->Update_OwnerTransform();
 
-	m_pWeapon->LateTick(_dDeltaTime);
-
-	/* State FSM Late Update */
 	iProgress = m_pStateController->LateTick(_dDeltaTime);
 	if (NO_EVENT != iProgress)
 		return iProgress;
+
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
+
+
+	if (FAILED(m_pRenderer->Add_RenderGroup(CRenderer::RENDER_NONALPHA, this)))
+		return -1;
+
+	m_pWeapon->LateTick(_dDeltaTime);
 
 	return _int();
 }
@@ -665,6 +668,15 @@ void CMonster_Bastion_Spear::Hit(const ATTACKDESC& _tAttackDesc)
 		Active_Effect((_uint)EFFECT::HIT_FLOATING);
 		Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 		Active_Effect((_uint)EFFECT::HIT_IMAGE);
+
+		//TODO : 실드일때 코드추가했음 
+		_matrix WWorld = m_pTransform->Get_WorldMatrix();
+		_vector WPos = { 0.f, 0.0f, 0.0f, 1.f };
+		WPos = XMVector4Transform(WPos, WWorld);
+		_matrix mat = g_pObserver->Get_PlayerWorldMatrix();
+		mat.r[3] = WPos;
+		Active_Effect_Target((_uint)EFFECT::GUARD, mat);
+
 		return;
 	}
 
@@ -734,7 +746,7 @@ void CMonster_Bastion_Spear::Hit(CCollision& collision)
 				//그로기 아닐때만 증가할수있게'
 				m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 				m_pStateController->Change_State(L"Hit");
-				m_fGroggyGauge += 2.f;
+				m_fGroggyGauge += 4.f;
 
 				Active_Effect((_uint)EFFECT::HIT);
 				Active_Effect((_uint)EFFECT::HIT_FLOATING);

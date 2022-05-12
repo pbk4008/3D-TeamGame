@@ -52,7 +52,7 @@ HRESULT CBullet::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Component(_iSceneID)))
 		return E_FAIL;
 
-	m_fDamage = 13.f;
+	m_fDamage = 20.f;
 
 	m_fAlpha = 1.f;
 	m_fFlowSpeedAlpha = 1.f;
@@ -116,6 +116,8 @@ _int CBullet::LateTick(_double _dDeltaTime)
 	{
 		m_fAccTime = 0.f;
 	}
+	if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
+		return 0;
 
 	m_pRenderer->Add_RenderGroup(CRenderer::RENDER_ALPHA, this);
 
