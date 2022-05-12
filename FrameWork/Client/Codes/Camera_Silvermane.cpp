@@ -65,52 +65,51 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 	if (NO_EVENT != iProgress)
 		return iProgress;
 
-	if (m_isExecution || m_isSkill)
+	if (g_pGameInstance->getkeyDown(DIK_B))
+		m_isShaderMode = !m_isShaderMode;
+
+	if (m_isShaderMode)
 	{
-		m_fExecutionChangeTime += (_float)_dDeltaTime;
-
-		// Eye
-		_matrix smatLocal = m_pEyeBone->Get_CombinedMatrix();
-		_matrix smatOwerPivot = m_pSilvermane->Get_Model()->Get_PivotMatrix();
-		_vector svEye = (smatLocal * smatOwerPivot).r[3];
-		// At
-		smatLocal = m_pAtBone->Get_CombinedMatrix();
-		_vector svAt = (smatLocal * smatOwerPivot).r[3];
-		// Right, Up, Look
-		_vector svLook, svRight, svUp;
-		svLook = XMVector3Normalize(svAt - svEye);
-		svRight = XMVector3Normalize(XMVector3Cross(_vector{ 0.f, 1.f, 0.f, 0.f }, svLook));
-		svUp = XMVector3Normalize(XMVector3Cross(svLook, svRight));
-
-		// SetLocalTransform
-		m_pLocalTransform->Set_State(CTransform::STATE_RIGHT, svRight);
-		m_pLocalTransform->Set_State(CTransform::STATE_UP, svUp);
-		m_pLocalTransform->Set_State(CTransform::STATE_LOOK, svLook);
-		m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svEye);
-
-		// SetWorldTransform
-		_matrix smatOwner = m_pSilvermane->Get_Transform()->Get_WorldMatrix();
-		_matrix smatResult = m_pLocalTransform->Get_WorldMatrix()* smatOwner;
-
-		// LerpMatrix
-		_float fRatio = m_fExecutionChangeTime / 1.f;
-		if (1.f < fRatio)
-			fRatio = 1.f;
-		_matrix smatWorld = m_pTransform->Get_WorldMatrix();
-		smatWorld.r[0] = XMVectorLerp(smatWorld.r[0], smatResult.r[0], fRatio);
-		smatWorld.r[1] = XMVectorLerp(smatWorld.r[1], smatResult.r[1], fRatio);
-		smatWorld.r[2] = XMVectorLerp(smatWorld.r[2], smatResult.r[2], fRatio);
-		smatWorld.r[3] = XMVectorLerp(smatWorld.r[3], smatResult.r[3], fRatio);
-
-		m_pTransform->Set_WorldMatrix(smatWorld);
+		if (false == g_pMainApp->IsDeltaTimeZero())
+		{
+			m_vRot.y -= (_float)_dDeltaTime * 15.f;
+			m_pWorldTransform->SetUp_Rotation(m_vRot);
+		}
+		m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
 	}
 	else
 	{
-		m_fExecutionChangeTime += (_float)_dDeltaTime * 0.2f;
-		_float fRatio = m_fExecutionChangeTime / 1.f;
-		if (0.1f >= fRatio)
+		if (m_isExecution || m_isSkill)
 		{
-			_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix();
+			m_fExecutionChangeTime += (_float)_dDeltaTime;
+
+			// Eye
+			_matrix smatLocal = m_pEyeBone->Get_CombinedMatrix();
+			_matrix smatOwerPivot = m_pSilvermane->Get_Model()->Get_PivotMatrix();
+			_vector svEye = (smatLocal * smatOwerPivot).r[3];
+			// At
+			smatLocal = m_pAtBone->Get_CombinedMatrix();
+			_vector svAt = (smatLocal * smatOwerPivot).r[3];
+			// Right, Up, Look
+			_vector svLook, svRight, svUp;
+			svLook = XMVector3Normalize(svAt - svEye);
+			svRight = XMVector3Normalize(XMVector3Cross(_vector{ 0.f, 1.f, 0.f, 0.f }, svLook));
+			svUp = XMVector3Normalize(XMVector3Cross(svLook, svRight));
+
+			// SetLocalTransform
+			m_pLocalTransform->Set_State(CTransform::STATE_RIGHT, svRight);
+			m_pLocalTransform->Set_State(CTransform::STATE_UP, svUp);
+			m_pLocalTransform->Set_State(CTransform::STATE_LOOK, svLook);
+			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svEye);
+
+			// SetWorldTransform
+			_matrix smatOwner = m_pSilvermane->Get_Transform()->Get_WorldMatrix();
+			_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * smatOwner;
+
+			// LerpMatrix
+			_float fRatio = m_fExecutionChangeTime / 1.f;
+			if (1.f < fRatio)
+				fRatio = 1.f;
 			_matrix smatWorld = m_pTransform->Get_WorldMatrix();
 			smatWorld.r[0] = XMVectorLerp(smatWorld.r[0], smatResult.r[0], fRatio);
 			smatWorld.r[1] = XMVectorLerp(smatWorld.r[1], smatResult.r[1], fRatio);
@@ -121,78 +120,95 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		}
 		else
 		{
-			if (false == g_pMainApp->IsDeltaTimeZero())
+			m_fExecutionChangeTime += (_float)_dDeltaTime * 0.2f;
+			_float fRatio = m_fExecutionChangeTime / 1.f;
+			if (0.1f >= fRatio)
 			{
-				iProgress = Input_Key(_dDeltaTime);
-				if (NO_EVENT != iProgress)
-					return iProgress;
+				_matrix smatResult = m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix();
+				_matrix smatWorld = m_pTransform->Get_WorldMatrix();
+				smatWorld.r[0] = XMVectorLerp(smatWorld.r[0], smatResult.r[0], fRatio);
+				smatWorld.r[1] = XMVectorLerp(smatWorld.r[1], smatResult.r[1], fRatio);
+				smatWorld.r[2] = XMVectorLerp(smatWorld.r[2], smatResult.r[2], fRatio);
+				smatWorld.r[3] = XMVectorLerp(smatWorld.r[3], smatResult.r[3], fRatio);
+
+				m_pTransform->Set_WorldMatrix(smatWorld);
 			}
-			m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
+			else
+			{
+				if (false == g_pMainApp->IsDeltaTimeZero())
+				{
+					iProgress = Input_Key(_dDeltaTime);
+					if (NO_EVENT != iProgress)
+						return iProgress;
+				}
+				m_pTransform->Set_WorldMatrix(m_pLocalTransform->Get_WorldMatrix() * m_pWorldTransform->Get_WorldMatrix());
+			}
+
+			SpringArm();
 		}
 
-		SpringArm();
-	}
+		OnOffMonsterUI();
 
-	OnOffMonsterUI();
 
-	if (m_pCameraShake)
-	{
+		if (m_pCameraShake)
+		{
 #pragma region 쉐이킹 테스트
-		if (g_pGameInstance->getkeyDown(DIK_7))
-		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestX, _float3(0.f, 0.f, 0.f));
-		}
-		if (g_pGameInstance->getkeyDown(DIK_8))
-		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestY, _float3(0.f, 0.f, 0.f));
-		}
-		if (g_pGameInstance->getkeyDown(DIK_9))
-		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestZ, _float3(0.f, 0.f, 0.f));
-		}
-		if (g_pGameInstance->getkeyDown(DIK_4))
-		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXY, _float3(0.f, 0.f, -2.f));
-		}
-		if (g_pGameInstance->getkeyDown(DIK_5))
-		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestXZ, _float3(0.f, 0.f, 2.f));
-		}
-		if (g_pGameInstance->getkeyDown(DIK_6))
-		{
-			g_pShakeManager->Shake(CShakeManager::ETemplate::TestYZ, _float3(0.f, 0.f, 0.f));
-		}
-		CCameraShake::SHAKEEVENT tShakeEvent;
-		tShakeEvent.fDuration = 2.0f;
-		tShakeEvent.fBlendInTime = 0.4f;
-		tShakeEvent.fBlendOutTime = 0.4f;
-		tShakeEvent.tWaveX.fAmplitude = 0.04f;
-		tShakeEvent.tWaveX.fFrequency = 10.f;
-		tShakeEvent.tWaveY.fAmplitude = 0.04f;
-		tShakeEvent.tWaveY.fFrequency = 6.f;
-		tShakeEvent.tWaveZ.fAmplitude = 0.04f;
-		tShakeEvent.tWaveZ.fFrequency = 8.f;
-		if (g_pGameInstance->getkeyDown(DIK_RIGHT))
-		{
-			g_pShakeManager->Shake(tShakeEvent, _float3(0.f, 0.f, 0.f));
-		}
+			if (g_pGameInstance->getkeyDown(DIK_7))
+			{
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestX, _float3(0.f, 0.f, 0.f));
+			}
+			if (g_pGameInstance->getkeyDown(DIK_8))
+			{
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestY, _float3(0.f, 0.f, 0.f));
+			}
+			if (g_pGameInstance->getkeyDown(DIK_9))
+			{
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestZ, _float3(0.f, 0.f, 0.f));
+			}
+			if (g_pGameInstance->getkeyDown(DIK_4))
+			{
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestXY, _float3(0.f, 0.f, -2.f));
+			}
+			if (g_pGameInstance->getkeyDown(DIK_5))
+			{
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestXZ, _float3(0.f, 0.f, 2.f));
+			}
+			if (g_pGameInstance->getkeyDown(DIK_6))
+			{
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestYZ, _float3(0.f, 0.f, 0.f));
+			}
+			CCameraShake::SHAKEEVENT tShakeEvent;
+			tShakeEvent.fDuration = 2.0f;
+			tShakeEvent.fBlendInTime = 0.4f;
+			tShakeEvent.fBlendOutTime = 0.4f;
+			tShakeEvent.tWaveX.fAmplitude = 0.04f;
+			tShakeEvent.tWaveX.fFrequency = 10.f;
+			tShakeEvent.tWaveY.fAmplitude = 0.04f;
+			tShakeEvent.tWaveY.fFrequency = 6.f;
+			tShakeEvent.tWaveZ.fAmplitude = 0.04f;
+			tShakeEvent.tWaveZ.fFrequency = 8.f;
+			if (g_pGameInstance->getkeyDown(DIK_RIGHT))
+			{
+				g_pShakeManager->Shake(tShakeEvent, _float3(0.f, 0.f, 0.f));
+			}
 #pragma endregion
 
-		m_pCameraShake->Tick(this, _dDeltaTime);
-		if (m_pCameraShake->IsShaking())
-		{
-			_vector svLocalTotalpos = XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos) + XMLoadFloat3(&m_vShakeAccPos), 1.f);
-			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
-		}
-		else
-		{
-			_vector svShakeAccPos = XMVectorSetW(XMLoadFloat3(&m_vShakeAccPos), 1.f);
-			_float fDeltaTime = (_float)_dDeltaTime;
-			if (1.f < fDeltaTime)
-				fDeltaTime = 1.f;
-			_vector svLerp = XMVectorLerp(svShakeAccPos, XMVectorSet(0.f, 0.f, 0.f, 1.f), fDeltaTime);
-			_vector svLocalTotalpos = XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos) + svLerp, 1.f);
-			m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
+			m_pCameraShake->Tick(this, _dDeltaTime);
+			if (m_pCameraShake->IsShaking())
+			{
+				_vector svLocalTotalpos = XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos) + XMLoadFloat3(&m_vShakeAccPos), 1.f);
+				m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
+			}
+			else
+			{
+				_vector svShakeAccPos = XMVectorSetW(XMLoadFloat3(&m_vShakeAccPos), 1.f);
+				_float fDeltaTime = (_float)_dDeltaTime;
+				if (1.f < fDeltaTime)
+					fDeltaTime = 1.f;
+				_vector svLerp = XMVectorLerp(svShakeAccPos, XMVectorSet(0.f, 0.f, 0.f, 1.f), fDeltaTime);
+				_vector svLocalTotalpos = XMVectorSetW(XMLoadFloat3(&m_vLocalOriginPos) + svLerp, 1.f);
+				m_pLocalTransform->Set_State(CTransform::STATE_POSITION, svLocalTotalpos);
+			}
 		}
 	}
 
@@ -373,7 +389,7 @@ void CCamera_Silvermane::SpringArm()
 	XMStoreFloat3(&tRaycastDesc.vOrigin, svTargetPos);
 	XMStoreFloat3(&tRaycastDesc.vDir, XMVector3Normalize(svPosition - svTargetPos));
 	tRaycastDesc.fMaxDistance = 4.f;
-	tRaycastDesc.filterData.flags = PxQueryFlag::eANY_HIT | PxQueryFlag::eSTATIC;
+	tRaycastDesc.filterData.flags |= PxQueryFlag::eANY_HIT;
 	tRaycastDesc.layerMask = (1 << (_uint)ELayer::Enviroment);
 	if (g_pGameInstance->Raycast(tRaycastDesc))
 	{

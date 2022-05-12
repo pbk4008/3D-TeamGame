@@ -80,7 +80,6 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 			m_pOwner->Set_Dead();
 			m_pOwner->Remove_Collider();
 			m_pOwner->Resolve_Link();
-
 			m_pStateController->Change_State(L"Death");
 
 			m_pOwner->Set_LightCheck(true);

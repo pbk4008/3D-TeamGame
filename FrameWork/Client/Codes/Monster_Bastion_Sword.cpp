@@ -750,7 +750,7 @@ void CMonster_Bastion_Sword::Hit()
 		Active_Effect((_uint)EFFECT::HIT_IMAGE);
 
 		m_pStateController->Change_State(L"Hit", &tData);
-		m_fGroggyGauge += 4; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+		m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 	//Active_Effect((_uint)EFFECT::GUARD);

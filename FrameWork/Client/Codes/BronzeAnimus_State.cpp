@@ -81,7 +81,6 @@ _int CBronzeAnimus_State::Tick(const _double& _dDeltaTime)
 			m_pOwner->Set_IsAttack(false);
 
 			m_pStateController->Change_State(L"Death");
-
 			m_pOwner->Set_LightCheck(true);
 		}
 	}
