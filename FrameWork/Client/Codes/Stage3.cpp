@@ -83,8 +83,8 @@ HRESULT CStage3::NativeConstruct()
 	if (FAILED(Ready_MapObject()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Boss(L"Layer_Boss")))
-		return E_FAIL;
+	//if (FAILED(Ready_Boss(L"Layer_Boss")))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 		return E_FAIL;
@@ -104,8 +104,8 @@ HRESULT CStage3::NativeConstruct()
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
 
-	g_pQuestManager->SetRender(true);
-	g_pInvenUIManager->SetRender(true);
+	//g_pQuestManager->SetRender(true);
+	//g_pInvenUIManager->SetRender(true);
 
 	//PLAY_SOUND(L"Stage3_BGM", CHANNEL::BGM);
 	//VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
@@ -119,7 +119,7 @@ HRESULT CStage3::NativeConstruct()
 _int CStage3::Tick(_double TimeDelta)
 {
 	// monster
-	_float3 fPos = { 0.f,5.f,20.f };
+	_float3 fPos = { 48.f, 3.f, 146.f };
 	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	{
 		CMonster_Crawler* pMonster = nullptr;
@@ -223,17 +223,20 @@ _int CStage3::Tick(_double TimeDelta)
 	if (g_pGuideManager)
 		g_pGuideManager->Tick(g_dImmutableTime);
 
-	if (m_pBoss->Get_Dead() && !m_bClear)
+	if (m_pBoss != nullptr)
 	{
-		m_bClear = true;
-		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
+		if (m_pBoss->Get_Dead() && !m_bClear)
+		{
+			m_bClear = true;
+			m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
+		}
 	}
 
 	if (g_pInvenUIManager)
 		g_pInvenUIManager->Tick(TimeDelta);
 
 	if (g_pQuestManager)
-		g_pQuestManager->Tick(g_dImmutableTime);
+		//g_pQuestManager->Tick(g_dImmutableTime);
 
 	return _int();
 }
@@ -253,7 +256,7 @@ _int CStage3::LateTick(_double TimeDelta)
 		g_pVoiceManager->Late_Tick(TimeDelta);
 
 	if (g_pQuestManager)
-		g_pQuestManager->Late_Tick(TimeDelta);
+		//g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }

@@ -280,7 +280,7 @@ HRESULT CSilvermane::NativeConstruct(const _uint _iSceneID, void* _pArg)
 		m_pFillCKey2->setActive(false);
 
 	Set_AttackDesc_Damaga(10.f);
-	m_isLootShield = false;
+	m_isLootShield = true;
 	m_fSkillGuage = 100.f;
 
 	return S_OK;

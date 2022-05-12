@@ -1135,11 +1135,13 @@ HRESULT CLoader::Load_Stage3_Object()
 		return E_FAIL;
 	if (FAILED(Load_Stage1PlayerLoad()))
 		return E_FAIL;
-	if (FAILED(Load_Stage3_Cinema_Object()))
-		return E_FAIL;
+	//if (FAILED(Load_Stage3_Cinema_Object()))
+	//	return E_FAIL;
 
-	if(FAILED(Load_Stage3_BossLoad()))
+	if (FAILED(Load_Stage1MonsterLoad()))
 		return E_FAIL;
+	//if(FAILED(Load_Stage3_BossLoad()))
+	//	return E_FAIL;
 	if(FAILED(Load_Stage1StaticUILoad()))
 		return E_FAIL;
 	if (FAILED(Load_Stage1UILoad()))
@@ -1156,42 +1158,42 @@ HRESULT CLoader::Load_Stage3_Object()
 		return E_FAIL;
 #pragma endregion
 
-	_matrix matPivot = XMMatrixIdentity();
-	matPivot *= XMMatrixRotationZ(XMConvertToRadians(90.f)); //정수리옆으로나옴..
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinder_lowPoly_idst.fbx",
-		L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
+	//_matrix matPivot = XMMatrixIdentity();
+	//matPivot *= XMMatrixRotationZ(XMConvertToRadians(90.f)); //정수리옆으로나옴..
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Cylinder_LowPoly_Idst_Razer", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Effect/FX13/", "ky_cylinder_lowPoly_idst.fbx",
+	//	L"../bin/ShaderFile/Shader_MeshEffect.hlsl", matPivot, CModel::TYPE_STATIC, true)))) MSGBOX(L"메쉬 이펙트용 메쉬 로드 실패");
 
 
-	//Boss_HpBar_Red
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_HpBar_Red"), CUI_Boss_HpBar_Red::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_HpBar_Red", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Red.dds")))
-	{
-		return E_FAIL;
-	}
+	////Boss_HpBar_Red
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_HpBar_Red"), CUI_Boss_HpBar_Red::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_HpBar_Red", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Red.dds")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	//Boss_ShieldBar_Blue
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_ShieldBar_Blue"), CUI_Boss_ShieldBar_Blue::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_ShieldBar_Blue", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Blue.dds")))
-	{
-		return E_FAIL;
-	}
+	////Boss_ShieldBar_Blue
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Boss_ShieldBar_Blue"), CUI_Boss_ShieldBar_Blue::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Boss_ShieldBar_Blue", L"../bin/Resources/Texture/UI/Dynamic/Active/T_HUD_BossHealth_Meter_Fill_Blue.dds")))
+	//{
+	//	return E_FAIL;
+	//}
 
-	//Boss_Bar_Mark
-	if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Bar_Mark"), CUI_Bar_Mark::Create(m_pDevice, m_pDeviceContext))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Bar_Mark", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_BossHealth_Chevron.dds")))
-	{
-		return E_FAIL;
-	}
+	////Boss_Bar_Mark
+	//if (FAILED(g_pGameInstance->Add_Prototype(TEXT("Proto_GameObject_UI_Bar_Mark"), CUI_Bar_Mark::Create(m_pDevice, m_pDeviceContext))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Texture(m_pDevice, L"Texture_Bar_Mark", L"../bin/Resources/Texture/UI/Static/Active/T_HUD_BossHealth_Chevron.dds")))
+	//{
+	//	return E_FAIL;
+	//}
 
 	return S_OK;
 }
