@@ -49,6 +49,7 @@
 #include "Cinema5_3.h"
  
 #include "Boss_Solaris.h"
+#include "Boss_Bastion_Judicator.h"
 
 CStage3::CStage3(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	:CLevel(pDevice, pDeviceContext)
@@ -109,6 +110,15 @@ HRESULT CStage3::NativeConstruct()
 
 _int CStage3::Tick(_double TimeDelta)
 {
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD7))
+	//{
+	//	_float3 fPos = _float3(47.f, 5.f, 38.f);
+	//
+	//	CBoss_Bastion_Judicator* pMonster = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMonster)))
+	//		return -1;
+	//}
+
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -159,13 +169,16 @@ _int CStage3::Tick(_double TimeDelta)
 	if(pParticle != nullptr)
 		pParticle->Set_State(CTransform::STATE_POSITION, XMVectorSet(38.f, 1.f, 55.f, 1.f));
 
+	if (g_pGuideManager)
+		g_pGuideManager->Tick(g_dImmutableTime);
+
 	if (m_pBoss->Get_Dead() && !m_bClear)
 	{
 		m_bClear = true;
 		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
 	}
 
-	//g_pInvenUIManager->Tick(TimeDelta);
+	g_pInvenUIManager->Tick(TimeDelta);
 
 	//if (g_pQuestManager)
 		//g_pQuestManager->Tick(g_dImmutableTime);
@@ -180,6 +193,9 @@ _int CStage3::LateTick(_double TimeDelta)
 		if (iProgress == 1)
 			return 0;
 	}
+
+	if (g_pGuideManager)
+		g_pGuideManager->Late_Tick(g_dImmutableTime);
 
 	//if (g_pVoiceManager)
 	//{
@@ -294,9 +310,9 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 
 HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
-	_float3 vpos = { 48.f, 5.f, 146.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos, (CGameObject**)&m_pBoss)))
-		return E_FAIL;
+	//_float3 vpos = { 48.f, 5.f, 146.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos, (CGameObject**)&m_pBoss)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

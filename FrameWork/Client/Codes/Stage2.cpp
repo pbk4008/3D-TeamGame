@@ -496,8 +496,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Fill_Ckey");
 	Desc3.UIDesc.bMinus = false;
 	Desc3.UIDesc.fAngle = 0.f;
-	Desc3.UIDesc.fPos = { 700.f, 390.f, 0.1f };
-	Desc3.UIDesc.fSize = { 40.f , 40.f };
+	Desc3.UIDesc.fPos = { 1000.f, 570.f, 0.1f };
+	Desc3.UIDesc.fSize = { 50.f , 50.f };
 	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
@@ -509,8 +509,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Blank_Ckey");
 	Desc4.UIDesc.bMinus = false;
 	Desc4.UIDesc.fAngle = 0.f;
-	Desc4.UIDesc.fPos = { 700.f, 390.f, 0.09f };
-	Desc4.UIDesc.fSize = { 40.f , 40.f };
+	Desc4.UIDesc.fPos = { 1000.f, 570.f, 0.09f };
+	Desc4.UIDesc.fSize = { 50.f , 50.f };
 	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))

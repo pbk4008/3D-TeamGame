@@ -52,7 +52,7 @@ HRESULT CBullet::NativeConstruct(const _uint _iSceneID, void* _pArg)
 	if (FAILED(Ready_Component(_iSceneID)))
 		return E_FAIL;
 
-	m_fDamage = 13.f;
+	m_fDamage = 20.f;
 
 	m_fAlpha = 1.f;
 	m_fFlowSpeedAlpha = 1.f;

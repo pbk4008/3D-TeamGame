@@ -75,7 +75,7 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 	if (FAILED(Ready_StateFSM()))
 		return E_FAIL;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 20.f;
 	m_fGroggyGauge = 0.f;
 	m_fMaxHp = 250.f;
 	m_fCurrentHp = m_fMaxHp;
@@ -708,7 +708,7 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 		Active_Effect((_uint)EFFECT::HIT_IMAGE, Pos);
 
 		//TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
-		m_fGroggyGauge += 2.f;
+		m_fGroggyGauge += 4.f;
 
 		m_pPanel->Set_HpBar(Get_HpRatio());
 

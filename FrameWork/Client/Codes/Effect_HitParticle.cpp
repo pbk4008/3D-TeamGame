@@ -158,7 +158,6 @@ void CEffect_HitParticle::Set_Reset(_bool bReset)
 {
 	CEffect::Set_Reset(bReset);
 	m_Desc.fCurTime = 0.f;
-
 	m_pBuffer->Set_Desc(m_backupDesc);
 	m_pBuffer->Particle_Reset();;
 }

@@ -388,7 +388,7 @@ void CMonster_Bastion_Shooter::Hit()
 	if (!m_bGroggy)
 	{
 		//±×·Î±â ¾Æ´Ò¶§¸¸ Áõ°¡ÇÒ¼öÀÖ°Ô
-		m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+		m_fGroggyGauge += 4; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
@@ -608,7 +608,7 @@ HRESULT CMonster_Bastion_Shooter::Ready_UI()
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 100.f;
+	m_fMaxHp = 250.f;
 	m_fCurrentHp = m_fMaxHp;
 
 	m_fMaxGroggyGauge = 10.f;
