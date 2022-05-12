@@ -212,7 +212,7 @@ _int CStage3::Tick(_double TimeDelta)
 
 	if (g_pVoiceManager)
 	{
-		g_pVoiceManager->Tick(TimeDelta);
+		//g_pVoiceManager->Tick(TimeDelta);
 	}
 
 	CTransform* pParticle =  g_pGameInstance->getObjectList((_uint)SCENEID::SCENE_STAGE3, L"Layer_Effect_Stage3_Env_Respawn")->front()->Get_Transform();
@@ -253,7 +253,7 @@ _int CStage3::LateTick(_double TimeDelta)
 		g_pGuideManager->Late_Tick(g_dImmutableTime);
 
 	if (g_pVoiceManager)
-		g_pVoiceManager->Late_Tick(TimeDelta);
+		//g_pVoiceManager->Late_Tick(TimeDelta);
 
 	if (g_pQuestManager)
 		//g_pQuestManager->Late_Tick(TimeDelta);

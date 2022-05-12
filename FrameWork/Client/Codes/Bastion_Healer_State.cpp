@@ -74,13 +74,13 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (FAILED(Check_State()))
 		return -1;
 
-	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		CMonster_Bastion_Healer* pMonster = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
+	//if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+	//{
+	//	//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+	//	CMonster_Bastion_Healer* pMonster = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
 
-		pMonster->Groggy_Start();
-	}
+	//	pMonster->Groggy_Start();
+	//}
 	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
 	{
 		m_pOwner->Set_Dead();

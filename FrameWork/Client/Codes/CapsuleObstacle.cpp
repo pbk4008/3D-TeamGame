@@ -91,6 +91,7 @@ HRESULT CCapsuleObstacle::Ready_Components()
 	_matrix smatPivot = XMMatrixRotationZ(XMConvertToRadians(90.f)) * XMMatrixTranslation(0.f, tCapsuleColliderDesc.fHeight * 0.5f, 0.f);
 	m_pCollider->setPivotMatrix(smatPivot);
 	m_pCollider->Update_PxTransform();
+	m_pCollider->setShapeLayer((_uint)ELayer::Enviroment);
 
 	return S_OK;
 }

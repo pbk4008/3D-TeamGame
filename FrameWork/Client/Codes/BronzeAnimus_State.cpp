@@ -69,10 +69,10 @@ _int CBronzeAnimus_State::Tick(const _double& _dDeltaTime)
 	Check_State();
 
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
-		m_pOwner->GroggyStart();
+	//if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+	//	m_pOwner->GroggyStart();
 
-	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
+	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead() && !m_pMonster->IsExecution())
 	{
 		m_pOwner->Set_Dead();
 		m_pOwner->Remove_Collider();

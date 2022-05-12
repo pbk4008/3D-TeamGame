@@ -68,6 +68,9 @@ private: /* For.Shake */
 	CCameraShake* m_pCameraShake = nullptr;
 	CGameObject* m_pTargetMonster = nullptr;
 
+private: /* For.Shader */
+	_bool m_isShaderMode = false;
+
 public:
 	static CCamera_Silvermane* Create(ID3D11Device* _pDevice, ID3D11DeviceContext* _pDeviceContext);
 	virtual CGameObject* Clone(const _uint _iSceneID, void* _pArg) override;

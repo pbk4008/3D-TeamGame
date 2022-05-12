@@ -99,12 +99,12 @@ _int CSpear_State::Tick(const _double& _dDeltaTime)
 
 	if (!m_pOwner->Get_Dead())
 	{
-		if (m_pOwner->Get_GroggyGauge() >= MAXGROOGUGAGUE)
-		{
-			//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-			m_pOwner->Set_Groggy(true);
-			m_pOwner->Groggy_Start();
-		}
+		//if (m_pOwner->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+		//{
+		//	//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+		//	m_pOwner->Set_Groggy(true);
+		//	m_pOwner->Groggy_Start();
+		//}
 		if (0 >= m_pOwner->Get_CurrentHp())
 		{
 			m_pOwner->Set_Dead();

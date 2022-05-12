@@ -747,6 +747,7 @@ void CMonster_Bastion_2HSword::Parry(const PARRYDESC& _tParrykDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
 	Groggy_Start();
+	Set_IsAttack(false);
 }
 
 void CMonster_Bastion_2HSword::Remove_Collider()

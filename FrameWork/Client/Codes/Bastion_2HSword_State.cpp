@@ -130,11 +130,11 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	if (FAILED(Check_State()))
 		return -1;
 
-	if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		m_pOwner->Groggy_Start();
-	}
+	//if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
+	//{
+	//	//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+	//	m_pOwner->Groggy_Start();
+	//}
 
 	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
 	{
