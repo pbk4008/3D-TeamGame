@@ -236,7 +236,7 @@ _int CStage3::Tick(_double TimeDelta)
 		g_pInvenUIManager->Tick(TimeDelta);
 
 	if (g_pQuestManager)
-		//g_pQuestManager->Tick(g_dImmutableTime);
+		g_pQuestManager->Tick(g_dImmutableTime);
 
 	return _int();
 }
@@ -256,7 +256,7 @@ _int CStage3::LateTick(_double TimeDelta)
 		//g_pVoiceManager->Late_Tick(TimeDelta);
 
 	if (g_pQuestManager)
-		//g_pQuestManager->Late_Tick(TimeDelta);
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
