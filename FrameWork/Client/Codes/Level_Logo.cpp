@@ -49,7 +49,7 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 
 		return 0;
 	}
-	else if (g_pGameInstance->getkeyDown(DIK_NUMPADENTER))
+	else if (g_pGameInstance->getkeyDown(DIK_SPACE))
 	{
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2,true))))
 			return -1;
