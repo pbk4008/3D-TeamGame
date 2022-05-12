@@ -14,7 +14,7 @@ private:
 	explicit CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 	virtual~CLoader()=default;
 public:
-	HRESULT Init_Loader(SCENEID eID);
+	HRESULT Init_Loader(SCENEID eID, _bool bDebug);
 private:
 	HRESULT LoadForScene();
 private:
@@ -60,7 +60,7 @@ private:
 	void Add_LoadingThread(const wstring& pComponetTag, const wstring& pFilePath, _uint iType);
 public:
 	static _uint CALLBACK Thread_Main(void* pArg);
-	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID);
+	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID, _bool bDebug = false);
 private:
 	virtual void Free();
 public:
@@ -74,6 +74,7 @@ private:
 	SCENEID m_eNextScene;
 	ID3D11Device* m_pDevice;
 	ID3D11DeviceContext* m_pDeviceContext;
+	_bool m_bDebug;
 	/*vector<CTexutre*> m_vectexture;*/
 };
 END

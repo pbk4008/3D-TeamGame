@@ -40,7 +40,6 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 	{
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_TEST_JS))))
 			return -1;
-
 		return 0;
 	}
 	else if (g_pGameInstance->getkeyDown(DIK_NUMPADENTER))
@@ -50,7 +49,13 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 
 		return 0;
 	}
+	else if (g_pGameInstance->getkeyDown(DIK_NUMPADENTER))
+	{
+		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2,true))))
+			return -1;
 
+		return 0;
+	}
 	if (m_pobj->Get_OutNextCheck() == true)
 	{
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE1))))

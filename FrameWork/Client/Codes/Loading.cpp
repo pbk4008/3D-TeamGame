@@ -23,7 +23,7 @@ CLoading::CLoading(ID3D11Device* pDevice, ID3D11DeviceContext* pDevcieContext)
 {
 }
 
-HRESULT CLoading::NativeConstruct(SCENEID eID)
+HRESULT CLoading::NativeConstruct(SCENEID eID, _bool bDebug)
 {
 	if (FAILED(CLevel::NativeConstruct()))
 		return E_FAIL;
@@ -33,7 +33,7 @@ HRESULT CLoading::NativeConstruct(SCENEID eID)
 	if (FAILED(Ready_GameObject()))
 		return E_FAIL;
 
-	m_pLoader = CLoader::Create(m_pDevice, m_pDeviceContext, m_eSceneID);
+	m_pLoader = CLoader::Create(m_pDevice, m_pDeviceContext, m_eSceneID, bDebug);
 
 	if (!m_pLoader)
 		return E_FAIL;
@@ -131,10 +131,10 @@ HRESULT CLoading::Ready_GameObject()
 	return S_OK;
 }
 
-CLoading* CLoading::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevcieContext, SCENEID eID)
+CLoading* CLoading::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDevcieContext, SCENEID eID, _bool bDebug)
 {
 	CLoading* pInstance = new CLoading(pDevice, pDevcieContext);
-	if (FAILED(pInstance->NativeConstruct(eID)))
+	if (FAILED(pInstance->NativeConstruct(eID, bDebug)))
 	{
 		MSGBOX("Loading Create Fail");
 		Safe_Release(pInstance);

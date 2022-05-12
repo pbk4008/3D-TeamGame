@@ -135,6 +135,7 @@ CLoader::CLoader()
 	, m_pDevice(nullptr)
 	, m_pDeviceContext(nullptr)
 	, m_eNextScene(SCENEID::SCENE_END)
+	, m_bDebug(false)
 {
 	ZeroMemory(&m_Critical, sizeof(CRITICAL_SECTION));
 }
@@ -150,11 +151,11 @@ CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext)
 	Safe_AddRef(m_pDeviceContext);
 	ZeroMemory(&m_Critical, sizeof(CRITICAL_SECTION));
 }
-HRESULT CLoader::Init_Loader(SCENEID eID)
+HRESULT CLoader::Init_Loader(SCENEID eID, _bool bDebug)
 {
 	InitializeCriticalSection(&m_Critical);
 	m_eNextScene = eID;
-	
+	m_bDebug = bDebug;
 	m_hThread = (HANDLE)_beginthreadex(nullptr, 0, Thread_Main, this, 0,nullptr);
 	
 	if (!m_hThread)
@@ -1625,34 +1626,34 @@ HRESULT CLoader::Load_Stage1MonsterLoad()
 
 	//////////////////////////////////////////////////////// Stage2 용임 주석 풀기 ㄴㄴ
 	////BronzeAnimus
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	////weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-	{
-		return E_FAIL;
-	}
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/BronzeAnimus_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_BronzeAnimus", CMonster_BronzeAnimus::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//////weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_BronzeAnimus_Sword", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/BronzeAnimus_Sword/", "BronzeAnimus_Sword.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//{
+	//	return E_FAIL;
+	//}
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_BronzeAnimus_Sword", CBronzeAnimus_Sword::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
-	////Bastion Spear
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
-		L"../bin/FBX/Monster/Bastion_HonerGuard_Bin.fbx", CModel::TYPE_ANIM, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Spear", CMonster_Bastion_Spear::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
-	////weapon
-	if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
-		"../bin/Resources/Mesh/Polearm/", "Bastion_Polearm.fbx",
-		L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
-		return E_FAIL;
-	if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Polearm", CPolearm::Create(m_pDevice, m_pDeviceContext))))
-		return E_FAIL;
+	//////Bastion Spear
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Bastion_Spear", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	L"../bin/FBX/Monster/Bastion_HonerGuard_Bin.fbx", CModel::TYPE_ANIM, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Monster_Bastion_Spear", CMonster_Bastion_Spear::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
+	//////weapon
+	//if (FAILED(g_pGameInstance->Add_Prototype((_uint)SCENEID::SCENE_STATIC, L"Model_Polearm", CModel::Create(m_pDevice, m_pDeviceContext,
+	//	"../bin/Resources/Mesh/Polearm/", "Bastion_Polearm.fbx",
+	//	L"../../Reference/ShaderFile/Shader_Weapon.hlsl", matPivot, CModel::TYPE_STATIC, true))))
+	//	return E_FAIL;
+	//if (FAILED(g_pGameInstance->Add_Prototype(L"Proto_GameObject_Weapon_Polearm", CPolearm::Create(m_pDevice, m_pDeviceContext))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -1687,10 +1688,10 @@ _uint CLoader::Thread_Main(void* pArg)
 	return iFlag;
 }
 
-CLoader* CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID)
+CLoader* CLoader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, SCENEID eID, _bool bDebug = false)
 {
 	CLoader* pInsance = new CLoader(pDevice, pDeviceContext);
-	if (FAILED(pInsance->Init_Loader(eID)))
+	if (FAILED(pInsance->Init_Loader(eID,bDebug)))
 	{
 		MSGBOX("Loader Create Fail");
 		Safe_Release(pInsance);
@@ -1724,11 +1725,61 @@ HRESULT CLoader::Ready_Stage1()
 
 HRESULT CLoader::Ready_Stage2()
 {
-	if (FAILED(Set_Stage2_Prototype()))
-		return E_FAIL;
+	if(m_bDebug)
+	{
+		if (FAILED(SetUp_Stage1_Prototype()))
+			return E_FAIL;
 
-	if (FAILED(Load_Stage2_Object()))
-		return E_FAIL;
+		if (FAILED(Load_Stage1FBXLoad()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage1Navi_SkyLoad()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage1PlayerLoad()))
+			return E_FAIL;
+
+		if(FAILED(Load_Stage1MonsterLoad()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage1BossLoad()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage1StaticUILoad()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage1UILoad()))
+			return E_FAIL;
+
+#pragma region 이펙트들
+		if (FAILED(Load_Stage1EffectLoad()))
+			return E_FAIL;
+		if (FAILED(Load_TrailEffects())) //소드
+			return E_FAIL;
+		if (FAILED(Load_MeshEffects())) //매쉬
+			return E_FAIL;
+		if (FAILED(Load_StaticEffects())) // static effect
+			return E_FAIL;
+#pragma endregion
+
+		if (FAILED(Load_Stage1JumpTrigger()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage1_TreasureChest_Load()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage1TriggerLod()))
+			return E_FAIL;
+
+		if (FAILED(Load_Pot()))
+			return E_FAIL;
+
+	}
+		if (FAILED(Set_Stage2_Prototype()))
+			return E_FAIL;
+
+		if (FAILED(Load_Stage2_Object()))
+			return E_FAIL;
 
 	return S_OK;
 }
