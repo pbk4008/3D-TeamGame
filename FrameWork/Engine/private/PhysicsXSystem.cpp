@@ -68,9 +68,11 @@ HRESULT CPhysicsXSystem::Init_PhysX()
 	if (!m_pScene)
 		return E_FAIL;
 
-#ifdef _DEBUG
 	m_pScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.f);
 	m_pScene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
+#ifdef _DEBUG
+	//m_pScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.f);
+	//m_pScene->setVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES, 1.f);
 	//m_pScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 2.f); // ±âÁî¸ð
 #endif // _DEBUG
 
