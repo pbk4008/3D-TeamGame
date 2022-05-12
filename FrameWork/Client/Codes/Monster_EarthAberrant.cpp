@@ -229,7 +229,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		m_fUIShowTimeAcc = 0.f;
 	}
 
-	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
+	if (m_fGroggyGauge >= m_fMaxGroggyGauge && !m_bDead)
 	{
 		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
 		m_bGroggy = true;
