@@ -90,10 +90,10 @@ HRESULT CMonster_Bastion_Healer::NativeConstruct(const _uint _iSceneID, void* _p
 
 	m_pPanel->Set_TargetWorldMatrix(m_pTransform->Get_WorldMatrix());
 
-	m_fMaxHp = 150.f;
+	m_fMaxHp = 350.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 10.f;
+	m_fMaxGroggyGauge = 15.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
@@ -265,7 +265,7 @@ HRESULT CMonster_Bastion_Healer::Render()
 	RIM RimDesc;
 	ZeroMemory(&RimDesc, sizeof(RIM));
 
-	if (m_pLinkMonster)
+	if (m_pLinkMonster && !m_bDead)
 	{
 		RimDesc.rimcheck = true;
 		RimDesc.rimcol = _float3(0.f, 1.f, 1.f);
@@ -344,8 +344,7 @@ void CMonster_Bastion_Healer::Hit(CCollision& pCol)
 				Active_Effect((_uint)EFFECT::HIT_FLOATING_2);
 				Active_Effect((_uint)EFFECT::HIT_IMAGE);
 
-				//m_fCurrentHp -= 5.f;
-				//m_bGroggy = 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+				m_fGroggyGauge += 4; 
 
 				m_pPanel->Set_HpBar(Get_HpRatio());
 

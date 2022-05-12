@@ -37,7 +37,7 @@ _int CMidBoss_Run::Tick(const _double& TimeDelta)
 	_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 
 	//TODO : Attackµµ °Å¸® ¶È°°ÀÌ ¸ÂÃçÁà¾ßµÊ 
-	if (6.f > fDistToPlayer )
+	if (10.5f > fDistToPlayer )
 	{
 		m_pStateController->Change_State(L"Attack");
 	}

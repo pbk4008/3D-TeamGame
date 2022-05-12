@@ -96,7 +96,7 @@ HRESULT CMonster_EarthAberrant::NativeConstruct(const _uint _iSceneID, void* _pA
 	m_fMaxHp = 150.f;
 	m_fCurrentHp = m_fMaxHp;
 
-	m_fMaxGroggyGauge = 20.f;
+	m_fMaxGroggyGauge = 10.f;
 	m_fGroggyGauge = 0.f;
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
@@ -698,7 +698,7 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 	g_pGameInstance->Play_Shot(L"Monster_Hit_2", CSoundMgr::CHANNELID::Earth_Hit);
 
 	m_fCurrentHp -= _tAttackDesc.fDamage;
-	m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+	m_fGroggyGauge += 4; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
 

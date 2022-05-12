@@ -29,13 +29,9 @@ HRESULT CRendererAssit::Setup_RenderTarget()
 	_uint widht = (_uint)ViewportDesc.Width;
 	_uint height = (_uint)ViewportDesc.Height;
 
-#ifdef _DEBUG
-	//_float fwidth = ViewportDesc.Width;
-	//_float fheight = ViewportDesc.Height;
-#endif // _DEBUG
-
 	_float fwidth = ViewportDesc.Width;
 	_float fheight = ViewportDesc.Height;
+
 
 	if (FAILED(m_pTargetMgr->Add_RenderTarget(m_pDevice, m_pDeviceContext, TEXT("Target_SkyBox"), widht, height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f), CRenderTarget::RTT::RTT_END)))
 		return E_FAIL;

@@ -148,11 +148,11 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
-	//{
-	//	MSGBOX("Stage1 Trigger");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger.dat")))
+	{
+		MSGBOX("Stage1 Trigger");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Data_UI(L"../bin/SaveData/UI/UI.dat")))
 	{
@@ -186,11 +186,11 @@ HRESULT CStage1::NativeConstruct()
 
 	g_pGameInstance->Change_BaseCamera(L"Camera_Silvermane");
 
-	//if (FAILED(Ready_Meteor()))
-	//{
-	//	MSGBOX("Meteor");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Meteor()))
+	{
+		MSGBOX("Meteor");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Indicator()))
 	{
@@ -198,31 +198,31 @@ HRESULT CStage1::NativeConstruct()
 		return E_FAIL;
 	}
 
-	//if (FAILED(Ready_Portal()))
-	//{
-	//	MSGBOX("Portal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Portal()))
+	{
+		MSGBOX("Portal");
+		return E_FAIL;
+	}
 
-	//if (FAILED(Ready_Wall()))
-	//{
-	//	MSGBOX("Wall");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Wall()))
+	{
+		MSGBOX("Wall");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Pot()))
 		return E_FAIL;
 
-	//////// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
-	//if (FAILED(Ready_Cinema()))
-	//{
-	//	MSGBOX("Cinema");
-	//	return E_FAIL;
-	//}
+	////// 시네마 릭 남으면 시네마 캠 레디 컴포넌트에 디스크립션 제로메모리 확인 
+	if (FAILED(Ready_Cinema()))
+	{
+		MSGBOX("Cinema");
+		return E_FAIL;
+	}
 
-	////g_pGameInstance->PlayBGM(L"Stage1_BGM");
+	//g_pGameInstance->PlayBGM(L"Stage1_BGM");
 
-	//m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
+	m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA1_1);
 
 	if (FAILED(Ready_Obstacle()))
 		return E_FAIL;
@@ -345,13 +345,13 @@ _int CStage1::Tick(_double TimeDelta)
 	//	//pRazer->setActive(true);
 	//}
 	// boss
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CBoss_Bastion_Judicator* pMidBoss = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMidBoss)))
-			return -1;
-		pMidBoss->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMidBoss)))
+	//		return -1;
+	//	pMidBoss->setActive(true);
+	//}
 	// monster
 	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
 	//{
@@ -444,7 +444,6 @@ _int CStage1::Tick(_double TimeDelta)
 		g_pQuestManager->Tick(g_dImmutableTime);
 	
 	if (g_pGuideManager)
-
 		g_pGuideManager->Tick(g_dImmutableTime);
 
 	if (g_pVoiceManager)
@@ -694,7 +693,7 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	ZeroMemory(&Desc, sizeof(CUI_Player_HpBar::UIDESC));
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.35f;
 	Desc.fPos = { 333.f, 912.f, 0.f };
 	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
@@ -782,8 +781,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Fill_Ckey");
 	Desc3.UIDesc.bMinus = false;
 	Desc3.UIDesc.fAngle = 0.f;
-	Desc3.UIDesc.fPos = { 700.f, 390.f, 0.1f };
-	Desc3.UIDesc.fSize = { 40.f , 40.f };
+	Desc3.UIDesc.fPos = { 1000.f, 570.f, 0.1f };
+	Desc3.UIDesc.fSize = { 50.f , 50.f };
 	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
@@ -795,8 +794,8 @@ HRESULT CStage1::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Blank_Ckey");
 	Desc4.UIDesc.bMinus = false;
 	Desc4.UIDesc.fAngle = 0.f;
-	Desc4.UIDesc.fPos = { 700.f, 390.f, 0.09f };
-	Desc4.UIDesc.fSize = { 40.f , 40.f };
+	Desc4.UIDesc.fPos = { 1000.f, 570.f, 0.09f };
+	Desc4.UIDesc.fSize = { 50.f , 50.f };
 	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE1, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))

@@ -170,9 +170,6 @@ _int CStage3::Tick(_double TimeDelta)
 		pMonster->setActive(true);
 	}
 
-
-
-
 #ifdef  _DEBUG
 	_int iLevel = 0;
 	if (g_pDebugSystem->Get_LevelMoveCheck(iLevel))
@@ -223,16 +220,20 @@ _int CStage3::Tick(_double TimeDelta)
 	if(pParticle != nullptr)
 		pParticle->Set_State(CTransform::STATE_POSITION, XMVectorSet(38.f, 1.f, 55.f, 1.f));
 
+	if (g_pGuideManager)
+		g_pGuideManager->Tick(g_dImmutableTime);
+
 	if (m_pBoss->Get_Dead() && !m_bClear)
 	{
 		m_bClear = true;
 		m_pCinematicManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA5_1);
 	}
 
-	//g_pInvenUIManager->Tick(TimeDelta);
+	if (g_pInvenUIManager)
+		g_pInvenUIManager->Tick(TimeDelta);
 
-	//if (g_pQuestManager)
-		//g_pQuestManager->Tick(g_dImmutableTime);
+	if (g_pQuestManager)
+		g_pQuestManager->Tick(g_dImmutableTime);
 
 	return _int();
 }
@@ -245,13 +246,14 @@ _int CStage3::LateTick(_double TimeDelta)
 			return 0;
 	}
 
-	//if (g_pVoiceManager)
-	//{
-		//g_pVoiceManager->Late_Tick(TimeDelta);
-	//}
+	if (g_pGuideManager)
+		g_pGuideManager->Late_Tick(g_dImmutableTime);
 
-	//if (g_pQuestManager)
-		//g_pQuestManager->Late_Tick(TimeDelta);
+	if (g_pVoiceManager)
+		g_pVoiceManager->Late_Tick(TimeDelta);
+
+	if (g_pQuestManager)
+		g_pQuestManager->Late_Tick(TimeDelta);
 
 	return _int();
 }
@@ -358,9 +360,9 @@ HRESULT CStage3::Ready_Player(const _tchar* LayerTag)
 
 HRESULT CStage3::Ready_Boss(const _tchar* LayerTag)
 {
-	_float3 vpos = { 48.f, 5.f, 146.f };
-	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos, (CGameObject**)&m_pBoss)))
-		return E_FAIL;
+	//_float3 vpos = { 48.f, 5.f, 146.f };
+	//if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE3, L"Layer_Boss", L"Proto_GameObject_Solaris", &vpos, (CGameObject**)&m_pBoss)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -372,7 +374,7 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	CUI_Player_HpBar::UIDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.35f;
 	Desc.fPos = { 333.f, 912.f, 0.f };
 	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
@@ -384,7 +386,7 @@ HRESULT CStage3::Ready_UI(const _tchar* LayerTag)
 	ZeroMemory(&Desc, sizeof(CUI_Player_HpBar::UIDESC));
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.35f;
 	Desc.fPos = { 333.f, 912.f, 0.f };
 	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;

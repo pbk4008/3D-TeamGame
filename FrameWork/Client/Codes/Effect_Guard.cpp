@@ -72,13 +72,12 @@ _int CEffect_Guard::Tick(_double TimeDelta)
 	m_pBuffer->Update(g_dImmutableTime, m_Desc.iAxis);
 
 	m_fNonActiveTimeAcc += (_float)g_dImmutableTime;
+
 	if (4.f <= m_fNonActiveTimeAcc)
 	{
 		setActive(false);
 		m_fNonActiveTimeAcc = 0.f;
 	}
-	wstring wstrCamTag = g_pGameInstance->Get_BaseCameraTag();
-	m_pTransform->Face_Target(g_pGameInstance->Get_CamPosition(wstrCamTag));
 
 	_matrix matCullingBoxPivot = XMMatrixIdentity();
 	matCullingBoxPivot.r[3] = { m_Desc.CullingBoxPos.x, m_Desc.CullingBoxPos.y,m_Desc.CullingBoxPos.z, 1.f };
@@ -127,6 +126,9 @@ HRESULT CEffect_Guard::Render()
 
 	_float3 color = { 0.3f, 0.3f, 1.f };
 	m_pBuffer->SetUp_ValueOnShader("g_color", &color, sizeof(_float3));
+
+	_float Power = 2.5f;
+	m_pBuffer->SetUp_ValueOnShader("g_empower", &Power, sizeof(_float));
 
 	m_pBuffer->SetUp_ValueOnShader("g_vCamPosition", (void*)&CamPos, sizeof(_vector));
 

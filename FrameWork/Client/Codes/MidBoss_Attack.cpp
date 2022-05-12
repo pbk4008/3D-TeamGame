@@ -69,7 +69,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 6.f;
+			_float fDamage = 25.f;
 			_uint iLevel = 3;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -89,7 +89,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		{
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 8.f;
+			_float fDamage = 25.f;
 			_uint iLevel = 4;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -159,7 +159,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 6.f;
+			_float fDamage = 25.f;
 			_uint iLevel = 3;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -203,7 +203,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 6.f;
+			_float fDamage = 25.f;
 			_uint iLevel = 3;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -221,7 +221,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		{
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 6.f;
+			_float fDamage = 25.f;
 			_uint iLevel = 3;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -285,14 +285,21 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 	{
 		cout << "S1 : " << iCurKeyFrameIndex << endl;
 
+		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+
 		//림라이트
 		if (m_rimcheck == true)
 		{
-			m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 6.f);
+			m_pMonster->RimlightCheck(true, _float3(0.1f, 0, 0), 4.f);
 			m_rimcheck = false;
 		}
-
-		m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
+		
+		if (40 < iCurKeyFrameIndex && 45 > iCurKeyFrameIndex && !m_bEnergy)
+		{
+			//차징하는듯한 효과주려고
+			m_bEnergy = true;
+			m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
+		}
 
 		if (60 < iCurKeyFrameIndex && 90 > iCurKeyFrameIndex)
 		{
@@ -324,7 +331,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 6.f;
+			_float fDamage = 25.f;
 			_uint iLevel = 3;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -359,7 +366,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			m_pMonster->Set_IsAttack(true);
 
-			_float fDamage = 7.f;
+			_float fDamage = 30.f;
 			_uint iLevel = 4;
 			m_pMonster->Set_AttackDesc_Damaga(fDamage);
 			m_pMonster->Set_AttackDesc_Level(iLevel);
@@ -392,7 +399,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 		if (35 < iCurKeyFrameIndex && 55 > iCurKeyFrameIndex)
 		{
 			OVERLAPDESC tOverlapDesc;
-			tOverlapDesc.geometry = PxSphereGeometry(5.f);
+			tOverlapDesc.geometry = PxSphereGeometry(8.f);
 			XMStoreFloat3(&tOverlapDesc.vOrigin, m_pTransform->Get_State(CTransform::STATE_POSITION));
 			CGameObject* pHitObject = nullptr;
 			tOverlapDesc.ppOutHitObject = &pHitObject;
@@ -409,7 +416,7 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 					{
 					case (_uint)GAMEOBJECT::PLAYER:
 						ATTACKDESC tAttackDesc = m_pMonster->Get_AttackDesc();
-						tAttackDesc.fDamage = 7.f;
+						tAttackDesc.fDamage = 30.f;
 						tAttackDesc.iLevel = 4;
 
 						pActor->Hit(tAttackDesc);
@@ -420,8 +427,11 @@ _int CMidBoss_Attack::Tick(const _double& TimeDelta)
 
 			if (37 < iCurKeyFrameIndex && 40 > iCurKeyFrameIndex && !m_bExplosion)
 			{
+
 				m_bExplosion = true;
 				static_cast<CBoss_Bastion_Judicator*>(m_pMonster)->OnEff_MeshExplosion(true);
+
+				m_pMonster->Active_Effect((_uint)EFFECT::HIT_GROUND_SMOKE);
 
 				CCameraShake::SHAKEEVENT tShakeEvent;
 				tShakeEvent.fDuration = 0.5f;
@@ -492,7 +502,7 @@ HRESULT CMidBoss_Attack::EnterState()
 
 	m_pTransform->Face_Target(g_pObserver->Get_PlayerPos());
 
-	if (8.f > fDistToPlayer )
+	if (10.f > fDistToPlayer )
 	{
 		_int iRandom = rand() % 4;
 
@@ -523,7 +533,7 @@ HRESULT CMidBoss_Attack::EnterState()
 		}
 	}
 
-	else if (8.f <= fDistToPlayer)
+	else if (10.f <= fDistToPlayer)
 	{
 		_int iRandom = rand() % 3;
 
@@ -624,7 +634,7 @@ void CMidBoss_Attack::Play_Sound(void)
 			{
 				g_pShakeManager->Shake(CShakeManager::ETemplate::MidBossXYZ, Pos);
 
-				g_pGameInstance->BlendSound(L"MidBoss_Swing_2", L"MidBoss_Attack_End_2", CSoundMgr::CHANNELID::MidBoss_Attack_1, CSoundMgr::CHANNELID::MidBoss_Attack_2);
+				g_pGameInstance->BlendSound(L"MidBoss_Roar_1", L"MidBoss_Swing_2", CSoundMgr::CHANNELID::MidBoss_Attack_1, CSoundMgr::CHANNELID::MidBoss_Attack_2);
 				g_pGameInstance->VolumeChange(CSoundMgr::CHANNELID::MidBoss_Attack_2, 0.5f);
 			}
 		}

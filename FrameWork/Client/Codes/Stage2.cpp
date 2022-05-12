@@ -82,16 +82,16 @@ HRESULT CStage2::NativeConstruct()
 	}
 
 	///* 랜더타겟 지우지 못하는 버그있음요 */
-	//if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
-	//	return E_FAIL;
+	if (FAILED(Ready_TriggerSystem(L"../bin/SaveData/Trigger/MonsterSpawnTrigger2.dat")))
+		return E_FAIL;
 
 	if (FAILED(Ready_Treasure_Chest()))
 	{
 		MSGBOX("Chest");
 		return E_FAIL;
 	}
-	//if (FAILED(Ready_Portal()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Portal()))
+		return E_FAIL;
 
 	if (FAILED(Ready_GameManager()))
 		return E_FAIL;
@@ -131,13 +131,13 @@ _int CStage2::Tick(_double TimeDelta)
 
 #endif //  _DEBUG
 	_float3 fPos = { 70.f, 3.f, 5.f };
-	if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
-	{
-		CBoss_Bastion_Judicator* pMidBoss = nullptr;
-		if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMidBoss)))
-			return -1;
-		pMidBoss->setActive(true);
-	}
+	//if (g_pGameInstance->getkeyDown(DIK_NUMPAD0))
+	//{
+	//	CBoss_Bastion_Judicator* pMidBoss = nullptr;
+	//	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Test", L"Proto_GameObject_Boss_Bastion", &fPos, (CGameObject**)&pMidBoss)))
+	//		return -1;
+	//	pMidBoss->setActive(true);
+	//}
 
 
 	if (nullptr != m_pTriggerSystem)
@@ -410,7 +410,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	CUI_Player_HpBar::UIDESC Desc;
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.35f;
 	Desc.fPos = { 333.f, 912.f, 0.f };
 	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
@@ -422,7 +422,7 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	ZeroMemory(&Desc, sizeof(CUI_Player_HpBar::UIDESC));
 	_tcscpy_s(Desc.TextureTag, L"Texture_Player_HpBar_Red");
 	Desc.bMinus = true;
-	Desc.fAngle = 0.3f;
+	Desc.fAngle = 0.35f;
 	Desc.fPos = { 333.f, 912.f, 0.f };
 	Desc.fSize = { 265.f , 38.f };
 	Desc.IDTag = (_uint)GAMEOBJECT::UI_DYNAMIC;
@@ -507,8 +507,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc3.UIDesc.TextureTag, L"Texture_Fill_Ckey");
 	Desc3.UIDesc.bMinus = false;
 	Desc3.UIDesc.fAngle = 0.f;
-	Desc3.UIDesc.fPos = { 700.f, 390.f, 0.1f };
-	Desc3.UIDesc.fSize = { 40.f , 40.f };
+	Desc3.UIDesc.fPos = { 1000.f, 570.f, 0.1f };
+	Desc3.UIDesc.fSize = { 50.f , 50.f };
 	Desc3.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_BlankC", L"Proto_GameObject_UI_Blank_CKey", &Desc3)))
@@ -520,8 +520,8 @@ HRESULT CStage2::Ready_UI(const _tchar* LayerTag)
 	_tcscpy_s(Desc4.UIDesc.TextureTag, L"Texture_Blank_Ckey");
 	Desc4.UIDesc.bMinus = false;
 	Desc4.UIDesc.fAngle = 0.f;
-	Desc4.UIDesc.fPos = { 700.f, 390.f, 0.09f };
-	Desc4.UIDesc.fSize = { 40.f , 40.f };
+	Desc4.UIDesc.fPos = { 1000.f, 570.f, 0.09f };
+	Desc4.UIDesc.fSize = { 50.f , 50.f };
 	Desc4.UIDesc.IDTag = (_uint)GAMEOBJECT::UI_STATIC;
 
 	if (FAILED(g_pGameInstance->Add_GameObjectToLayer((_uint)SCENEID::SCENE_STAGE2, L"Layer_UI_FillC", L"Proto_GameObject_UI_Fill_CKey", &Desc4)))
