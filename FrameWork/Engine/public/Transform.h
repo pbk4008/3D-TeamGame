@@ -26,6 +26,10 @@ private:
 public:
 	_fvector Get_State(STATE eState) const {	return XMLoadFloat4((_float4*)&m_WorldMatrix.m[eState][0]); }
 	const _fvector Get_CombinedState(const STATE _eState);
+
+
+
+
 	_float Get_Scale(STATE eState) const { return XMVectorGetX(XMVector3Length(Get_State(eState))); }
 	_fmatrix Get_WorldMatrix() const { return XMLoadFloat4x4(&m_WorldMatrix); }
 	_fmatrix Get_WorldMatrixInverse() const { return XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)); }

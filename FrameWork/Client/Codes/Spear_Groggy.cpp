@@ -22,10 +22,14 @@ _int CSpear_Groggy::Tick(const _double& _dDeltaTime)
 		return iProgress;
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_fGroggyTime -= (_float)_dDeltaTime;
 
 	if (0 >= m_fGroggyTime)
+	{
 		m_pStateController->Change_State(L"Groggy_End");
+		m_fGroggyTime = 5.0f;
+	}
+	else
+		m_fGroggyTime -= (_float)_dDeltaTime;
 
 	return _int();
 }

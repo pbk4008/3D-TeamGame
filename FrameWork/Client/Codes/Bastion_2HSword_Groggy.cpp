@@ -23,10 +23,13 @@ _int CBastion_2HSword_Groggy::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_fGroggyTime -= (_float)_dDeltaTime;
-
-	if (m_fGroggyTime <= 0.f)
+	if (0 >= m_fGroggyTime)
+	{
 		m_pStateController->Change_State(L"Groggy_End");
+		m_fGroggyTime = 5.0f;
+	}
+	else
+		m_fGroggyTime -= (_float)_dDeltaTime;
 
 	return _int();
 }

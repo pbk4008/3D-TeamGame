@@ -160,6 +160,12 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		}
 		else
 		{
+			CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
+			if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)
+				static_cast<CStage1*>(pLevel)->Minus_MonsterCount();
+			else if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE2)
+				static_cast<CStage2*>(pLevel)->Minus_MonsterCount();
+
 			Set_Remove(true);
 			m_pPanel->Set_UIRemove(true);
 			Active_Effect((_uint)EFFECT::DEATH);
@@ -179,15 +185,6 @@ _int CMonster_Bastion_2HSword::Tick(_double _dDeltaTime)
 		m_pPanel->Set_Show(false);
 		m_bUIShow = false;
 		m_fUIShowTimeAcc = 0.f;
-	}
-
-	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		m_bGroggy = true;
-		m_fGroggyGauge = 0.f;
-		m_pStateController->Change_State(L"Groggy");
-		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
 	if (true == m_bGroggy || true == m_bDead)

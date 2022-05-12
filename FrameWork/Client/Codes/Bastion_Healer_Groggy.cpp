@@ -23,7 +23,14 @@ _int CBastion_Healer_Groggy::Tick(const _double& _dDeltaTime)
 
 	m_pAnimator->Tick(_dDeltaTime);
 
-	m_fGroggyTime -= (_float)_dDeltaTime;
+	if (0 >= m_fGroggyTime)
+	{
+		m_pStateController->Change_State(L"Groggy_End");
+		m_fGroggyTime = 5.0f;
+	}
+	else
+		m_fGroggyTime -= (_float)_dDeltaTime;
+
 
 	return _int();
 }
@@ -48,8 +55,7 @@ void CBastion_Healer_Groggy::Look_Player(void)
 
 void CBastion_Healer_Groggy::Look_Monster(void)
 {
-	if (0 >= m_fGroggyTime)
-		m_pStateController->Change_State(L"Groggy_End");
+	
 }
 
 void CBastion_Healer_Groggy::OnTriggerEnter(CCollision& collision)

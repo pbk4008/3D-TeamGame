@@ -39,21 +39,10 @@ CDropBoxData::CDropBoxData(void)
 		item3.szStatusName = L"T_1H_DPS_145";
 		item3.weaponType = EWeaponType::LongSword;
 
-		CItemData item4;
-		item4.ItemType = EItemType::Potion;
-
-		CItemData item5;
-		item5.ItemType = EItemType::Potion;
-
-		CItemData item6;
-		item6.ItemType = EItemType::Potion;
-
 		m_vecIteamData[0].push_back(item1);
 		m_vecIteamData[0].push_back(item2);
 		m_vecIteamData[0].push_back(item3);
-		m_vecIteamData[0].push_back(item4);
-		m_vecIteamData[0].push_back(item5);
-		m_vecIteamData[0].push_back(item6);
+
 	}
 	{
 		CItemData item1;
@@ -93,9 +82,23 @@ CDropBoxData::CDropBoxData(void)
 		item3.iLevel = 16;
 		item3.equipmentName = EEquipmentName::Amulet_11;
 
+
+		CItemData item4;
+		item4.ItemType = EItemType::Potion;
+
+		CItemData item5;
+		item5.ItemType = EItemType::Potion;
+
+		CItemData item6;
+		item6.ItemType = EItemType::Potion;
+
+
 		m_vecIteamData[1].push_back(item1);
 		m_vecIteamData[1].push_back(item2);
 		m_vecIteamData[1].push_back(item3);
+		m_vecIteamData[1].push_back(item4);
+		m_vecIteamData[1].push_back(item5);
+		m_vecIteamData[1].push_back(item6);
 	}
 	{
 		CItemData item1;
