@@ -202,8 +202,6 @@ _int CMonster_Crawler::LateTick(_double _dDeltaTime)
 		{
 			return iProgress;
 		}
-		if (!g_pGameInstance->isIn_WorldFrustum(m_pTransform->Get_State(CTransform::STATE_POSITION), 3.f))
-			return 0;
 	}
 
 	return 0;
