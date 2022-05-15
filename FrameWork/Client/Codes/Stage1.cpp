@@ -1497,8 +1497,8 @@ void CStage1::Open_Wall()
 			advance(iter, 0);
 			if((*iter)->getActive())
 				static_cast<CWall*>(*iter)->Destroy();
-			PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
-			VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
+			//PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+			//VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
 		}
 		if (m_iCountMonster == 0)
 		{
@@ -1529,7 +1529,7 @@ void CStage1::Open_Wall()
 	}
 	else if (m_pTriggerSystem->Get_CurrentTriggerNumber() == 9)
 	{
-		if (m_iCountMonster == 0)
+		if (m_iCountMonster == 0&& m_iPortalCount == 15)
 		{
 			advance(iter, 4);
 			if ((*iter)->getActive())
@@ -2172,8 +2172,8 @@ void CStage1::Trgger_Function11()
 //º¸½º
 void CStage1::Trgger_FunctionBoss()
 {
-	g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
-	g_pGameInstance->PlayBGM(L"Stage1_Boss_BGM");
+	//g_pGameInstance->StopSound(CSoundMgr::CHANNELID::BGM);
+	//g_pGameInstance->PlayBGM(L"Stage1_Boss_BGM");
 
 	if(m_pScenemaManager)
 		m_pScenemaManager->Active_Scenema((_uint)CINEMA_INDEX::CINEMA2_1);

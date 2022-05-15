@@ -131,7 +131,7 @@ public:
 	HRESULT CurrentTriggerMonsterAllDelete()
 	{
 		for (auto& pMonster : m_vecCurMonster)
-			pMonster->Set_Remove(true);
+				pMonster->Set_Remove(true);
 
 		m_vecCurMonster.clear();
 		return S_OK;

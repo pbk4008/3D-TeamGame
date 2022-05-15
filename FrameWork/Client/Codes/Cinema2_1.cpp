@@ -51,6 +51,7 @@ HRESULT CCinema2_1::NativeContruct(_uint iSceneID)
 	m_pMidWeapon->Set_FixedBone(m_pMidBoss->Get_Bone("weapon_r"));
 	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
 	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+	m_pMidWeapon->Tick(g_fDeltaTime);
 
 
 	return S_OK;
@@ -69,16 +70,15 @@ _int CCinema2_1::Tick(_double dDeltaTime)
 
 	cout << m_pCam->Get_CamFrame() << endl;
 
-	m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
-	m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
-
 	if (m_pCam->Get_CamFrame() >= 480.f)
 	{
 		m_pMidBoss->Tick(dDeltaTime);
+		m_pMidWeapon->Set_OwnerPivotMatrix(m_pMidBoss->Get_Pivot());
+		m_pMidWeapon->set_OwerMatrix(m_pMidBoss->Get_Transform()->Get_WorldMatrix());
+		m_pMidWeapon->Tick(dDeltaTime);
 	}
 	m_pSilvermane->Tick(dDeltaTime);
 	m_pCam->Tick(dDeltaTime);
-	m_pMidWeapon->Tick(dDeltaTime);
 
 	cout << "Cam : " << m_pCam->Get_CamFrame() << endl;
 	if (m_pCam->Get_CamFrame() > 610.f && m_iSubTitleSequence == 0)

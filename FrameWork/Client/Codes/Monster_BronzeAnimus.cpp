@@ -77,7 +77,8 @@ HRESULT CMonster_BronzeAnimus::NativeConstruct(const _uint _iSceneID, void* _pAr
 
 	m_fMaxGroggyGauge = 20.f;
 	m_fGroggyGauge = 0.f;
-	m_fMaxHp = 600.f;
+	m_fMaxHp = 250.f;
+
 	m_fCurrentHp = m_fMaxHp;
 	m_isFall = true;
 	m_tAttackDesc.iLevel = 1;
@@ -172,15 +173,6 @@ _int CMonster_BronzeAnimus::Tick(_double _dDeltaTime)
 			m_pPanel->Set_UIRemove(true);
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
-	}
-
-	if (m_fGroggyGauge >= m_fMaxGroggyGauge && !m_bDead)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		m_bGroggy = true;
-		m_fGroggyGauge = 0.f;
-		m_pStateController->Change_State(L"Groggy");
-		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
 	}
 
 	if (true == m_bGroggy || true == m_bDead)
@@ -706,7 +698,7 @@ void CMonster_BronzeAnimus::Hit(CCollision& collision)
 		Active_Effect((_uint)EFFECT::HIT_IMAGE, Pos);
 
 		//TODO::수치정해서바꿔줘야됨
-		m_fGroggyGauge += 2.f;
+		m_fGroggyGauge += 4.f;
 
 		m_pPanel->Set_HpBar(Get_HpRatio());
 

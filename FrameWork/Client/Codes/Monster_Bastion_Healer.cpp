@@ -195,14 +195,6 @@ _int CMonster_Bastion_Healer::Tick(_double _dDeltaTime)
 		m_fUIShowTimeAcc = 0.f;
 	}
 
-	if (m_fGroggyGauge >= m_fMaxGroggyGauge)
-	{
-		//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-		m_bGroggy = true;
-		m_fGroggyGauge = 0.f;
-		m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
-	}
-
 	if (true == m_bGroggy || true == m_bDead)
 	{
 		m_fGroggyGauge = 0.f;
@@ -319,6 +311,7 @@ void CMonster_Bastion_Healer::Groggy_Start()
 	Set_Groggy(true);
 	Set_GroggyGauge(0);
 	m_pPanel->Set_GroggyBar(Get_GroggyGaugeRatio());
+	m_pStateController->Change_State(L"Groggy");
 }
 
 void CMonster_Bastion_Healer::Hit(CCollision& pCol)
@@ -404,6 +397,7 @@ void CMonster_Bastion_Healer::Execution()
 {
 	Set_Dead();
 	Remove_Collider();
+	Resolve_Link();
 
 	CLevel* pLevel = g_pGameInstance->getCurrentLevelScene();
 	if (g_pGameInstance->getCurrentLevel() == (_uint)SCENEID::SCENE_STAGE1)

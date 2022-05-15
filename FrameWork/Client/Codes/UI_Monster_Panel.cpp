@@ -1873,7 +1873,7 @@ void CUI_Monster_Panel::Update_Setting_MidBoss(_double TimeDelta)
 {
 	//Panel pos Setting
 	_matrix SettingMat = XMMatrixIdentity();
-	SettingMat.r[3] = { 0.f, 4.2f, 0.f , 1.f };
+	SettingMat.r[3] = { 0.f, 3.35f, 0.f , 1.f };
 	_matrix TargetSettinMat = SettingMat * XMLoadFloat4x4(&m_TargetMatrix); //몬스터(타겟)위치
 	m_pTransform->Set_WorldMatrix(TargetSettinMat);
 

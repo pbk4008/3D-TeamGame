@@ -136,7 +136,7 @@ HRESULT CPot::Render()
 }
 void CPot::OnTriggerEnter(CCollision& collision)
 {
-	if (g_pObserver->IsAttack())
+	if (g_pObserver->IsAttack() && !m_bBroken)
 	{
 		m_bBroken = true;
 		m_pTransform->Scaling(XMVectorSet(0.5f, 0.5f,0.5f,0.f));

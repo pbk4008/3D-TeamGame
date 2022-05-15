@@ -34,12 +34,6 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (m_pOwner->get_LinkMonster())
 		m_pOwner->Check_LinkMonster();
 
-	/*m_bTargetOn = false;
-	m_bAttackOn = false;*/
-	//Check_Attack(_dDeltaTime);
-	//_fvector vMonsterPos = m_pTransform->Get_State(CTransform::STATE::STATE_POSITION);
-	//_fvector vDist = vMonsterPos - g_pObserver->Get_PlayerPos();
-	//_float fDistToPlayer = XMVectorGetX(XMVector3Length(vDist));
 	_float fDist = g_pObserver->Get_Dist(m_pTransform->Get_State(CTransform::STATE_POSITION));
 	if (!m_pOwner->get_Attack())
 	{
@@ -74,24 +68,24 @@ _int CBastion_Healer_State::Tick(const _double& _dDeltaTime)
 	if (FAILED(Check_State()))
 		return -1;
 
-	//if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
-	//{
-	//	//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-	//	CMonster_Bastion_Healer* pMonster = static_cast<CMonster_Bastion_Healer*>(m_pMonster);
-
-	//	pMonster->Groggy_Start();
-	//}
-	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
+	if (!m_pOwner->Get_Dead())
 	{
-		m_pOwner->Set_Dead();
-		m_pOwner->Remove_Collider();
-		m_pOwner->Resolve_Link();
+		if (m_pMonster->Get_GroggyGauge() >= m_pOwner->Get_MaxGroggyGauge())
+		{
+			//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+			m_pOwner->Groggy_Start();
+		}
+		if (0 >= m_pMonster->Get_CurrentHp())
+		{
+			m_pOwner->Set_Dead();
+			m_pOwner->Remove_Collider();
+			m_pOwner->Resolve_Link();
+			m_pStateController->Change_State(L"Death");
 
-		m_pStateController->Change_State(L"Death");
+			m_pOwner->Set_LightCheck(true);
 
-		m_pOwner->Set_LightCheck(true);
-
-		return 0;
+			return 0;
+		}
 	}
 	//if (true == m_bCastProtect)
 	//	m_pStateController->Change_State(L"Cast_Protect");

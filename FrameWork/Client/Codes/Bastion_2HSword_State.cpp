@@ -130,23 +130,26 @@ _int CBastion_2HSword_State::Tick(const _double& _dDeltaTime)
 	if (FAILED(Check_State()))
 		return -1;
 
-	//if (m_pMonster->Get_GroggyGauge() >= MAXGROOGUGAGUE)
-	//{
-	//	//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
-	//	m_pOwner->Groggy_Start();
-	//}
-
-	if (0 >= m_pMonster->Get_CurrentHp() && !m_pMonster->Get_Dead())
+	if (!m_pOwner->Get_Dead())
 	{
-		m_pOwner->Set_Dead();
-		m_pOwner->Remove_Collider();
+		if (m_pMonster->Get_GroggyGauge() >= m_pOwner->Get_MaxGroggyGauge())
+		{
+			//스턴상태일때 스턴state에서 현재 그로기 계속 0으로 고정시켜줌
+			m_pOwner->Groggy_Start();
+		}
 
-		m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
-		m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
+		if (0 >= m_pMonster->Get_CurrentHp())
+		{
+			m_pOwner->Set_Dead();
+			m_pOwner->Remove_Collider();
 
-		m_pStateController->Change_State(L"Death");
+			m_pAnimator->Get_AnimController()->Set_MoveSpeed(40.f);
+			m_pAnimator->Get_AnimController()->Set_PlaySpeed(1.f);
 
-		m_pOwner->Set_LightCheck(true);
+			m_pStateController->Change_State(L"Death");
+
+			m_pOwner->Set_LightCheck(true);
+		}
 	}
 
 	return _int();

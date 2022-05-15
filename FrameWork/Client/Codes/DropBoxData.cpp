@@ -5,14 +5,17 @@ CDropBoxData::CDropBoxData(void)
 {
 	{
 		CItemData item1;
-		item1.iconTexName = L"T_Amulet_BlisteringPulse";
-		item1.equipmentGrade = EEquipmentGrade::Legendary;
+		item1.iconTexName = L"T_Weapon_Hammer_2H_Player_Soothsayer";
+		item1.equipmentGrade = EEquipmentGrade::Uncommon;
 		item1.ItemType = EItemType::Equipment;
-		item1.equipmentType = EEquipmentType::Amulet;
-		item1.szItemName = L"HeeDong's Sword_6";
+		item1.equipmentType = EEquipmentType::Weapon;
+		item1.szItemName = L"HeeDong's Sword_5";
 		item1.iMainStat = 20;
 		item1.iLevel = 16;
-		item1.equipmentName = EEquipmentName::Amulet_BlisteringPulse;
+		item1.weaponData.weaponName = L"Soothsayer";
+		item1.equipmentName = EEquipmentName::Soothsayer;
+		item1.szStatusName = L"T_2H_DPS_135";
+		item1.weaponType = EWeaponType::Hammer;
 
 		CItemData item2;
 		item2.iconTexName = L"T_Ring_5";
@@ -26,34 +29,24 @@ CDropBoxData::CDropBoxData(void)
 		item2.equipmentName = EEquipmentName::Ring_5;
 
 		CItemData item3;
-		item3.iconTexName = L"T_Weapon_Sword_1H_Player_Eclipse_Gold";
-		item3.equipmentGrade = EEquipmentGrade::Legendary;
+		item3.iconTexName = L"T_Weapon_Sword_1H_Player_Crossblade";
+		item3.equipmentGrade = EEquipmentGrade::Rare;
 		item3.ItemType = EItemType::Equipment;
 		item3.equipmentType = EEquipmentType::Weapon;
-		item3.szItemName = L"HeeDong's Sword_3";
+		item3.szItemName = L"YoungMo's Sword";
 		item3.iMainStat = 20;
 		item3.iLevel = 16;
-		item3.szWeaponName = L"7";
-		item3.weaponData.weaponName = L"Eclipse";
-		item3.equipmentName = EEquipmentName::Eclipse;
-		item3.szStatusName = L"T_1H_DPS_145";
+		item3.szWeaponName = L"3";
+		item3.weaponData.weaponName = L"Crossblade";
+		item3.equipmentName = EEquipmentName::Crossblade;
+		item3.szStatusName = L"T_2H_DPS_135";
 		item3.weaponType = EWeaponType::LongSword;
 
-		CItemData item4;
-		item4.ItemType = EItemType::Potion;
-
-		CItemData item5;
-		item5.ItemType = EItemType::Potion;
-
-		CItemData item6;
-		item6.ItemType = EItemType::Potion;
 
 		m_vecIteamData[0].push_back(item1);
 		m_vecIteamData[0].push_back(item2);
 		m_vecIteamData[0].push_back(item3);
-		m_vecIteamData[0].push_back(item4);
-		m_vecIteamData[0].push_back(item5);
-		m_vecIteamData[0].push_back(item6);
+
 	}
 	{
 		CItemData item1;
@@ -93,9 +86,23 @@ CDropBoxData::CDropBoxData(void)
 		item3.iLevel = 16;
 		item3.equipmentName = EEquipmentName::Amulet_11;
 
+
+		CItemData item4;
+		item4.ItemType = EItemType::Potion;
+
+		CItemData item5;
+		item5.ItemType = EItemType::Potion;
+
+		CItemData item6;
+		item6.ItemType = EItemType::Potion;
+
+
 		m_vecIteamData[1].push_back(item1);
 		m_vecIteamData[1].push_back(item2);
 		m_vecIteamData[1].push_back(item3);
+		m_vecIteamData[1].push_back(item4);
+		m_vecIteamData[1].push_back(item5);
+		m_vecIteamData[1].push_back(item6);
 	}
 	{
 		CItemData item1;

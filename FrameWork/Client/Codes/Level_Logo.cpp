@@ -31,7 +31,7 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 	if (0 > (__super::Tick(TimeDelta)))
 		return -1;
 
-	if (g_pGameInstance->getkeyDown(DIK_RETURN) && m_pobj->Get_FadeIn() == false)
+	if (g_pGameInstance->getkeyDown(DIK_NUMPAD9) && m_pobj->Get_FadeIn() == false)
 	{
 		m_pobj->Set_FadeOutCheck(true);
 		PLAY_SOUND(L"UI_tab_over", CHANNEL::UI);
@@ -40,7 +40,6 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 	{
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_TEST_JS))))
 			return -1;
-
 		return 0;
 	}
 	else if (g_pGameInstance->getkeyDown(DIK_NUMPADENTER))
@@ -50,7 +49,13 @@ _int CLevel_Logo::Tick(_double TimeDelta)
 
 		return 0;
 	}
+	else if (g_pGameInstance->getkeyDown(DIK_SPACE))
+	{
+		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE2,true))))
+			return -1;
 
+		return 0;
+	}
 	if (m_pobj->Get_OutNextCheck() == true)
 	{
 		if (FAILED(g_pGameInstance->Open_Level((_uint)SCENEID::SCENE_LOADING, CLoading::Create(m_pDevice, m_pDeviceContext, SCENEID::SCENE_STAGE1))))

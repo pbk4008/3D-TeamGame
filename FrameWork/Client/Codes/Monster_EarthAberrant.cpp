@@ -123,6 +123,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 	//string str;
 	//str.assign(m_pStateController->Get_CurStateTag().begin(), m_pStateController->Get_CurStateTag().end());
 	//cout << str << endl;
+	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.0f, 1.f, 0.f, 1.f), 10.f);
 
 	m_pTransform->Set_Velocity(XMVectorZero());
 
@@ -213,6 +214,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 			m_pPanel->Set_UIRemove(true);
 			Active_Effect((_uint)EFFECT::DEATH);
 		}
+		return 0;
 	}
 
 	if (true == m_bUIShow)
@@ -251,7 +253,7 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 		}
 	}
 
-	CActor::LightOnOff(m_pTransform->Get_State(CTransform::STATE_POSITION), XMVectorSet(0.0f, 1.f, 0.f, 1.f), 10.f);
+	
 
 	return 0;
 }
@@ -697,7 +699,7 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 	g_pGameInstance->Play_Shot(L"Monster_Hit_2", CSoundMgr::CHANNELID::Earth_Hit);
 
 	m_fCurrentHp -= _tAttackDesc.fDamage;
-	m_fGroggyGauge += 4; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
+	m_fGroggyGauge += 2; //TODO::¼öÄ¡Á¤ÇØ¼­¹Ù²ãÁà¾ßµÊ
 
 	m_pPanel->Set_HpBar(Get_HpRatio());
 

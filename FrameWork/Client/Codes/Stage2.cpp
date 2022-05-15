@@ -1059,8 +1059,8 @@ void CStage2::Trgger_Function6()
 	if (!pLayer)
 		return;
 
-	PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
-	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
+	/*PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);*/
 
 	if (m_bDebug)
 	{
@@ -1220,8 +1220,8 @@ void CStage2::Trgger_Function9()
 	if (!pLayer)
 		return;
 
-	PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
-	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);
+	/*PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+	VOLUME_CHANGE(CHANNEL::BGM, 0.5f);*/
 
 	if (m_bDebug)
 	{
@@ -1537,8 +1537,8 @@ void CStage2::Portal_Spot3()
 
 	if (m_iCountMonster <= 4 && m_iPortalCount == 7)
 	{
-		PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
-		VOLUME_CHANGE(CHANNEL::BGM, 1.5f);
+		/*PLAY_SOUND(L"Monster_Battle", CHANNEL::BATTLE);
+		VOLUME_CHANGE(CHANNEL::BGM, 1.5f);*/
 
 		m_iPortalCount = 8;
 		Open_Potal(XMVectorSet(8.f, 10.f, 206.f, 1.f), (_uint)GAMEOBJECT::MONSTER_SPEAR);
