@@ -483,9 +483,7 @@ HRESULT CSilvermane::Render()
 
 #ifdef _DEBUG
 	//Render_Debug();
-
 #endif
-
 
 	return S_OK;
 }
@@ -533,7 +531,6 @@ HRESULT CSilvermane::Render_Velocity()
 		}
 	}
 
-
 	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 	//m_timer += g_fDeltaTime;
 	//if (m_timer >= 0.3f)
@@ -541,7 +538,6 @@ HRESULT CSilvermane::Render_Velocity()
 	//	m_PreWroldMat = m_pTransform->Get_WorldMatrix();
 	//	m_timer = 0.f;
 	//}
-
 
 	return S_OK;
 }

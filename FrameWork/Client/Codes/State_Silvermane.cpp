@@ -660,12 +660,12 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 		}
 			break;
 		case 3:
-			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.2f);
+			m_pSilvermane->Add_HP(-_tAttackDesc.fDamage * 0.2f);
 			m_pStateController->Change_State(L"Shield_ParryStunback");
 			return;
 			break;
 		case 4:
-			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.4f);
+			m_pSilvermane->Add_HP(-_tAttackDesc.fDamage * 0.4f);
 			m_pStateController->Change_State(L"Shield_ParryStunbackStrong");
 			return;
 			break;
@@ -704,12 +704,12 @@ void CState_Silvermane::Block(const ATTACKDESC& _tAttackDesc)
 			return;
 			break;
 		case 3:
-			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.2f);
+			m_pSilvermane->Add_HP(-_tAttackDesc.fDamage * 0.2f);
 			m_pStateController->Change_State(L"Shield_Ricochet");
 			return;
 			break;
 		case 4:
-			m_pSilvermane->Add_HP(_tAttackDesc.fDamage * 0.4f);
+			m_pSilvermane->Add_HP(-_tAttackDesc.fDamage * 0.4f);
 			m_pStateController->Change_State(L"Shield_BlockBreakStart");
 			return;
 			break;

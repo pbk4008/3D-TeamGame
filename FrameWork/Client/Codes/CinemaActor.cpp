@@ -2,6 +2,8 @@
 #include"CinemaActor.h"
 #include "HierarchyNode.h"
 
+#include "Material.h"
+
 
 CCinemaActor::CCinemaActor()
 	: m_pController(nullptr)
@@ -85,6 +87,12 @@ HRESULT CCinemaActor::Ready_Model(_uint iModel)
 	{
 	case (_uint)CINEMA_ACTOR::ACTOR_SILVERMANE:
 		hr=CGameObject::SetUp_Components((_uint)SCENEID::SCENE_STATIC, L"Model_Cinema_Silvermane", L"Model", (CComponent**)&m_pModel);
+
+		m_pTexture = g_pGameInstance->Clone_Component<CTexture>(0, L"Proto_Component_Texture");
+		m_pTexture->Change_Texture(L"Texture_SilvermeanNewHair");
+
+		m_pModel->Get_Materials()[3]->Set_Texture("g_OtherTexture", TEXTURETYPE::TEX_OTHER, m_pTexture);
+
 		break;
 	case (_uint)CINEMA_ACTOR::ACTOR_GRAYEHAWK:
 		hr=CGameObject::SetUp_Components(m_iSceneID, L"Model_Cinema_GrayHawk", L"Model", (CComponent**)&m_pModel);
@@ -324,4 +332,5 @@ void CCinemaActor::Free()
 {
 	CActor::Free();
 	Safe_Release(m_pController);
+	Safe_Release(m_pTexture);
 }

@@ -155,7 +155,9 @@ _int CMonster_EarthAberrant::Tick(_double _dDeltaTime)
 			m_pActiveLight->Set_Active(true);
 		}
 		else
+		{
 			m_pCharacterController->Move(_dDeltaTime, m_pTransform->Get_Velocity());
+		}
 	}
 	else
 	{
@@ -730,6 +732,8 @@ void CMonster_EarthAberrant::Hit(const ATTACKDESC& _tAttackDesc)
 void CMonster_EarthAberrant::Parry(const PARRYDESC& _tParryDesc)
 {
 	m_fGroggyGauge += (m_fMaxGroggyGauge - m_fGroggyGauge);
+	Set_IsAttack(false);
+	m_pStateController->Change_State(L"Stun");
 }
 
 void CMonster_EarthAberrant::Execution()

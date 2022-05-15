@@ -153,43 +153,44 @@ _int CCamera_Silvermane::Tick(_double _dDeltaTime)
 		if (m_pCameraShake)
 		{
 #pragma region 쉐이킹 테스트
+			_float3 vTargetPos{}; XMStoreFloat3(&vTargetPos, m_pSilvermane->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 			if (g_pGameInstance->getkeyDown(DIK_7))
 			{
-				g_pShakeManager->Shake(CShakeManager::ETemplate::TestX, _float3(0.f, 0.f, 0.f));
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestX, vTargetPos);
 			}
 			if (g_pGameInstance->getkeyDown(DIK_8))
 			{
-				g_pShakeManager->Shake(CShakeManager::ETemplate::TestY, _float3(0.f, 0.f, 0.f));
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestY, vTargetPos);
 			}
 			if (g_pGameInstance->getkeyDown(DIK_9))
 			{
-				g_pShakeManager->Shake(CShakeManager::ETemplate::TestZ, _float3(0.f, 0.f, 0.f));
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestZ, vTargetPos);
 			}
 			if (g_pGameInstance->getkeyDown(DIK_4))
 			{
-				g_pShakeManager->Shake(CShakeManager::ETemplate::TestXY, _float3(0.f, 0.f, -2.f));
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestXY, vTargetPos);
 			}
 			if (g_pGameInstance->getkeyDown(DIK_5))
 			{
-				g_pShakeManager->Shake(CShakeManager::ETemplate::TestXZ, _float3(0.f, 0.f, 2.f));
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestXZ, vTargetPos);
 			}
 			if (g_pGameInstance->getkeyDown(DIK_6))
 			{
-				g_pShakeManager->Shake(CShakeManager::ETemplate::TestYZ, _float3(0.f, 0.f, 0.f));
+				g_pShakeManager->Shake(CShakeManager::ETemplate::TestYZ, vTargetPos);
 			}
 			CCameraShake::SHAKEEVENT tShakeEvent;
-			tShakeEvent.fDuration = 2.0f;
-			tShakeEvent.fBlendInTime = 0.4f;
-			tShakeEvent.fBlendOutTime = 0.4f;
-			tShakeEvent.tWaveX.fAmplitude = 0.04f;
-			tShakeEvent.tWaveX.fFrequency = 10.f;
-			tShakeEvent.tWaveY.fAmplitude = 0.04f;
-			tShakeEvent.tWaveY.fFrequency = 6.f;
-			tShakeEvent.tWaveZ.fAmplitude = 0.04f;
-			tShakeEvent.tWaveZ.fFrequency = 8.f;
+			tShakeEvent.fDuration = 3.f;
+			tShakeEvent.fBlendInTime = 0.5f;
+			tShakeEvent.fBlendOutTime = 2.f;
+			tShakeEvent.tWaveY.fAdditionalOffset = 2.f;
+			tShakeEvent.tWaveY.fFrequency = 0.01f;
+			tShakeEvent.tWaveY.fAmplitude = 0.01f;
+			tShakeEvent.tWaveZ.fAdditionalOffset = -4.f;
+			tShakeEvent.tWaveZ.fFrequency = 0.01f;
+			tShakeEvent.tWaveZ.fAmplitude = 0.01f;
 			if (g_pGameInstance->getkeyDown(DIK_RIGHT))
 			{
-				g_pShakeManager->Shake(tShakeEvent, _float3(0.f, 0.f, 0.f));
+				g_pShakeManager->Shake(tShakeEvent, vTargetPos);
 			}
 #pragma endregion
 

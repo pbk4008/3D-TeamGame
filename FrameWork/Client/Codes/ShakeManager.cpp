@@ -17,69 +17,69 @@ HRESULT CShakeManager::NativeConstruct()
 HRESULT CShakeManager::Ready_Template()
 {
 	CCameraShake::SHAKEEVENT tShakeEvent;
-	tShakeEvent.fDuration = 4.f;
-	tShakeEvent.fOuterRadius = 10.f;
-	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.1f;
+	tShakeEvent.fDuration = 5.f;
+	tShakeEvent.fOuterRadius = 20.f;
+	tShakeEvent.fInnerRadius = 4.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.06f;
 	tShakeEvent.tWaveX.fFrequency = 10.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestX] = tShakeEvent;
 
 	tShakeEvent = CCameraShake::SHAKEEVENT();
-	tShakeEvent.fDuration = 4.f;
-	tShakeEvent.fOuterRadius = 10.f;
-	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	tShakeEvent.fDuration = 5.f;
+	tShakeEvent.fOuterRadius = 20.f;
+	tShakeEvent.fInnerRadius = 4.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.06f;
 	tShakeEvent.tWaveY.fFrequency = 6.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestY] = tShakeEvent;
 
 	tShakeEvent = CCameraShake::SHAKEEVENT();
-	tShakeEvent.fDuration = 4.f;
-	tShakeEvent.fOuterRadius = 4.f;
-	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+	tShakeEvent.fDuration = 5.f;
+	tShakeEvent.fOuterRadius = 20.f;
+	tShakeEvent.fInnerRadius = 4.f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.06f;
 	tShakeEvent.tWaveZ.fFrequency = 8.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestZ] = tShakeEvent;
 
 	tShakeEvent = CCameraShake::SHAKEEVENT();
-	tShakeEvent.fDuration = 4.f;
-	tShakeEvent.fOuterRadius = 10.f;
-	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.1f;
+	tShakeEvent.fDuration = 5.f;
+	tShakeEvent.fOuterRadius = 20.f;
+	tShakeEvent.fInnerRadius = 4.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.06f;
 	tShakeEvent.tWaveX.fFrequency = 10.f;
-	tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	tShakeEvent.tWaveY.fAmplitude = 0.06f;
 	tShakeEvent.tWaveY.fFrequency = 6.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestXY] = tShakeEvent;
 
 	tShakeEvent = CCameraShake::SHAKEEVENT();
-	tShakeEvent.fDuration = 4.f;
-	tShakeEvent.fOuterRadius = 10.f;
-	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.1f;
+	tShakeEvent.fDuration = 5.f;
+	tShakeEvent.fOuterRadius = 20.f;
+	tShakeEvent.fInnerRadius = 4.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.06f;
 	tShakeEvent.tWaveX.fFrequency = 10.f;
-	tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.06f;
 	tShakeEvent.tWaveZ.fFrequency = 8.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestXZ] = tShakeEvent;
 
 	tShakeEvent = CCameraShake::SHAKEEVENT();
-	tShakeEvent.fDuration = 4.f;
-	tShakeEvent.fOuterRadius = 10.f;
-	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	tShakeEvent.fDuration = 5.f;
+	tShakeEvent.fOuterRadius = 20.f;
+	tShakeEvent.fInnerRadius = 4.f;
+	tShakeEvent.tWaveY.fAmplitude = 0.06f;
 	tShakeEvent.tWaveY.fFrequency = 6.f;
-	tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.06f;
 	tShakeEvent.tWaveZ.fFrequency = 8.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestYZ] = tShakeEvent;
 
 
 	tShakeEvent = CCameraShake::SHAKEEVENT();
-	tShakeEvent.fDuration = 4.f;
-	tShakeEvent.fOuterRadius = 10.f;
-	tShakeEvent.fInnerRadius = 3.f;
-	tShakeEvent.tWaveX.fAmplitude = 0.1f;
+	tShakeEvent.fDuration = 5.f;
+	tShakeEvent.fOuterRadius = 20.f;
+	tShakeEvent.fInnerRadius = 4.f;
+	tShakeEvent.tWaveX.fAmplitude = 0.06f;
 	tShakeEvent.tWaveX.fFrequency = 10.f;
-	tShakeEvent.tWaveY.fAmplitude = 0.1f;
+	tShakeEvent.tWaveY.fAmplitude = 0.06f;
 	tShakeEvent.tWaveY.fFrequency = 6.f;
-	tShakeEvent.tWaveZ.fAmplitude = 0.1f;
+	tShakeEvent.tWaveZ.fAmplitude = 0.06f;
 	tShakeEvent.tWaveZ.fFrequency = 8.f;
 	m_arrShakeEvents[(_uint)ETemplate::TestXYZ] = tShakeEvent;
 
